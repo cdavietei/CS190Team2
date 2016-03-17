@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<text>
+    <label id="FILE">File</label>
+    <label id="HELP">Help</label>
+    <label id="SEARCH">Search</label>
+    <label id="GRAPH">Graph</label>
+    <label id="TABLE">Table</label>
+    <label id="MODULE">Module</label>
+    <label id="STOCK">Stock</label>
+    <label id="RESET">Reset</label>
+    <label id="RECENT">Recent</label>
+</text>
