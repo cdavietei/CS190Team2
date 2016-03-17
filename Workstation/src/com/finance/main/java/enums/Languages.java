@@ -1,4 +1,4 @@
-package enums;
+package com.finance.main.java.enums;
 
 
 

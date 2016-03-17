@@ -1,8 +1,8 @@
-package test;
+package com.finance.test;
 
 import java.io.*;
-import enums.*;
-import util.*;
+import com.finance.main.java.enums.*;
+import com.finance.main.java.util.*;
 
 public class Test
 {

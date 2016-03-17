@@ -1,10 +1,10 @@
-package util;
+package com.finance.main.java.util;
 
 import java.util.HashMap;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import java.io.*;
-import enums.*;
+import com.finance.main.java.enums.*;
 
 
 /**
@@ -12,7 +12,7 @@ import enums.*;
  * application to dynamically switch between languages and for the labels to be
  * consistent.
  *
- * To use simply call (@code LocalizedStrings.getLocalString(TextFields)} with
+ * To use simply call {@code LocalizedStrings.getLocalString(TextFields)} with
  * the desired label or text field name.
  *
  * To update language either set language variable to new Enum from

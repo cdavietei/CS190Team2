@@ -1,4 +1,4 @@
-package enums;
+package com.finance.main.java.enums;
 
 /**
  * Contains all the labels and text fields used by the application

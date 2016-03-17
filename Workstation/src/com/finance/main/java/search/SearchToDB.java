@@ -1,7 +1,7 @@
-package search;
+package com.finance.main.java.search;
 
 
-public interface searchToDB {
+public interface SearchToDB {
 	String isCompanyName(String userInput);
 	//isCompanyName takes the users input as a parameter, and returns
 	//a string based on what the database lookup finds. If it finds that

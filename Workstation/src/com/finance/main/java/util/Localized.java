@@ -1,4 +1,4 @@
-package util;
+package com.finance.main.java.util;
 
 /**
  * This interface defines a method to be implemented in any GUI window to allow
