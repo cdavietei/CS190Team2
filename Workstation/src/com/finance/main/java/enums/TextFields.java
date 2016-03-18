@@ -1,4 +1,4 @@
-package com.finance.main.java.enums;
+package enums;
 
 /**
  * Contains all the labels and text fields used by the application
@@ -60,5 +60,45 @@ public enum TextFields
 	 * Recent label
 	 * @since 1.0
 	 */
-	RECENT
+	RECENT,	/**
+	 * Table Day Low label
+	 * @since 1.0
+	 */
+	TABLE_DAYHIGH,	/**
+	 * Table Day High label
+	 * @since 1.0
+	 */
+	TABLE_DAYLOW,	/**
+	 * Table Year High label
+	 * @since 1.0
+	 */
+	TABLE_YEARHIGH,	/**
+	 * Table Year Low label
+	 * @since 1.0
+	 */
+	TABLE_YEARLOW,	/**
+	 * Table Exchange label
+	 * @since 1.0
+	 */
+	TABLE_EXCHANGE,	/**
+	 * Table Change label
+	 * @since 1.0
+	 */
+	TABLE_CHANGE,	/**
+	 * Table Stock Name label
+	 * @since 1.0
+	 */
+	TABLE_STOCKNAME,	/**
+	 * Table Last Trade Price label
+	 * @since 1.0
+	 */
+	TABLE_LASTTRADE,	/**
+	 * Table Average Daily Price label
+	 * @since 1.0
+	 */
+	TABLE_AVERAGEDAILY,	/**
+	 * Table Volume label
+	 * @since 1.0
+	 */
+	TABLE_VOLUME
 }//TextFields enum

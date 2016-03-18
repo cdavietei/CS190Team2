@@ -9,4 +9,14 @@
     <label id="STOCK">Valores</label>
     <label id="RESET">Reajustar</label>
     <label id="RECENT">Reciente</label>
+    <label id="TABLE_DAYHIGH">Día Alto</label>
+    <label id="TABLE_DAYLOW">Día Baja</label>
+	<label id="TABLE_YEARHIGH">Año Alto<label>
+    <label id="TABLE_YEARLOW">Año Bajo</label>
+    <label id="TABLE_EXCHANGE">Intercambio</label>
+    <label id="TABLE_CHANGE">Cambio</label>
+    <label id="TABLE_STOCKNAME">Nombre de archivo</label>
+    <label id="TABLE_VOLUME">Volumen</label>
+    <label id="TABLE_LASTTRADE">Última cotización de precios</label>
+    <label id="TABLE_AVERAGEDAILY">Precio Promedio Diario</label>
 </text>
