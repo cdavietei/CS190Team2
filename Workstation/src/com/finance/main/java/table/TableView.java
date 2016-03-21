@@ -1,8 +1,10 @@
-package table;
+package com.finance.main.java.table;
 
 import javax.swing.JPanel;
+import java.io.*;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -10,20 +12,20 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JToolBar;
 import javax.swing.JScrollPane;
-
+import com.finance.main.java.enums.*;
+import com.finance.main.java.util.*;
 public class TableView extends JPanel {
-	String[] columnNames = {"Data Point","Value"};
+	LocalizedStrings localStrings = new LocalizedStrings();
+	
 	private TableSettings settingsFrame = new TableSettings();
 	private JTable table;
 	DefaultTableModel data;
+	public JScrollPane scrollpane;
 	/**
 	 * Create the panel.
 	 */
 	Object[][] tableData = new Object[10][2];
-	Object[][] rows = {{"Day High",null},{"Day Low",null},{"Year High",null},
-			{"Year Low", null},{"Stock Name",null},{"Exchange",null},
-			{"Average Daily Price",null},{"Change",null},
-			{"Last Price",null},{"Volume",null}};
+
 	JCheckBox[] checkBoxes={settingsFrame.dayHighBox,settingsFrame.dayLowBox,
 			settingsFrame.yearHighBox,settingsFrame.yearLowBox,settingsFrame.nameBox,
 			settingsFrame.exchangeBox,settingsFrame.averageDailyBox,settingsFrame.changeBox,
@@ -31,7 +33,9 @@ public class TableView extends JPanel {
 	public TableView() {
 		settingsFrame.setVisible(false);
 		setLayout(null);
-		
+		localStrings.setLanguage(Languages.SPANISH);
+		localStrings.update();
+		System.out.println(localStrings.getLocalString(TextFields.TABLE_AVERAGEDAILY));
 		JButton btnNewButton = new JButton("");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -50,7 +54,7 @@ public class TableView extends JPanel {
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"Row1","12"},
+				{"Row1", "12"},
 				{"Row2", "13"},
 				{"Row3", "14"},
 				{"Row4", "15"},
@@ -65,15 +69,30 @@ public class TableView extends JPanel {
 				"Data Point", "Value"
 			}
 		));
+		table.getColumnModel().getColumn(0).setMinWidth(20);
 		
 		//table.setBounds(86, 67, 217, 160);
-		JScrollPane scrollpane = new JScrollPane(table);
+		scrollpane = new JScrollPane(table);
 		scrollpane.setBounds(23, 23, 257, 194);
+		scrollpane.setBorder(BorderFactory.createEmptyBorder());
 		add(scrollpane);
 		updateTable();
+		table.setEnabled(false);
 
 	}
-	public void updateTable(){
+	public void updateTable(){	
+		Object[][] rows = {{localStrings.getLocalString(TextFields.TABLE_DAYHIGH),null},
+			{localStrings.getLocalString(TextFields.TABLE_DAYLOW),null},
+			{localStrings.getLocalString(TextFields.TABLE_YEARHIGH),null},
+			{localStrings.getLocalString(TextFields.TABLE_YEARLOW), null},
+			{localStrings.getLocalString(TextFields.TABLE_STOCKNAME),null},
+			{localStrings.getLocalString(TextFields.TABLE_EXCHANGE),null},
+			{localStrings.getLocalString(TextFields.TABLE_AVERAGEDAILY),null},
+			{localStrings.getLocalString(TextFields.TABLE_CHANGE),null},
+			{localStrings.getLocalString(TextFields.TABLE_LASTTRADE),null},
+			{localStrings.getLocalString(TextFields.TABLE_VOLUME),null}};
+		String[] columnNames = {localStrings.getLocalString(TextFields.TABLE_DATAPOINTS),
+				localStrings.getLocalString(TextFields.TABLE_VALUE)};
 		data = (DefaultTableModel) table.getModel();
 		for(int i = data.getRowCount() -1; i >= 0; i--)
 			data.removeRow(i);
@@ -82,6 +101,10 @@ public class TableView extends JPanel {
 				data.addRow(rows[i]);
 			}
 		}
-		table.setModel(data);;
+		table.setModel(data);
+		settingsFrame.setVisible(false);
+		//scrollpane.setSize(table.getSize());
+		//scrollpane.setBounds(23,23,table.getWidth(),table.getHeight());
+
 	}
 }

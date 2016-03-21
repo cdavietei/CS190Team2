@@ -1,4 +1,4 @@
-package enums;
+package com.finance.main.java.enums;
 
 /**
  * Contains all the labels and text fields used by the application
@@ -100,5 +100,22 @@ public enum TextFields
 	 * Table Volume label
 	 * @since 1.0
 	 */
-	TABLE_VOLUME
+	TABLE_VOLUME,	/**
+	 * Table Data Points label
+	 * @since 1.0
+	 */
+	TABLE_DATAPOINTS,	/**
+	 * Table Value label
+	 * @since 1.0
+	 */
+	TABLE_VALUE,	/**
+	 * Table Apply label
+	 * @since 1.0
+	 */
+	TABLE_APPLY,
+	/**
+	 * Table Cancel label
+	 * @since 1.0
+	 */
+	TABLE_CANCEL
 }//TextFields enum

@@ -1,3 +1,4 @@
+package com.finance.main.java.search;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
