@@ -10,7 +10,7 @@ import com.finance.main.java.stock.*;
 import org.json.*;
 public class yqlQuery {
 	public static void main(String[] args) throws JSONException, ParseException{
-		query("GOOG","2009-09-11","2010-10-13");
+		query("GOOG","2016-03-18","2016-03-29");
 	}
 	/**
 	 * 
@@ -23,11 +23,6 @@ public class yqlQuery {
 	 * @throws ParseException
 	 */
 	public static ArrayList<Stock> query(String stockName,String startDate, String endDate){
-	//String baseUrl = "http://query.yahooapis.com/v1/public/yql?q=";
-	//String query = "select * from yahoo.finance.historicaldata where symbol = \"YHOO\" and startDate = \"2009-09-11\" and endDate = \"2010-03-10\"";
-	//String fullUrlStr = baseUrl + EncodingUtil.encodeURIComponent(query) + "&format=json";
-	//System.out.println(fullUrlStr);
-	/*URL fullUrl = new URL(fullUrlStr);*/
 	String base0 = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.historicaldata%20where%20symbol%20%3D%20%22";
 	String base1 = "%22%20and%20startDate%20%3D%20%22";
 	String base2 ="%22%20and%20endDate%20%3D%20%22";
@@ -50,9 +45,10 @@ public class yqlQuery {
 	//System.out.println(stockData);
 	JSONObject jobj = new JSONObject(stockData);
 	int count = jobj.getJSONObject("query").getInt("count");
-	System.out.println(count);
+	//System.out.println(count);
 	JSONArray quote = jobj.getJSONObject("query").getJSONObject("results").getJSONArray("quote");
 	ArrayList<Stock> stocks = new ArrayList<Stock>();
+	//System.out.println(stockData);
 	for(int i = 0; i < count;  i++){
 		String id = quote.getJSONObject(i).getString("Symbol");
 		String companyName = "";
@@ -67,6 +63,7 @@ public class yqlQuery {
 		java.util.Date utildate = new java.util.Date();
 		try {
 			utildate = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
+			System.out.println(utildate);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -77,6 +74,7 @@ public class yqlQuery {
 		Date date = new Date(utildate.getTime());
 		Stock newStock = new Stock(id,companyName,exchangeName,open,high,low,close,adjClose,volume,date);
 		stocks.add(newStock);
+		//System.out.println(newStock.getDate());
 	}
 	return stocks;
 		
