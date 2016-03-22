@@ -61,7 +61,7 @@ public class TableSettings extends JFrame {
 	 */
 	public TableSettings() {
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		LocalizedStrings.setLanguage(Languages.SPANISH);
+		LocalizedStrings.setLanguage(Languages.ENGLISH_US);
 		setBounds(100, 100, 414, 276);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

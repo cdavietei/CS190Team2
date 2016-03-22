@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-public class FrameWrapper extends JFrame {
+public class TableWrapper extends JFrame {
 
 	private JPanel contentPane;
 
@@ -18,7 +18,7 @@ public class FrameWrapper extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					FrameWrapper frame = new FrameWrapper();
+					TableWrapper frame = new TableWrapper();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -30,7 +30,7 @@ public class FrameWrapper extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public FrameWrapper() {
+	public TableWrapper() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new TableView();

@@ -15,7 +15,6 @@ import javax.swing.JScrollPane;
 import com.finance.main.java.enums.*;
 import com.finance.main.java.util.*;
 public class TableView extends JPanel {
-	LocalizedStrings localStrings = new LocalizedStrings();
 	
 	private TableSettings settingsFrame = new TableSettings();
 	private JTable table;
@@ -33,13 +32,16 @@ public class TableView extends JPanel {
 	public TableView() {
 		settingsFrame.setVisible(false);
 		setLayout(null);
-		localStrings.setLanguage(Languages.SPANISH);
-		localStrings.update();
-		System.out.println(localStrings.getLocalString(TextFields.TABLE_AVERAGEDAILY));
+		LocalizedStrings.setLanguage(Languages.ENGLISH_US);
+		LocalizedStrings.update();
+		//System.out.println(LocalizedStrings.getLocalString(TextFields.TABLE_AVERAGEDAILY));
 		JButton btnNewButton = new JButton("");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				settingsFrame.setVisible(true);
+				if(!settingsFrame.isVisible())
+					settingsFrame.setVisible(true);
+				else
+					settingsFrame.setVisible(false);
 			}
 		});
 		settingsFrame.apply.addActionListener(new ActionListener(){
@@ -85,18 +87,18 @@ public class TableView extends JPanel {
 	 * Updates a table
 	 */
 	public void updateTable(){	
-		Object[][] rows = {{localStrings.getLocalString(TextFields.TABLE_DAYHIGH),null},
-			{localStrings.getLocalString(TextFields.TABLE_DAYLOW),null},
-			{localStrings.getLocalString(TextFields.TABLE_YEARHIGH),null},
-			{localStrings.getLocalString(TextFields.TABLE_YEARLOW), null},
-			{localStrings.getLocalString(TextFields.TABLE_STOCKNAME),null},
-			{localStrings.getLocalString(TextFields.TABLE_EXCHANGE),null},
-			{localStrings.getLocalString(TextFields.TABLE_AVERAGEDAILY),null},
-			{localStrings.getLocalString(TextFields.TABLE_CHANGE),null},
-			{localStrings.getLocalString(TextFields.TABLE_LASTTRADE),null},
-			{localStrings.getLocalString(TextFields.TABLE_VOLUME),null}};
-		String[] columnNames = {localStrings.getLocalString(TextFields.TABLE_DATAPOINTS),
-				localStrings.getLocalString(TextFields.TABLE_VALUE)};
+		Object[][] rows = {{LocalizedStrings.getLocalString(TextFields.TABLE_DAYHIGH),null},
+			{LocalizedStrings.getLocalString(TextFields.TABLE_DAYLOW),null},
+			{LocalizedStrings.getLocalString(TextFields.TABLE_YEARHIGH),null},
+			{LocalizedStrings.getLocalString(TextFields.TABLE_YEARLOW), null},
+			{LocalizedStrings.getLocalString(TextFields.TABLE_STOCKNAME),null},
+			{LocalizedStrings.getLocalString(TextFields.TABLE_EXCHANGE),null},
+			{LocalizedStrings.getLocalString(TextFields.TABLE_AVERAGEDAILY),null},
+			{LocalizedStrings.getLocalString(TextFields.TABLE_CHANGE),null},
+			{LocalizedStrings.getLocalString(TextFields.TABLE_LASTTRADE),null},
+			{LocalizedStrings.getLocalString(TextFields.TABLE_VOLUME),null}};
+		String[] columnNames = {LocalizedStrings.getLocalString(TextFields.TABLE_DATAPOINTS),
+				LocalizedStrings.getLocalString(TextFields.TABLE_VALUE)};
 		data = (DefaultTableModel) table.getModel();
 		for(int i = data.getRowCount() -1; i >= 0; i--)
 			data.removeRow(i);

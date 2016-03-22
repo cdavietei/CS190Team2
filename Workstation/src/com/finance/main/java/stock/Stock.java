@@ -1,6 +1,11 @@
 package com.finance.main.java.stock;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * 
@@ -238,6 +243,35 @@ public class Stock implements Comparable<Stock>
 	public int compareTo(Stock other)
 	{
 		return date.compareTo(other.getDate());
+	}
+	/**
+	 * 
+	 * @param stock 
+	 * @return
+	 */
+	public static Stock makeStock(JSONObject stockInfo){
+		String id = stockInfo.getString("Symbol");
+		String companyName = "";
+		String exchangeName = "";
+		double open = stockInfo.getDouble("Open");
+		double high = stockInfo.getDouble("High");
+		double low = stockInfo.getDouble("Low");
+		double close = stockInfo.getDouble("Close");
+		double adjClose = stockInfo.getDouble("Adj_Close");
+		int volume = stockInfo.getInt("Volume");
+		String strDate = stockInfo.getString("Date");
+		java.util.Date utildate = new java.util.Date();
+		try {
+			utildate = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Stock newStock = new Stock(id,companyName,exchangeName,open,high,low,close,adjClose,volume,utildate);
+		return newStock;
 	}
 
 }
