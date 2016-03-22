@@ -1,6 +1,6 @@
 package com.finance.main.java.stock;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * 
