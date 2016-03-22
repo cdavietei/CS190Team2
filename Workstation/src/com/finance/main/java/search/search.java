@@ -1,6 +1,12 @@
 package com.finance.main.java.search;
 import javax.swing.JPanel;
+import com.finance.main.java.enums.*;
+import com.finance.main.java.util.*;
 import javax.swing.JTextField;
+
+import com.finance.main.java.enums.Languages;
+import com.finance.main.java.util.LocalizedStrings;
+
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -17,8 +23,9 @@ public class search extends JPanel {
 	 */
 	public search() {
 		setLayout(null);
-		//LocalizedStrings.update();
-		String searchLabel ="search"; //LocalizedStrings.getLocalString(TextFields.SEARCH);
+		LocalizedStrings.setLanguage(Languages.SPANISH);
+		LocalizedStrings.update();
+		String searchLabel = LocalizedStrings.getLocalString(TextFields.SEARCH)+ ":";
 		textField = new JTextField();
 		textField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -40,7 +47,7 @@ public class search extends JPanel {
 		add(btnNewButton);
 		
 		JLabel lblSearch = new JLabel(searchLabel);
-		lblSearch.setBounds(49, 123, 46, 14);
+		lblSearch.setBounds(75, 123, 46, 14);
 		add(lblSearch);
 	}
 	public String isCompanyName(String userInput){

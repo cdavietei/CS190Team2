@@ -80,6 +80,10 @@ public class TableView extends JPanel {
 		table.setEnabled(false);
 
 	}
+	
+	/**
+	 * Updates a table
+	 */
 	public void updateTable(){	
 		Object[][] rows = {{localStrings.getLocalString(TextFields.TABLE_DAYHIGH),null},
 			{localStrings.getLocalString(TextFields.TABLE_DAYLOW),null},
@@ -100,7 +104,7 @@ public class TableView extends JPanel {
 			if(checkBoxes[i].isSelected()){
 				data.addRow(rows[i]);
 			}
-		}
+		}//for
 		table.setModel(data);
 		settingsFrame.setVisible(false);
 		//scrollpane.setSize(table.getSize());

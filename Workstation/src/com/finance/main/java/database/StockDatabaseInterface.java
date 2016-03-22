@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import com.finance.main.java.stock.Stock;
 import com.finance.main.java.enums.*;
+import com.finance.main.java.yql.yqlQuery;
 
 /**
  * 
@@ -94,7 +95,7 @@ public class StockDatabaseInterface
 		ArrayList<Stock> stocks = new ArrayList<Stock>(diff);
 
 		if (!dateRangeExists(symbol, startDate, endDate))
-			queryYQL();
+			queryYQL(symbol,"start", "end");
 
 		/* Queries the database for the stock information */
 		// TODO Make this more efficient by using two date clauses in the
@@ -125,7 +126,7 @@ public class StockDatabaseInterface
 
 	/**
 	 * 
-	 * @param symbol
+	 * @param symbol 
 	 * @param start
 	 * @param end
 	 * @return
@@ -161,9 +162,16 @@ public class StockDatabaseInterface
 
 		return retval;
 	}
-
-	protected boolean queryYQL()
+	/**
+	 * 
+	 * @param stockName The name of the stock.
+	 * @param startDate The starting date for the search (yyyy-mm-dd)
+	 * @param endDate The ending date for the search (yyyy-mm-dd)
+	 * @return An Array/List of Stocks, one for each date in the date range.
+	 */
+	protected boolean queryYQL(String stockName, String startDate, String endDate)
 	{
+		ArrayList<Stock> stockList = yqlQuery.query(stockName,startDate,endDate);
 		return false;
 	}
 
