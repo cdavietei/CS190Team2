@@ -1,4 +1,4 @@
-package table;
+package com.finance.main.java.table;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -6,6 +6,11 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import com.finance.main.java.enums.Languages;
+import com.finance.main.java.enums.TextFields;
+import com.finance.main.java.util.LocalizedStrings;
+
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -55,83 +60,69 @@ public class TableSettings extends JFrame {
 	 * Create the frame.
 	 */
 	public TableSettings() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 357, 276);
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		LocalizedStrings.setLanguage(Languages.SPANISH);
+		setBounds(100, 100, 414, 276);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		dayHighBox = new JCheckBox("Day High");
+		dayHighBox = new JCheckBox(LocalizedStrings.getLocalString(TextFields.TABLE_DAYHIGH));
 		dayHighBox.setSelected(true);
-		dayHighBox.setBounds(49, 37, 97, 23);
+		dayHighBox.setBounds(6, 37, 144, 23);
 		contentPane.add(dayHighBox);
 		
-		dayLowBox = new JCheckBox("Day Low");
+		dayLowBox = new JCheckBox(LocalizedStrings.getLocalString(TextFields.TABLE_DAYLOW));
 		dayLowBox.setSelected(true);
-		dayLowBox.setBounds(49, 63, 97, 23);
+		dayLowBox.setBounds(6, 63, 144, 23);
 		contentPane.add(dayLowBox);
 		
-		nameBox = new JCheckBox("Stock Name");
+		nameBox = new JCheckBox(LocalizedStrings.getLocalString(TextFields.TABLE_STOCKNAME));
 		nameBox.setSelected(true);
-		nameBox.setBounds(49, 89, 97, 23);
+		nameBox.setBounds(6, 89, 144, 23);
 		contentPane.add(nameBox);
 		
-		changeBox = new JCheckBox("Change");
+		changeBox = new JCheckBox(LocalizedStrings.getLocalString(TextFields.TABLE_CHANGE));
 		changeBox.setSelected(true);
-		changeBox.setBounds(49, 115, 97, 23);
+		changeBox.setBounds(6, 115, 144, 23);
 		contentPane.add(changeBox);
 		
-		yearHighBox = new JCheckBox("Year High");
+		yearHighBox = new JCheckBox(LocalizedStrings.getLocalString(TextFields.TABLE_YEARHIGH));
 		yearHighBox.setSelected(true);
-		yearHighBox.setBounds(49, 141, 97, 23);
+		yearHighBox.setBounds(6, 141, 144, 23);
 		contentPane.add(yearHighBox);
 		
-		yearLowBox = new JCheckBox("Year Low");
+		yearLowBox = new JCheckBox(LocalizedStrings.getLocalString(TextFields.TABLE_YEARLOW));
 		yearLowBox.setSelected(true);
-		yearLowBox.setBounds(148, 89, 97, 23);
+		yearLowBox.setBounds(154, 89, 222, 23);
 		contentPane.add(yearLowBox);
 		
-		lastTradePriceBox = new JCheckBox("Last Trade Price");
+		lastTradePriceBox = new JCheckBox(LocalizedStrings.getLocalString(TextFields.TABLE_LASTTRADE));
 		lastTradePriceBox.setSelected(true);
-		lastTradePriceBox.setBounds(148, 115, 97, 23);
+		lastTradePriceBox.setBounds(154, 115, 222, 23);
 		contentPane.add(lastTradePriceBox);
 		
-		volumeBox = new JCheckBox("Volume Traded");
+		volumeBox = new JCheckBox(LocalizedStrings.getLocalString(TextFields.TABLE_VOLUME));
 		volumeBox.setSelected(true);
-		volumeBox.setBounds(148, 141, 97, 23);
+		volumeBox.setBounds(154, 141, 222, 23);
 		contentPane.add(volumeBox);
 		
-		exchangeBox = new JCheckBox("Exchange");
+		exchangeBox = new JCheckBox(LocalizedStrings.getLocalString(TextFields.TABLE_EXCHANGE));
 		exchangeBox.setSelected(true);
-		exchangeBox.setBounds(146, 37, 97, 23);
+		exchangeBox.setBounds(152, 37, 224, 23);
 		contentPane.add(exchangeBox);
 		
-		 averageDailyBox = new JCheckBox("Average Daily Price");
+		 averageDailyBox = new JCheckBox(LocalizedStrings.getLocalString(TextFields.TABLE_AVERAGEDAILY));
 		 averageDailyBox.setSelected(true);
-		averageDailyBox.setBounds(148, 63, 97, 23);
+		averageDailyBox.setBounds(154, 63, 222, 23);
 		contentPane.add(averageDailyBox);
 		
-		apply = new JButton("Apply");
-		apply.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dayHigh = dayHighBox.isSelected();
-				dayLow = dayLowBox.isSelected();
-				yearHigh = yearHighBox.isSelected();
-				yearLow = yearLowBox.isSelected();
-				change = changeBox.isSelected();
-				lastPrice = lastTradePriceBox.isSelected();
-				volume = volumeBox.isSelected();
-				stockName = nameBox.isSelected();
-				exchange = exchangeBox.isSelected();
-				avgDaily = averageDailyBox.isSelected();
-				TableSettings.this.setVisible(false);
-			}
-		});
+		apply = new JButton(LocalizedStrings.getLocalString(TextFields.TABLE_APPLY));
 		apply.setBounds(49, 192, 89, 23);
 		contentPane.add(apply);
 		
-		JButton btnCancel = new JButton("Cancel");
+		JButton btnCancel = new JButton(LocalizedStrings.getLocalString(TextFields.TABLE_CANCEL));
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				TableSettings.this.setVisible(false);

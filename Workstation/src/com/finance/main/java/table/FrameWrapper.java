@@ -1,4 +1,4 @@
-package table;
+package com.finance.main.java.table;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;

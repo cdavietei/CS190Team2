@@ -11,7 +11,7 @@
     <label id="RECENT">Recent</label>
     <label id="TABLE_DAYHIGH">Day High</label>
     <label id="TABLE_DAYLOW">Day Low</label>
-	<label id="TABLE_YEARHIGH">Year High<label>
+	<label id="TABLE_YEARHIGH">Year High</label>
     <label id="TABLE_YEARLOW">Year Low</label>
     <label id="TABLE_EXCHANGE">Exchange</label>
     <label id="TABLE_CHANGE">Change</label>
@@ -19,5 +19,8 @@
     <label id="TABLE_VOLUME">Volume</label>
     <label id="TABLE_LASTTRADE">Last Trade Price</label>
     <label id="TABLE_AVERAGEDAILY">Average Daily</label>
-    
+    <label id="TABLE_DATAPOINTS">Data Points</label>
+    <label id="TABLE_VALUE">Value</label>
+    <label id="TABLE_APPLY">Apply</label>
+    <label id="TABLE_CANCEL">Cancel</label>
     </text>
