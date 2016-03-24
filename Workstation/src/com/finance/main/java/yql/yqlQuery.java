@@ -55,7 +55,12 @@ public class yqlQuery {
 		}
 		return stocks;
 	}
-	public static void getQuote(String stockName){
+	/**
+	 *  Queries YQL for the quote of the stock and returns an object with all the data.
+	 * @param stockName The symbol of the stock.
+	 * @return A CurrentStock object created with the given stock quote data.
+	 */
+	public static CurrentStock getQuote(String stockName){
 		String queryStr = "https://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20yahoo.finance.quote%20WHERE%20symbol%3D%22"
 				+stockName
 				+"%22&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=";
@@ -73,6 +78,10 @@ public class yqlQuery {
 			e.printStackTrace();
 		}
 		JSONObject jobj = new JSONObject(stockInfo);
-		System.out.println(stockInfo);
+		JSONObject stockData = jobj.getJSONObject("query");
+		stockData = stockData.getJSONObject("results").getJSONObject("quote");
+		return CurrentStock.makeCurrentStock(stockData);
+
 	}
+
 }

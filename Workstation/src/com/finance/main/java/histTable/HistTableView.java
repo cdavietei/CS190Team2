@@ -93,17 +93,15 @@ public class HistTableView extends JPanel {
 			{LocalizedStrings.getLocalString(TextFields.TABLE_OPEN),null},
 			{LocalizedStrings.getLocalString(TextFields.TABLE_CLOSE),null},
 			{LocalizedStrings.getLocalString(TextFields.TABLE_VOLUME),null},
-			{LocalizedStrings.getLocalString(TextFields.TABLE_ADJCLOSE),null}}
-		String[] columnNames = {LocalizedStrings.getLocalString(TextFields.TABLE_DATAPOINTS),
-				LocalizedStrings.getLocalString(TextFields.TABLE_VALUE)};
-		data = (DefaultTableModel) table.getModel();
+			{LocalizedStrings.getLocalString(TextFields.TABLE_ADJCLOSE),null}};
 		for(int i = data.getRowCount() -1; i >= 0; i--)
 			data.removeRow(i);
 		for(int i = 0; i < checkBoxes.length; i++){
 			if(checkBoxes[i].isSelected()){
-				data.addRow(rows[i]);
+				//data.addRow(rows[i]);
 			}
 		}//for
+		//data = new DefaultTableModel(rows,columns);
 		table.setModel(data);
 		settingsFrame.setVisible(false);
 		//scrollpane.setSize(table.getSize());
