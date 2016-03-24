@@ -10,7 +10,8 @@ import com.finance.main.java.stock.*;
 import org.json.*;
 public class yqlQuery {
 	public static void main(String[] args) throws JSONException, ParseException{
-		query("GOOG","2016-03-12","2016-03-22");
+		getQuote("GOOG");
+		//query("GOOG","2016-03-12","2016-03-22");
 	}
 	/**
 	 * 
@@ -42,7 +43,7 @@ public class yqlQuery {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(stockData);
+		//System.out.println(stockData);
 		JSONObject jobj = new JSONObject(stockData);
 		int count = jobj.getJSONObject("query").getInt("count");
 		JSONArray quote = jobj.getJSONObject("query").getJSONObject("results").getJSONArray("quote");
@@ -53,7 +54,25 @@ public class yqlQuery {
 			stocks.add(newStock);
 		}
 		return stocks;
-
-
+	}
+	public static void getQuote(String stockName){
+		String queryStr = "https://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20yahoo.finance.quote%20WHERE%20symbol%3D%22"
+				+stockName
+				+"%22&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=";
+		URL fullUrl;
+		String stockInfo = "";
+		try{
+			fullUrl = new URL(queryStr);
+			URLConnection connection = fullUrl.openConnection();
+			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String inputLine = "";
+			while((inputLine = in.readLine()) != null){
+				stockInfo +=inputLine;
+			}
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		JSONObject jobj = new JSONObject(stockInfo);
+		System.out.println(stockInfo);
 	}
 }

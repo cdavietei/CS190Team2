@@ -117,5 +117,47 @@ public enum TextFields
 	 * Table Cancel label
 	 * @since 1.0
 	 */
-	TABLE_CANCEL
+	TABLE_CANCEL,
+
+	/**
+	 * Table Open label
+	 * @since 1.0
+	 */
+	TABLE_OPEN,
+
+	/**
+	 * Table High label
+	 * @since 1.0
+	 */
+	TABLE_HIGH,
+
+	/**
+	 * Table Close label
+	 * @since 1.0
+	 */
+	TABLE_CLOSE,
+
+	/**
+	 * Table Low label
+	 * @since 1.0
+	 */
+	TABLE_LOW,
+
+	/**
+	 * Table Date label
+	 * @since 1.0
+	 */
+	TABLE_DATE,
+
+	/**
+	 * Table Symbol label
+	 * @since 1.0
+	 */
+	TABLE_SYMBOL,
+
+	/**
+	 * Table Adjusted Close label
+	 * @since 1.0
+	 */
+	TABLE_ADJCLOSE,
 }//TextFields enum

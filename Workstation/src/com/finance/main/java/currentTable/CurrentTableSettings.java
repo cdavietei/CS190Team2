@@ -1,4 +1,4 @@
-package com.finance.main.java.table;
+package com.finance.main.java.currentTable;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -16,7 +16,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class TableSettings extends JFrame {
+public class CurrentTableSettings extends JFrame {
 	public JButton apply;
 	private JPanel contentPane;
 	public boolean dayHigh;
@@ -47,7 +47,7 @@ public class TableSettings extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TableSettings frame = new TableSettings();
+					CurrentTableSettings frame = new CurrentTableSettings();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -59,7 +59,7 @@ public class TableSettings extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public TableSettings() {
+	public CurrentTableSettings() {
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		LocalizedStrings.setLanguage(Languages.ENGLISH_US);
 		setBounds(100, 100, 414, 276);
@@ -125,7 +125,7 @@ public class TableSettings extends JFrame {
 		JButton btnCancel = new JButton(LocalizedStrings.getLocalString(TextFields.TABLE_CANCEL));
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				TableSettings.this.setVisible(false);
+				CurrentTableSettings.this.setVisible(false);
 				
 			}
 		});

@@ -1,4 +1,4 @@
-package com.finance.main.java.table;
+package com.finance.main.java.histTable;
 
 import javax.swing.JPanel;
 import java.io.*;
@@ -14,9 +14,9 @@ import javax.swing.JToolBar;
 import javax.swing.JScrollPane;
 import com.finance.main.java.enums.*;
 import com.finance.main.java.util.*;
-public class TableView extends JPanel {
+public class HistTableView extends JPanel {
 	
-	private TableSettings settingsFrame = new TableSettings();
+	private HistTableSettings settingsFrame; //= new HistTableSettings();
 	private JTable table;
 	DefaultTableModel data;
 	public JScrollPane scrollpane;
@@ -25,11 +25,10 @@ public class TableView extends JPanel {
 	 */
 	Object[][] tableData = new Object[10][2];
 
-	JCheckBox[] checkBoxes={settingsFrame.dayHighBox,settingsFrame.dayLowBox,
-			settingsFrame.yearHighBox,settingsFrame.yearLowBox,settingsFrame.nameBox,
-			settingsFrame.exchangeBox,settingsFrame.averageDailyBox,settingsFrame.changeBox,
-			settingsFrame.lastTradePriceBox,settingsFrame.volumeBox};
-	public TableView() {
+	JCheckBox[] checkBoxes={settingsFrame.symbolBox,settingsFrame.dateBox,
+			settingsFrame.highBox,settingsFrame.lowBox,settingsFrame.openBox,settingsFrame.closeBox,
+			settingsFrame.volumeBox,settingsFrame.adjCloseBox};
+	public HistTableView() {
 		settingsFrame.setVisible(false);
 		setLayout(null);
 		LocalizedStrings.setLanguage(Languages.ENGLISH_US);
@@ -75,7 +74,7 @@ public class TableView extends JPanel {
 		
 		//table.setBounds(86, 67, 217, 160);
 		scrollpane = new JScrollPane(table);
-		scrollpane.setBounds(23, 23, 257, 194);
+		scrollpane.setBounds(23, 23, 257, 214);
 		scrollpane.setBorder(BorderFactory.createEmptyBorder());
 		add(scrollpane);
 		updateTable();
@@ -87,16 +86,14 @@ public class TableView extends JPanel {
 	 * Updates a table
 	 */
 	public void updateTable(){	
-		Object[][] rows = {{LocalizedStrings.getLocalString(TextFields.TABLE_DAYHIGH),null},
-			{LocalizedStrings.getLocalString(TextFields.TABLE_DAYLOW),null},
-			{LocalizedStrings.getLocalString(TextFields.TABLE_YEARHIGH),null},
-			{LocalizedStrings.getLocalString(TextFields.TABLE_YEARLOW), null},
-			{LocalizedStrings.getLocalString(TextFields.TABLE_STOCKNAME),null},
-			{LocalizedStrings.getLocalString(TextFields.TABLE_EXCHANGE),null},
-			{LocalizedStrings.getLocalString(TextFields.TABLE_AVERAGEDAILY),null},
-			{LocalizedStrings.getLocalString(TextFields.TABLE_CHANGE),null},
-			{LocalizedStrings.getLocalString(TextFields.TABLE_LASTTRADE),null},
-			{LocalizedStrings.getLocalString(TextFields.TABLE_VOLUME),null}};
+		Object[][] columns = {{LocalizedStrings.getLocalString(TextFields.TABLE_SYMBOL),null},
+			{LocalizedStrings.getLocalString(TextFields.TABLE_DATE),null},
+			{LocalizedStrings.getLocalString(TextFields.TABLE_HIGH),null},
+			{LocalizedStrings.getLocalString(TextFields.TABLE_LOW), null},
+			{LocalizedStrings.getLocalString(TextFields.TABLE_OPEN),null},
+			{LocalizedStrings.getLocalString(TextFields.TABLE_CLOSE),null},
+			{LocalizedStrings.getLocalString(TextFields.TABLE_VOLUME),null},
+			{LocalizedStrings.getLocalString(TextFields.TABLE_ADJCLOSE),null}}
 		String[] columnNames = {LocalizedStrings.getLocalString(TextFields.TABLE_DATAPOINTS),
 				LocalizedStrings.getLocalString(TextFields.TABLE_VALUE)};
 		data = (DefaultTableModel) table.getModel();
