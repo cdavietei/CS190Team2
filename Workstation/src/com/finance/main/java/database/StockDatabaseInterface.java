@@ -85,7 +85,7 @@ public class StockDatabaseInterface
 		/* Checks to see if the given date ranges are valid */
 		if (startDate.compareTo(endDate) > 0)
 			throw new Exception("Invalid Date Range");
-		else if (connection.tableExists(symbol + "_info"))
+		else if (!connection.tableExists(symbol + "_info"))
 			return null;
 
 		/* Calculates the difference in days between the dates */
@@ -95,7 +95,7 @@ public class StockDatabaseInterface
 		ArrayList<Stock> stocks = new ArrayList<Stock>(diff);
 
 		if (!dateRangeExists(symbol, startDate, endDate))
-			queryYQL(symbol,"start", "end");
+			queryYQL(symbol,startDate.toString(), endDate.toString());
 
 		/* Queries the database for the stock information */
 		// TODO Make this more efficient by using two date clauses in the
@@ -171,7 +171,8 @@ public class StockDatabaseInterface
 	 */
 	protected boolean queryYQL(String stockName, String startDate, String endDate)
 	{
-		ArrayList<Stock> stockList = yqlQuery.query(stockName,startDate,endDate);
+		System.out.printf("Start: %s End: %s",startDate,endDate);
+		batchUpdateStock(yqlQuery.query(stockName,startDate,endDate));
 		return false;
 	}
 
@@ -184,8 +185,8 @@ public class StockDatabaseInterface
 		for (Stock stock : stocks)
 		{
 			String query = "INSERT INTO " + stock.getSymbol()
-					+ "_info (Symbol, Date, Open, High, Low, Close, Volume, Adj_Close)" + "VALUES ('"
-					+ stock.getSymbol() + "', '" + stock.getDate().toString() + "'," + stock.getOpen() + ","
+					+ "_info  (Date, Open, High, Low, Close, Volume, Adj_Close)" + "VALUES ('"
+					+ stock.getDate().toString() + "'," + stock.getOpen() + ","
 					+ stock.getHigh() + "," + stock.getLow() + "," + stock.getClose() + "," + stock.getVolume() + ","
 					+ stock.getAdjClose() + ");";
 
@@ -232,7 +233,7 @@ public class StockDatabaseInterface
 	 */
 	protected int dateDiff(Date start, Date end)
 	{
-		return (int) ((end.getTime() - start.getTime()) / 1000 * 60 * 60 * 24);
+		return (int) ((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
 	}// dateDiff(Date,Date)
 
 }// StockAdapter class
