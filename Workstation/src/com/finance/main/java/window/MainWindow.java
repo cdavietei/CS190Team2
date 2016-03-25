@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JDesktopPane;
 import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.JInternalFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -16,6 +18,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.Action;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 public class MainWindow extends JFrame implements ActionListener {
 
@@ -62,7 +66,36 @@ public class MainWindow extends JFrame implements ActionListener {
 		desktopPane.setBackground(Color.WHITE);
 		desktopPane.setBounds(0, 0, 434, 240);
 		contentPane.add(desktopPane);
+		
+		addComponentListener(new ComponentListener(){
 
+			@Override
+			public void componentHidden(ComponentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void componentMoved(ComponentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void componentResized(ComponentEvent e) {
+				Dimension newSize = getSize();
+				desktopPane.setSize(newSize);
+				
+			}
+
+			@Override
+			public void componentShown(ComponentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
 		mntmDis.addActionListener(
 				new ActionListener(){
 					public void actionPerformed(ActionEvent e){
