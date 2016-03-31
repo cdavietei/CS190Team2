@@ -23,4 +23,12 @@
     <label id="TABLE_VALUE">Value</label>
     <label id="TABLE_APPLY">Apply</label>
     <label id="TABLE_CANCEL">Cancel</label>
+	<label id="TABLE_OPEN">Open</label>
+	<label id="TABLE_CLOSE">Close</label>
+	<label id="TABLE_HIGH">High</label>
+	<label id="TABLE_LOW">Low</label>
+	<label id="TABLE_DATE">Date</label>
+	<label id="TABLE_SYMBOL">Symbol</label>
+	<label id="TABLE_ADJCLOSE">Adjusted Close</label>
+	
     </text>
