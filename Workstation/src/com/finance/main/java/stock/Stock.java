@@ -2,7 +2,7 @@ package com.finance.main.java.stock;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -244,12 +244,26 @@ public class Stock implements Comparable<Stock>
 	{
 		return date.compareTo(other.getDate());
 	}
+
+	public String toString()
+	{
+		
+		String retval = String.format(
+				"Symbol: %s Date: %s Open: %.3f High: %.3f Low: %.3f Close: %.3f Volume: %d AdjClose: %.3f",
+				getSymbol(), getDate().toString(), getOpen(), getHigh(), getLow(), getClose(), getVolume(),
+				getAdjClose());
+		return retval;
+				
+		//return "Symbol: "+getSymbol+" Date: "+getDate();
+	}
+
 	/**
 	 * 
-	 * @param stock 
+	 * @param stock
 	 * @return
 	 */
-	public static Stock makeStock(JSONObject stockInfo){
+	public static Stock makeStock(JSONObject stockInfo)
+	{
 		String id = stockInfo.getString("Symbol");
 		String companyName = "";
 		String exchangeName = "";
@@ -260,18 +274,27 @@ public class Stock implements Comparable<Stock>
 		double adjClose = stockInfo.getDouble("Adj_Close");
 		int volume = stockInfo.getInt("Volume");
 		String strDate = stockInfo.getString("Date");
-		java.util.Date utildate = new java.util.Date();
-		try {
-			utildate = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Stock newStock = new Stock(id,companyName,exchangeName,open,high,low,close,adjClose,volume,utildate);
+		
+
+		Stock newStock = new Stock(id, companyName, exchangeName, open, high, low, close, adjClose, volume,
+				createDate(strDate));
 		return newStock;
+	}
+	
+	public static Date createDate(String date)
+	{
+		java.util.Date utilDate = new java.util.Date();
+		
+		try
+		{
+			utilDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+		}
+		catch(Exception e)
+		{
+			System.out.println("createDate(): "+e.getLocalizedMessage());
+		}
+		return (utilDate != null) ? new Date(utilDate.getTime()) : null;
+		
 	}
 
 }

@@ -87,7 +87,7 @@ public class SQLiteConnector
 			} // try
 			catch (Exception e)
 			{
-				System.out.println(e.getLocalizedMessage());
+				System.out.println("connect(): " + e.getLocalizedMessage());
 				retval = false;
 			} // catch(Exception)
 		} // if !connected
@@ -107,7 +107,6 @@ public class SQLiteConnector
 	{
 		/* Stores variables outside try/catch block to properly close them */
 		ResultSet results = null;
-		Statement stmt = null;
 
 		/* Opens a connection if necessary */
 		if (!connected)
@@ -116,21 +115,18 @@ public class SQLiteConnector
 		/* Attempts to execute the given query */
 		try
 		{
-			stmt = con.createStatement();
-			results = stmt.executeQuery(query);
-			stmt.close();
+			PreparedStatement stmt = con.prepareStatement(query);
+
+			if (!stmt.isCloseOnCompletion())
+				stmt.closeOnCompletion();
+
+			results = stmt.executeQuery();
 
 		}
 		catch (SQLException e)
 		{
-			System.out.println(e.getLocalizedMessage());
+			System.out.println("executeQuery(): " + e.getLocalizedMessage());
 		} // catch(SQLException)
-		finally
-		{
-			/* Handles the complex objects manually */
-			if (stmt != null)
-				stmt = null;
-		} // finally
 
 		return results;
 	}// executeQuery(String)
@@ -152,14 +148,12 @@ public class SQLiteConnector
 		if (!connected)
 			connect();
 
-		Statement stmt = null;
-
 		/* Tries to execute a SQL query */
 		try
 		{
-			stmt = con.createStatement();
+			PreparedStatement stmt = con.prepareStatement(query);
 
-			int rows = stmt.executeUpdate(query);
+			int rows = stmt.executeUpdate();
 
 			/* If rows return is greater than 0, execution was successful */
 			if (rows > 0)
@@ -170,14 +164,9 @@ public class SQLiteConnector
 		} // try
 		catch (SQLException e)
 		{
-			System.out.println(e.getLocalizedMessage());
+			System.out.println("executeUpdate(): " + e.getLocalizedMessage());
+			e.printStackTrace();
 		} // catch SQLException
-		finally
-		{
-			/* Handles complex objects manually */
-			if (stmt != null)
-				stmt = null;
-		}
 
 		return retval;
 	}// executeUpdate(String)
@@ -220,7 +209,7 @@ public class SQLiteConnector
 		} // try
 		catch (Exception e)
 		{
-			System.out.println(e.getLocalizedMessage());
+			System.out.println("createDatabase(): " + e.getLocalizedMessage());
 		} // catch Exception
 		finally
 		{
@@ -260,7 +249,7 @@ public class SQLiteConnector
 			/* Executes a SQL query */
 			stmt = con.createStatement();
 
-			String sql = "SELECT name FROM sqlite_master WHERE type='table' AND name='" + table + "';";
+			String sql  = String.format("SELECT name FROM sqlite_master WHERE type='table' AND name='%s';", table);
 
 			ResultSet results = stmt.executeQuery(sql);
 
@@ -276,7 +265,7 @@ public class SQLiteConnector
 		} // try
 		catch (SQLException e)
 		{
-			System.out.println(e.getLocalizedMessage());
+			System.out.println("tableExists():" + e.getLocalizedMessage());
 		} // catch SQLException
 		finally
 		{
@@ -302,13 +291,14 @@ public class SQLiteConnector
 		} // try
 		catch (Exception e)
 		{
-			System.out.println(e.getLocalizedMessage());
+			System.out.println("close():" + e.getLocalizedMessage());
 		} // catch Exception
 		finally
 		{
 			/* Handles complex objects manually */
 			if (con != null)
 				con = null;
+
 			connected = false;
 		} // finally
 	}// close()

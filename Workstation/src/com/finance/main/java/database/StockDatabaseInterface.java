@@ -1,9 +1,13 @@
 package com.finance.main.java.database;
 
-import java.util.Date;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
+import org.json.JSONException;
 
 import com.finance.main.java.stock.Stock;
 import com.finance.main.java.enums.*;
@@ -33,7 +37,6 @@ public class StockDatabaseInterface
 	 */
 	public void addNewStock(String stock)
 	{
-
 		/* Exits function if table already exists */
 		if (connection.tableExists(stock + "_info"))
 			return;
@@ -42,8 +45,8 @@ public class StockDatabaseInterface
 		 * Creates and executes the SQL query to insert into the Current_Stocks
 		 * table
 		 */
-		String query = "INSERT INTO " + Tables.CURRENT_STOCKS + " (Symbol,Table_Name) VALUES ('" + stock + "', '"
-				+ stock + "_info');";
+		String query = String.format("INSERT INTO %s (%s,%s) VALUES ('%s','%s_info'", Tables.CURRENT_STOCKS,
+				TableFields.SYMBOL, TableFields.TABLE_NAME, stock, stock);
 
 		connection.executeUpdate(query);
 
@@ -62,10 +65,11 @@ public class StockDatabaseInterface
 	 */
 	protected String createStockTableQuery(String tableName)
 	{
-		return "CREATE TABLE " + tableName + " (" + TableFields.DATE + " DATE PRIMARY KEY NOT NULL, " + TableFields.OPEN
-				+ " FLOAT NOT NULL, " + TableFields.HIGH + " FLOAT NOT NULL, " + TableFields.LOW + " FLOAT NOT NULL, "
-				+ TableFields.CLOSE + " FLOAT NOT NULL, " + TableFields.VOLUME + " INTEGER NOT NULL, "
-				+ TableFields.ADJ_CLOSE + " FLOAT NOT NULL);";
+		return String.format(
+				"CREATE TABLE %s (%s DATE PRIMART KEY NOT NULL, %s FLOAT NOT NULL, %s FLOAT NOT NULL, "
+						+ "%s FLOAT NOT NULL, %s FLOAT NOT NULL, %s INTEGER NOT NULL, %s FLOAT NOT NULL);",
+				tableName, TableFields.DATE, TableFields.OPEN, TableFields.HIGH, TableFields.LOW, TableFields.CLOSE,
+				TableFields.VOLUME, TableFields.ADJ_CLOSE);
 	}// createStockTableQuery()
 
 	/**
@@ -95,30 +99,16 @@ public class StockDatabaseInterface
 		ArrayList<Stock> stocks = new ArrayList<Stock>(diff);
 
 		if (!dateRangeExists(symbol, startDate, endDate))
-			queryYQL(symbol,startDate.toString(), endDate.toString());
+			queryYQL(symbol, startDate.toString(), endDate.toString());
 
-		/* Queries the database for the stock information */
-		// TODO Make this more efficient by using two date clauses in the
-		// where
-		
-		String query = "SELECT * FROM "+symbol+"_info WHERE Date >= '"+startDate.toString() +"' AND Date <= '"+endDate.toString()+"';";
+		String query = String.format("SELECT * FROM %s_info WHERE Date >= '%s' AND Date <= '%s';", symbol,
+				startDate.toString(), endDate.toString());
+
 		ResultSet results = connection.executeQuery(query);
-		
-		while(results.next())
+
+		while (results.next())
 			stocks.add(createStock(symbol, results));
-		/*
-		for (int i = 0; i < diff; i++)
-		{
 
-			Date date = new Date(startDate.getTime() + i * 1000 * 60 * 60 * 24);
-			String query = "SELECT * FROM " + symbol + "_info WHERE Date = " + date.toString() + ";";
-
-			ResultSet results = connection.executeQuery(query);
-
-			while (results.next())
-				stocks.add(createStock(results));
-		}
-		*/
 		results.close();
 
 		return stocks;
@@ -126,15 +116,16 @@ public class StockDatabaseInterface
 
 	/**
 	 * 
-	 * @param symbol 
+	 * @param symbol
 	 * @param start
 	 * @param end
 	 * @return
 	 */
 	protected boolean dateRangeExists(String symbol, Date start, Date end)
 	{
-		String query1 = "SELECT Open FROM " + symbol + "_info WHERE Date ='" + start.toString() + "';";
-		String query2 = "SELECT Open FROM " + symbol + "_info WHERE Date ='" + end.toString() + "';";
+
+		String query1 = String.format("SELECT Date FROM %s_info WHERE Date ='%s';", symbol, start.toString());
+		String query2 = String.format("SELECT Date FROM %s_info WHERE Date ='%s';", symbol, end.toString());
 
 		ResultSet results1 = connection.executeQuery(query1);
 		ResultSet results2 = connection.executeQuery(query2);
@@ -144,24 +135,25 @@ public class StockDatabaseInterface
 		try
 		{
 			retval = !results1.isClosed() && !results2.isClosed();
-			
+
 			results1.close();
 			results2.close();
 		}
 		catch (Exception e)
 		{
-			System.out.println(e.getLocalizedMessage());
+			System.out.println("dateRangeExists()" + e.getLocalizedMessage());
 		}
 		finally
 		{
-			if(results1 != null)
+			if (results1 != null)
 				results1 = null;
-			if(results2 != null)
+			if (results2 != null)
 				results2 = null;
 		}
 
 		return retval;
 	}
+
 	/**
 	 * 
 	 * @param stockName The name of the stock.
@@ -171,8 +163,8 @@ public class StockDatabaseInterface
 	 */
 	protected boolean queryYQL(String stockName, String startDate, String endDate)
 	{
-		System.out.printf("Start: %s End: %s",startDate,endDate);
-		batchUpdateStock(yqlQuery.query(stockName,startDate,endDate));
+		System.out.printf("Start: %s End: %s\n", startDate, endDate);
+		batchUpdateStock(yqlQuery.query(stockName, startDate, endDate));
 		return false;
 	}
 
@@ -184,11 +176,12 @@ public class StockDatabaseInterface
 	{
 		for (Stock stock : stocks)
 		{
-			String query = "INSERT INTO " + stock.getSymbol()
-					+ "_info  (Date, Open, High, Low, Close, Volume, Adj_Close)" + "VALUES ('"
-					+ stock.getDate().toString() + "'," + stock.getOpen() + ","
-					+ stock.getHigh() + "," + stock.getLow() + "," + stock.getClose() + "," + stock.getVolume() + ","
-					+ stock.getAdjClose() + ");";
+
+			String query = String.format(
+					"INSERT OR IGNORE INTO %s_info (Date, Open, High, Low, Close, Volume, Adj_Close) "
+							+ "VALUES ('%s', %f, %f, %f, %f, %d, %f);",
+					stock.getSymbol(), stock.getDate().toString(), stock.getOpen(), stock.getHigh(), stock.getLow(),
+					stock.getClose(), stock.getVolume(), stock.getAdjClose());
 
 			connection.executeUpdate(query);
 		}
@@ -207,8 +200,7 @@ public class StockDatabaseInterface
 		try
 		{
 			stock = new Stock(symbol);
-
-			stock.setDate(results.getDate("Date"));
+			stock.setDate(Stock.createDate(results.getString("Date")));
 			stock.setOpen(results.getDouble("Open"));
 			stock.setHigh(results.getDouble("High"));
 			stock.setLow(results.getDouble("Low"));
@@ -218,7 +210,7 @@ public class StockDatabaseInterface
 		}
 		catch (SQLException e)
 		{
-			System.out.println(e.getLocalizedMessage());
+			System.out.println("createStock(): " + e.getLocalizedMessage());
 		}
 
 		return stock;
