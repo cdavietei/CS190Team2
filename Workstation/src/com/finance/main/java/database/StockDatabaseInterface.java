@@ -3,15 +3,11 @@ package com.finance.main.java.database;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
-import org.json.JSONException;
 
 import com.finance.main.java.stock.Stock;
 import com.finance.main.java.enums.*;
-import com.finance.main.java.yql.yqlQuery;
+import com.finance.main.java.yql.YQLQuery;
 
 /**
  * 
@@ -160,11 +156,12 @@ public class StockDatabaseInterface
 	 * @param startDate The starting date for the search (yyyy-mm-dd)
 	 * @param endDate The ending date for the search (yyyy-mm-dd)
 	 * @return An Array/List of Stocks, one for each date in the date range.
+	 * @throws Exception
 	 */
-	protected boolean queryYQL(String stockName, String startDate, String endDate)
+	protected boolean queryYQL(String stockName, String startDate, String endDate) throws Exception
 	{
 		System.out.printf("Start: %s End: %s\n", startDate, endDate);
-		batchUpdateStock(yqlQuery.query(stockName, startDate, endDate));
+		batchUpdateStock(YQLQuery.getHistoricalData(stockName, startDate, endDate));
 		return false;
 	}
 
