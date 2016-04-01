@@ -32,7 +32,7 @@ public class CurrentTableView extends JPanel {
 	public CurrentTableView() {
 		settingsFrame.setVisible(false);
 		setLayout(null);
-		LocalizedStrings.setLanguage(Languages.ENGLISH_US);
+		LocalizedStrings.setLanguage(Languages.SPANISH);
 		LocalizedStrings.update();
 		//System.out.println(LocalizedStrings.getLocalString(TextFields.TABLE_AVERAGEDAILY));
 		JButton btnNewButton = new JButton("");

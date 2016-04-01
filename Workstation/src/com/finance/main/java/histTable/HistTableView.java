@@ -89,7 +89,7 @@ public class HistTableView extends JPanel {
 		
 		//table.setBounds(86, 67, 217, 160);
 		scrollpane = new JScrollPane(table);
-		scrollpane.setBounds(23, 23, 257, 214);
+		scrollpane.setBounds(23, 23, 812, 214);
 		scrollpane.setBorder(BorderFactory.createEmptyBorder());
 		add(scrollpane);
 		updateTable();
@@ -141,6 +141,7 @@ public class HistTableView extends JPanel {
 				colIndex++;
 			}
 		}//for
+		data.setColumnIdentifiers(columns);
 		Object[] row;
 		for(int i =0; i < stockArray.size(); i++){
 			row = new Object[colNeeded];
@@ -154,7 +155,8 @@ public class HistTableView extends JPanel {
 				index++;
 			}
 			if(checkBoxes[2].isSelected()){
-				row[index] = stockArray.get(i).getHigh();
+				row[index] = new Double(stockArray.get(i).getHigh()).toString();
+				System.out.println(stockArray.get(i).getHigh());
 				index++;
 			}
 			if(checkBoxes[3].isSelected()){
@@ -180,7 +182,6 @@ public class HistTableView extends JPanel {
 			data.addRow(row);
 				
 		}
-		
 		table.setModel(data);
 		settingsFrame.setVisible(false);
 		//scrollpane.setSize(table.getSize());
