@@ -45,7 +45,6 @@ public class HistTableView extends JPanel {
 		setLayout(null);
 		LocalizedStrings.setLanguage(Languages.ENGLISH_US);
 		LocalizedStrings.update();
-		//System.out.println(LocalizedStrings.getLocalString(TextFields.TABLE_AVERAGEDAILY));
 		JButton btnNewButton = new JButton("");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -60,7 +59,7 @@ public class HistTableView extends JPanel {
 				updateTable();
 			}
 		});
-		btnNewButton.setIcon(new ImageIcon("C:\\Users\\Carl\\Desktop\\settings1_16x16.gif"));
+		btnNewButton.setIcon(new ImageIcon("Resources/Images/settingsIcon.gif"));
 		btnNewButton.setBounds(280, 0, 23, 23);
 		add(btnNewButton);
 
