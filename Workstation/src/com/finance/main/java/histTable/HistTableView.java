@@ -28,6 +28,7 @@ public class HistTableView extends JPanel {
 	private JTable table;
 	DefaultTableModel data;
 	public JScrollPane scrollpane;
+	public ArrayList<Stock> stockArray = null;
 	/**
 	 * Create the panel.
 	 */
@@ -92,11 +93,7 @@ public class HistTableView extends JPanel {
 		table.setEnabled(false);
 
 	}
-
-	/**
-	 * Updates a table
-	 */
-	public void updateTable(){
+	public void getStockData(String stockName){
 		StockDatabaseInterface inter = new StockDatabaseInterface();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		java.util.Date date1 = new java.util.Date();
@@ -113,13 +110,18 @@ public class HistTableView extends JPanel {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		ArrayList<Stock> stockArray = null;
 		try {
-			stockArray = inter.getStocks("GOOG", new Date(date1.getTime()), new Date(date2.getTime()));
+			stockArray = inter.getStocks(stockName, new Date(date1.getTime()), new Date(date2.getTime()));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		this.updateTable();
+	}
+	/**
+	 * Updates a table
+	 */
+	public void updateTable(){
 		data = (DefaultTableModel)table.getModel();
 		for(int i = data.getRowCount() -1; i >= 0; i--)
 			data.removeRow(i);
@@ -144,7 +146,7 @@ public class HistTableView extends JPanel {
 			}
 		}//for
 		data.setColumnIdentifiers(columns);
-		Object[] row;
+		Object[] row; 
 		for(int i =0; i < stockArray.size(); i++){
 			row = new Object[colNeeded];
 			int index = 0;
