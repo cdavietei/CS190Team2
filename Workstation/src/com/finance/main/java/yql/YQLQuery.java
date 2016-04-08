@@ -119,9 +119,9 @@ public class YQLQuery
 	private static String queryStringHistoricalData(String stockSymbol, String startDate, String endDate)
 	{
 		String queryString = "SELECT * FROM " + yahooFinanceHistoricalData + " " +
-							 "WHERE symbol = \"" + stockSymbol + "\" " +
-							 "AND startDate = \"" + startDate + "\" " +
-							 "AND endDate = \"" + endDate + "\"";
+		                     "WHERE symbol = \"" + stockSymbol + "\" " +
+		                     "AND startDate = \"" + startDate + "\" " +
+		                     "AND endDate = \"" + endDate + "\"";
 		
 		return queryString;
 	}
@@ -135,7 +135,7 @@ public class YQLQuery
 	private static String queryStringCurrentData(String stockSymbol)
 	{
 		String queryString = "SELECT * FROM " + yahooFinanceQuote + " " +
-							 "WHERE symbol = \"" + stockSymbol + "\"";
+		                     "WHERE symbol = \"" + stockSymbol + "\"";
 		
 		return queryString;
 	}

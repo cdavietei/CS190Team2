@@ -1,12 +1,11 @@
 package com.finance.main.java.histTable;
 
 import javax.swing.JPanel;
-import com.finance.main.java.stock.*;
 import java.io.*;
-import java.util.ArrayList;
-import java.sql.*;
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -18,27 +17,27 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JToolBar;
 import javax.swing.JScrollPane;
+
+import com.finance.main.java.database.StockDatabaseInterface;
 import com.finance.main.java.enums.*;
+import com.finance.main.java.stock.Stock;
 import com.finance.main.java.util.*;
-import com.finance.main.java.database.*;
 public class HistTableView extends JPanel {
-	
+
 	private HistTableSettings settingsFrame = new HistTableSettings();
 	private JTable table;
-	public DefaultTableModel data;
+	DefaultTableModel data;
 	public JScrollPane scrollpane;
+	public ArrayList<Stock> stockArray = null;
 	/**
 	 * Create the panel.
 	 */
-
 	Object[][] tableData = new Object[10][2];
-
-
 	public String[] columnNames = {LocalizedStrings.getLocalString(TextFields.TABLE_SYMBOL),
-		LocalizedStrings.getLocalString(TextFields.TABLE_DATE),LocalizedStrings.getLocalString(TextFields.TABLE_HIGH),
-		LocalizedStrings.getLocalString(TextFields.TABLE_LOW),LocalizedStrings.getLocalString(TextFields.TABLE_OPEN),
-		LocalizedStrings.getLocalString(TextFields.TABLE_CLOSE),LocalizedStrings.getLocalString(TextFields.TABLE_VOLUME),
-		LocalizedStrings.getLocalString(TextFields.TABLE_ADJCLOSE)};
+			LocalizedStrings.getLocalString(TextFields.TABLE_DATE),LocalizedStrings.getLocalString(TextFields.TABLE_HIGH),
+			LocalizedStrings.getLocalString(TextFields.TABLE_LOW),LocalizedStrings.getLocalString(TextFields.TABLE_OPEN),
+			LocalizedStrings.getLocalString(TextFields.TABLE_CLOSE),LocalizedStrings.getLocalString(TextFields.TABLE_VOLUME),
+			LocalizedStrings.getLocalString(TextFields.TABLE_ADJCLOSE)};
 	JCheckBox[] checkBoxes={settingsFrame.symbolBox,settingsFrame.dateBox,
 			settingsFrame.highBox,settingsFrame.lowBox,settingsFrame.openBox,settingsFrame.closeBox,
 			settingsFrame.volumeBox,settingsFrame.adjCloseBox};
@@ -47,7 +46,6 @@ public class HistTableView extends JPanel {
 		setLayout(null);
 		LocalizedStrings.setLanguage(Languages.ENGLISH_US);
 		LocalizedStrings.update();
-		//System.out.println(LocalizedStrings.getLocalString(TextFields.TABLE_AVERAGEDAILY));
 		JButton btnNewButton = new JButton("");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -59,48 +57,43 @@ public class HistTableView extends JPanel {
 		});
 		settingsFrame.apply.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-					updateTable();
+				updateTable();
 			}
 		});
-		
-		btnNewButton.setIcon(new ImageIcon("C:\\Users\\Carl\\Desktop\\settings1_16x16.gif"));
+		btnNewButton.setIcon(new ImageIcon("Resources/Images/settingsIcon.gif"));
 		btnNewButton.setBounds(280, 0, 23, 23);
 		add(btnNewButton);
-		
+
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"Row1", "12"},
-				{"Row2", "13"},
-				{"Row3", "14"},
-				{"Row4", "15"},
-				{"Row5", "16"},
-				{"Row6", "17"},
-				{"Row7", "18"},
-				{"Row8", "19"},
-				{"Row9", "20"},
-				{"Ro10", "21"},
-			},
-			new String[] {
-				"Data Point", "Value"
-			}
-		));
+				new Object[][] {
+					{"Row1", "12"},
+					{"Row2", "13"},
+					{"Row3", "14"},
+					{"Row4", "15"},
+					{"Row5", "16"},
+					{"Row6", "17"},
+					{"Row7", "18"},
+					{"Row8", "19"},
+					{"Row9", "20"},
+					{"Ro10", "21"},
+				},
+				new String[] {
+						"Data Point", "Value"
+				}
+				));
 		table.getColumnModel().getColumn(0).setMinWidth(20);
-		
+
 		//table.setBounds(86, 67, 217, 160);
 		scrollpane = new JScrollPane(table);
-		scrollpane.setBounds(23, 23, 257, 214);
+		scrollpane.setBounds(23, 23, 812, 214);
 		scrollpane.setBorder(BorderFactory.createEmptyBorder());
 		add(scrollpane);
 		updateTable();
 		table.setEnabled(false);
 
 	}
-	
-	/**
-	 * Updates a table
-	 */
-	public void updateTable(){
+	public void getStockData(String stockName){
 		StockDatabaseInterface inter = new StockDatabaseInterface();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		java.util.Date date1 = new java.util.Date();
@@ -117,31 +110,43 @@ public class HistTableView extends JPanel {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		ArrayList<Stock> stockArray = null;
 		try {
-			stockArray = inter.getStocks("GOOG", new Date(date1.getTime()), new Date(date2.getTime()));
+			stockArray = inter.getStocks(stockName, new Date(date1.getTime()), new Date(date2.getTime()));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		data = (DefaultTableModel) table.getModel();
-		for(int i = data.getRowCount() - 1; i >= 0; i--)
+		this.updateTable();
+	}
+	/**
+	 * Updates a table
+	 */
+	public void updateTable(){
+		data = (DefaultTableModel)table.getModel();
+		for(int i = data.getRowCount() -1; i >= 0; i--)
 			data.removeRow(i);
-		int colNeeded= 0;
+		for(int i = 0; i < checkBoxes.length; i++){
+			if(checkBoxes[i].isSelected()){
+				//data.addRow(rows[i]);
+			}
+		}//for
+		int colNeeded = 0;
+
+		int colIndex = 0;
 		for(int i = 0; i < checkBoxes.length; i++){
 			if(checkBoxes[i].isSelected()){
 				colNeeded++;
 			}
-		}//for
+		}
 		String[] columns = new String[colNeeded];
-		int colIndex = 0;
 		for(int i = 0; i < checkBoxes.length; i++){
 			if(checkBoxes[i].isSelected()){
 				columns[colIndex] = columnNames[i];
 				colIndex++;
 			}
 		}//for
-		Object[] row;
+		data.setColumnIdentifiers(columns);
+		Object[] row; 
 		for(int i =0; i < stockArray.size(); i++){
 			row = new Object[colNeeded];
 			int index = 0;
@@ -178,9 +183,8 @@ public class HistTableView extends JPanel {
 				index++;
 			}
 			data.addRow(row);
-				
-		}
-		
+
+		}		//data = new DefaultTableModel(rows,columns);
 		table.setModel(data);
 		settingsFrame.setVisible(false);
 		//scrollpane.setSize(table.getSize());

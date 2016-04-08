@@ -32,7 +32,7 @@ public class CurrentTableView extends JPanel {
 	public CurrentTableView() {
 		settingsFrame.setVisible(false);
 		setLayout(null);
-		LocalizedStrings.setLanguage(Languages.ENGLISH_US);
+		LocalizedStrings.setLanguage(Languages.SPANISH);
 		LocalizedStrings.update();
 		//System.out.println(LocalizedStrings.getLocalString(TextFields.TABLE_AVERAGEDAILY));
 		JButton btnNewButton = new JButton("");
@@ -97,6 +97,8 @@ public class CurrentTableView extends JPanel {
 			{LocalizedStrings.getLocalString(TextFields.TABLE_CHANGE),null},
 			{LocalizedStrings.getLocalString(TextFields.TABLE_LASTTRADE),null},
 			{LocalizedStrings.getLocalString(TextFields.TABLE_VOLUME),null}};
+		String[] columnNames = {LocalizedStrings.getLocalString(TextFields.TABLE_DATAPOINTS),
+				LocalizedStrings.getLocalString(TextFields.TABLE_VALUE)};
 		data = (DefaultTableModel) table.getModel();
 		for(int i = data.getRowCount() -1; i >= 0; i--)
 			data.removeRow(i);
