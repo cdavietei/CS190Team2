@@ -86,7 +86,7 @@ public class StockDatabaseInterface
 		if (startDate.compareTo(endDate) > 0)
 			throw new Exception("Invalid Date Range");
 		else if (!connection.tableExists(symbol + "_info"))
-			return null;
+			addNewStock(symbol);
 
 		/* Calculates the difference in days between the dates */
 		int diff = dateDiff(startDate, endDate);
