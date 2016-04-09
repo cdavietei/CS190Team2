@@ -23,4 +23,6 @@
     <label id="TABLE_VALUE">Valer</label>
     <label id="TABLE_APPLY">Aplicar</label>
     <label id="TABLE_CANCEL">Cancelar</label>
+    <label id="CHART_XAXIS">Hora</label>
+	<label id="CHART_YAXIS">Precio de Mercado</label>
 </text>

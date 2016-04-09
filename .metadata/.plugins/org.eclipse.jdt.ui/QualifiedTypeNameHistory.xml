@@ -23,4 +23,13 @@
 <fullyQualifiedTypeName name="org.jfree.chart.plot.XYPlot"/>
 <fullyQualifiedTypeName name="java.awt.BorderLayout"/>
 <fullyQualifiedTypeName name="java.awt.GridLayout"/>
+<fullyQualifiedTypeName name="org.jfree.chart.labels.StandardXYSeriesLabelGenerator"/>
+<fullyQualifiedTypeName name="org.jfree.chart.labels.StandardCategoryToolTipGenerator"/>
+<fullyQualifiedTypeName name="java.text.NumberFormat"/>
+<fullyQualifiedTypeName name="java.text.DateFormat"/>
+<fullyQualifiedTypeName name="java.text.DecimalFormat"/>
+<fullyQualifiedTypeName name="org.jfree.chart.labels.StandardXYToolTipGenerator"/>
+<fullyQualifiedTypeName name="com.finance.main.java.util.LocalizedStrings"/>
+<fullyQualifiedTypeName name="com.finance.main.java.enums.TextFields"/>
+<fullyQualifiedTypeName name="com.finance.main.java.enums.Languages"/>
 </qualifiedTypeNameHistroy>

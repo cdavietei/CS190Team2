@@ -31,12 +31,12 @@ import com.finance.main.java.util.LocalizedStrings;
 /**
  * Displays graphical view of one or more stocks.
  * 
- * This chart implements tool-tip generator. Hovering mouse over a data point in the chart
+ * The chart(s) implements tool-tip generator. Hovering mouse over a data point in the chart
  * will display the stock name, the time and the stock price in the format:
  * 		stockName: (time, price)
  * 
  * 
- * To get the panel containing chart,
+ * To get the panel containing chart(s),
  * instantiate the class with no parameters, and call getPanel().
  * 
  * This class uses the Builder design pattern. Therefore, to change the panel's width or height
@@ -46,6 +46,14 @@ import com.finance.main.java.util.LocalizedStrings;
  *                                       .setPanelHeight(400)
  *                                       .setXAxisLabel("Date")
  *                                       .setShowLegend(false); 
+ * 
+ * To compare two or more stocks on the same panel, calling addDataset(...) will create
+ * chart for each stock. For example, to compare Google and Yahoo stocks over May 20, 2015 to 
+ * May 30, 2015, use the following:
+ * 
+ * StockChart newChart = new StockChart();
+ * newChart.addDataset("GOOG", "05/20/2015", "05/30/2015");
+ * newChart.addDataset("YHOO", "05/20/2015", "05/30/2015");
  * 
  * @author MI ONIM
  *
