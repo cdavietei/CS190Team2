@@ -160,4 +160,14 @@ public enum TextFields
 	 * @since 1.0
 	 */
 	TABLE_ADJCLOSE,
+	
+	/**
+	 * Chart x-Axis label
+	 */
+	CHART_XAXIS,
+	
+	/**
+	 * Chart y-Axis label
+	 */
+	CHART_YAXIS,
 }//TextFields enum

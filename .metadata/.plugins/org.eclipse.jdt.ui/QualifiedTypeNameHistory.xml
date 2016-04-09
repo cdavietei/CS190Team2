@@ -6,4 +6,21 @@
 <fullyQualifiedTypeName name="com.finance.main.java.database.StockDatabaseInterface"/>
 <fullyQualifiedTypeName name="com.finance.main.java.stock.Stock"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="org.json.JSONObject"/>
+<fullyQualifiedTypeName name="org.jfree.chart.ChartPanel"/>
+<fullyQualifiedTypeName name="org.jfree.data.xy.XYDataset"/>
+<fullyQualifiedTypeName name="org.jfree.chart.plot.PlotOrientation"/>
+<fullyQualifiedTypeName name="org.jfree.chart.JFreeChart"/>
+<fullyQualifiedTypeName name="org.jfree.chart.ChartFactory"/>
+<fullyQualifiedTypeName name="java.awt.Dimension"/>
+<fullyQualifiedTypeName name="javax.swing.JPanel"/>
+<fullyQualifiedTypeName name="javax.swing.JFrame"/>
+<fullyQualifiedTypeName name="java.util.Date"/>
+<fullyQualifiedTypeName name="org.jfree.data.xy.XYSeries"/>
+<fullyQualifiedTypeName name="org.jfree.data.time.TimeSeries"/>
+<fullyQualifiedTypeName name="org.jfree.data.time.Day"/>
+<fullyQualifiedTypeName name="org.jfree.data.time.TimeSeriesCollection"/>
+<fullyQualifiedTypeName name="org.jfree.chart.plot.XYPlot"/>
+<fullyQualifiedTypeName name="java.awt.BorderLayout"/>
+<fullyQualifiedTypeName name="java.awt.GridLayout"/>
 </qualifiedTypeNameHistroy>

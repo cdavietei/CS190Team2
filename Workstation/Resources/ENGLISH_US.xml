@@ -6,8 +6,8 @@
     <label id="GRAPH">Graph</label>
     <label id="TABLE">Table</label>
     <label id="MODULE">Module</label>
-    <label id="STOCK">Stock</label>
     <label id="RESET">Reset</label>
+    <label id="STOCK">Stock</label>
     <label id="RECENT">Recent</label>
     <label id="TABLE_DAYHIGH">Day High</label>
     <label id="TABLE_DAYLOW">Day Low</label>
@@ -30,5 +30,6 @@
 	<label id="TABLE_DATE">Date</label>
 	<label id="TABLE_SYMBOL">Symbol</label>
 	<label id="TABLE_ADJCLOSE">Adjusted Close</label>
-	
-    </text>
+	<label id="CHART_XAXIS">Time</label>
+	<label id="CHART_YAXIS">Stock Price</label>
+</text>
