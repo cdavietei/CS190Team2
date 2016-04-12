@@ -20,8 +20,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 
 public class MainWindow extends JFrame implements ActionListener {
+	
+	private volatile int screenX = 0;
+	private volatile int screenY = 0;
+	private volatile int myX = 0;
+	private volatile int myY = 0;
 
 	private JPanel contentPane;
 
@@ -45,6 +53,18 @@ public class MainWindow extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public MainWindow() {
+		
+		
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+
+		JDesktopPane desktopPane = new JDesktopPane();
+		desktopPane.setBackground(Color.WHITE);
+		desktopPane.setBounds(0, 0, 434, 240);
+		contentPane.add(desktopPane);
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		
@@ -55,17 +75,41 @@ public class MainWindow extends JFrame implements ActionListener {
 		menuBar.add(mnStocks);
 		
 		JMenuItem mntmDis = new JMenuItem("DIS");
+
+		mntmDis.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				JInternalFrame newInternalFrame = new JInternalFrame("NEW");
+				newInternalFrame.setBounds(e.getX(), e.getY(), 100, 100);
+				desktopPane.add(newInternalFrame);
+				newInternalFrame.setVisible(true);
+				newInternalFrame.setClosable(true);
+				newInternalFrame.setResizable(true);
+				
+				screenX = e.getXOnScreen();
+				screenY = e.getYOnScreen();
+				
+				myX = newInternalFrame.getX();
+				myY = newInternalFrame.getY();
+				
+				mntmDis.addMouseMotionListener(new MouseMotionAdapter() {
+					@Override
+					public void mouseDragged(MouseEvent e) {
+						int deltaX = e.getXOnScreen() - screenX;
+						int deltaY = e.getYOnScreen() - screenY;
+						
+						newInternalFrame.setLocation(myX + deltaX, myY + deltaY);
+					}
+				});
+				
+			}
+		});
+		
 		mnStocks.add(mntmDis);
+
 		
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
 		
-		JDesktopPane desktopPane = new JDesktopPane();
-		desktopPane.setBackground(Color.WHITE);
-		desktopPane.setBounds(0, 0, 434, 240);
-		contentPane.add(desktopPane);
 		
 		addComponentListener(new ComponentListener(){
 
@@ -96,18 +140,7 @@ public class MainWindow extends JFrame implements ActionListener {
 			
 		});
 		
-		mntmDis.addActionListener(
-				new ActionListener(){
-					public void actionPerformed(ActionEvent e){
-						JInternalFrame newInternalFrame = new JInternalFrame("NEW");
-						newInternalFrame.setBounds(100, 100, 100, 100);
-						desktopPane.add(newInternalFrame);
-						newInternalFrame.setVisible(true);
-						newInternalFrame.setClosable(true);
-						newInternalFrame.setResizable(true);
-					}
-				}
-				);
+
 		
 		
 	}
