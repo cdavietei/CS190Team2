@@ -82,7 +82,6 @@ public class CurrentTableView extends JPanel {
 		table.setEnabled(false);
 
 	}
-	
 	/**
 	 * Updates a table
 	 */

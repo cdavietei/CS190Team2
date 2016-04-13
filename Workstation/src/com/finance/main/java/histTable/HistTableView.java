@@ -22,9 +22,10 @@ import com.finance.main.java.database.StockDatabaseInterface;
 import com.finance.main.java.enums.*;
 import com.finance.main.java.stock.Stock;
 import com.finance.main.java.util.*;
-public class HistTableView extends JPanel {
+import javax.swing.JComboBox;
+public class HistTableView extends JPanel implements Localized {
 
-	private HistTableSettings settingsFrame = new HistTableSettings();
+	private HistTableSettings settingsFrame; //= new HistTableSettings();
 	private JTable table;
 	DefaultTableModel data;
 	public JScrollPane scrollpane;
@@ -44,8 +45,6 @@ public class HistTableView extends JPanel {
 	public HistTableView() {
 		settingsFrame.setVisible(false);
 		setLayout(null);
-		LocalizedStrings.setLanguage(Languages.ENGLISH_US);
-		LocalizedStrings.update();
 		JButton btnNewButton = new JButton("");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -91,6 +90,10 @@ public class HistTableView extends JPanel {
 		add(scrollpane);
 		updateTable();
 		table.setEnabled(false);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(147, 0, 123, 20);
+		add(comboBox);
 
 	}
 	public void getStockData(String stockName){
@@ -190,5 +193,16 @@ public class HistTableView extends JPanel {
 		//scrollpane.setSize(table.getSize());
 		//scrollpane.setBounds(23,23,table.getWidth(),table.getHeight());
 
+	}
+	@Override
+	public boolean updateLabels()
+	{
+		this.columnNames = new String[] {LocalizedStrings.getLocalString(TextFields.TABLE_SYMBOL),
+				LocalizedStrings.getLocalString(TextFields.TABLE_DATE),LocalizedStrings.getLocalString(TextFields.TABLE_HIGH),
+				LocalizedStrings.getLocalString(TextFields.TABLE_LOW),LocalizedStrings.getLocalString(TextFields.TABLE_OPEN),
+				LocalizedStrings.getLocalString(TextFields.TABLE_CLOSE),LocalizedStrings.getLocalString(TextFields.TABLE_VOLUME),
+				LocalizedStrings.getLocalString(TextFields.TABLE_ADJCLOSE)};
+		this.updateTable();
+		return true;
 	}
 }

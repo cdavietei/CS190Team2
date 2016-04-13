@@ -4,7 +4,6 @@ import com.finance.main.java.enums.*;
 import com.finance.main.java.util.*;
 import javax.swing.JTextField;
 
-import com.finance.main.java.enums.Languages;
 import com.finance.main.java.util.LocalizedStrings;
 
 import javax.swing.JButton;
@@ -12,10 +11,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.*;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
-public class search extends JPanel {
+public class search extends JPanel implements Localized {
 	private JTextField textField;
+	private static ArrayList<String> stockNames = new ArrayList<String>();
 	//LocalizedSrings.lang = Languages.English;
 
 	/**
@@ -66,6 +67,7 @@ public class search extends JPanel {
 			String returns = isCompanyName(userInput);
 			if(returns.equals("")){
 				if(isStockName(userInput)){
+					stockNames.add(userInput);
 					if(searchYQL(userInput)){
 						mess.showMessageDialog(frame,"Search successful!"/*LocalizedStrings.getLocalString(TextFields.SEARCHSUCCESS*/);
 					}
@@ -79,6 +81,7 @@ public class search extends JPanel {
 				}
 			}
 			else{
+				stockNames.add(returns);
 				if(searchYQL(returns)){
 					mess.showMessageDialog(frame, "Search successful"/*LocalizedStrings.getLocalString(TextFields.SEARCHSUCCESS*/);
 				}
@@ -90,5 +93,15 @@ public class search extends JPanel {
 		else{
 			mess.showMessageDialog(frame,"Please input a search term.");
 		}
+	}
+	public static ArrayList<String> getStockNames(){
+		return stockNames;
+	}
+	@Override
+	public boolean updateLabels()
+	{
+
+		
+		return true;
 	}
 }
