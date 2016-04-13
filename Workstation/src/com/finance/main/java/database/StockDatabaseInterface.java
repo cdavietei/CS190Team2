@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.finance.main.java.stock.Stock;
+import com.finance.main.java.util.Utilities;
 import com.finance.main.java.enums.*;
 import com.finance.main.java.yql.YQLQuery;
 
@@ -89,7 +90,7 @@ public class StockDatabaseInterface
 			addNewStock(symbol);
 
 		/* Calculates the difference in days between the dates */
-		int diff = dateDiff(startDate, endDate);
+		int diff = Utilities.dateDiff(startDate, endDate);
 
 		/* Creates the ArrayList to store the stocks */
 		ArrayList<Stock> stocks = new ArrayList<Stock>(diff);
@@ -197,7 +198,7 @@ public class StockDatabaseInterface
 		try
 		{
 			stock = new Stock(symbol);
-			stock.setDate(Stock.createDate(results.getString("Date")));
+			stock.setDate(Utilities.stringToSqlDate(results.getString("Date")));
 			stock.setOpen(results.getDouble("Open"));
 			stock.setHigh(results.getDouble("High"));
 			stock.setLow(results.getDouble("Low"));
@@ -213,16 +214,5 @@ public class StockDatabaseInterface
 		return stock;
 
 	}// createStock(ResultSet)
-
-	/**
-	 * Returns the differences between two dates in terms of days
-	 * @param start The starting date of the given range
-	 * @param end The end date of the given range
-	 * @return The number of days difference between the two days
-	 */
-	protected int dateDiff(Date start, Date end)
-	{
-		return (int) ((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-	}// dateDiff(Date,Date)
 
 }// StockAdapter class

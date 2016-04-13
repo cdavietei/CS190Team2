@@ -7,6 +7,8 @@ import java.sql.Date;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.finance.main.java.util.Utilities;
+
 /**
  * 
  * @author Chris
@@ -277,24 +279,7 @@ public class Stock implements Comparable<Stock>
 		
 
 		Stock newStock = new Stock(id, companyName, exchangeName, open, high, low, close, adjClose, volume,
-				createDate(strDate));
+				Utilities.stringToSqlDate(strDate));
 		return newStock;
 	}
-	
-	public static Date createDate(String date)
-	{
-		java.util.Date utilDate = new java.util.Date();
-		
-		try
-		{
-			utilDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-		}
-		catch(Exception e)
-		{
-			System.out.println("createDate(): "+e.getLocalizedMessage());
-		}
-		return (utilDate != null) ? new Date(utilDate.getTime()) : null;
-		
-	}
-
 }

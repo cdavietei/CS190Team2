@@ -6,18 +6,21 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.sql.Date;
 
 import com.finance.main.java.stock.*;
+import com.finance.main.java.util.Utilities;
+
 import org.json.*;
 
 public class YQLQuery
 {
-	public static final String baseUrlStart = "https://query.yahooapis.com/v1/public/yql?q=";
-	public static final String baseUrlEnd = "&format=json&env=store://datatables.org/alltableswithkeys";
+	public static final String BASE_URL_START = "https://query.yahooapis.com/v1/public/yql?q=";
+	public static final String BASE_URL_END = "&format=json&env=store://datatables.org/alltableswithkeys";
 	
 	//the Data-tables YQL looks into
-	public static final String yahooFinanceHistoricalData = "yahoo.finance.historicaldata";
-	public static final String yahooFinanceQuote = "yahoo.finance.quote";
+	public static final String YAHOO_FINANCE_HISTORICAL_DATA = "yahoo.finance.historicaldata";
+	public static final String YAHOO_FINANCE_QUOTE = "yahoo.finance.quote";
 	
 	/* test the query methods here */
 	public static void main(String[] args) throws Exception
@@ -37,23 +40,46 @@ public class YQLQuery
 	 */
 	public static ArrayList<Stock> getHistoricalData(String stockSymbol, String startDate, String endDate) throws Exception
 	{
-		String queryString = queryStringHistoricalData(stockSymbol, startDate, endDate);
+		/* YQL fails to return data when the date difference is more than ~350.
+		 * As a result, if the difference between start date and end date is more than
+		 * 300 days (to be safe), send multiple request to Yahoo Finance with smaller date ranges.
+		 */
+		Date start = Utilities.stringToSqlDate(startDate);
+		Date end = Utilities.stringToSqlDate(endDate);
+		int dateDifference = Utilities.dateDiff(start, end);
+		int iteration = 1;
 		
-		//encode queryString into UTF-8 format
-		String urlString = baseUrlStart + URLEncoder.encode(queryString, "UTF-8").replace("+", "%20") + baseUrlEnd;
-		String urlData = readStreamFromUrl(urlString);
-		
-		//parse the JSON data returned from the query
-		JSONObject queryObject = new JSONObject(urlData);
-		int countData = queryObject.getJSONObject("query").getInt("count");
-		JSONArray stockData = queryObject.getJSONObject("query").getJSONObject("results").getJSONArray("quote");
+		if (dateDifference > 300) {
+			iteration = (int) Math.ceil((double) dateDifference / 300);
+		}
 		
 		ArrayList<Stock> stocks = new ArrayList<Stock>();
-		for(int i = 0; i < countData;  i++) {
-			JSONObject stockObject = stockData.getJSONObject(i);
-			Stock newStock = Stock.makeStock(stockObject);
-			stocks.add(newStock);
-		} //for
+		
+		while (iteration-- > 0) {
+			end = Utilities.addDaysToSqlDate(start, 300);
+			if (end.after(Utilities.stringToSqlDate(endDate))) {
+				end = Utilities.stringToSqlDate(endDate);
+			}
+			
+			String queryString = queryStringHistoricalData(stockSymbol, Utilities.sqlDateToString(start),
+			                                                            Utilities.sqlDateToString(end));
+			
+			//encode queryString into UTF-8 format
+			String urlString = BASE_URL_START + URLEncoder.encode(queryString, "UTF-8").replace("+", "%20") + BASE_URL_END;
+			String urlData = readStreamFromUrl(urlString);
+			
+			//parse the JSON data returned from the query
+			JSONObject queryObject = new JSONObject(urlData);
+			int countData = queryObject.getJSONObject("query").getInt("count");
+			JSONArray stockData = queryObject.getJSONObject("query").getJSONObject("results").getJSONArray("quote");
+			
+			for(int i = 0; i < countData;  i++) {
+				JSONObject stockObject = stockData.getJSONObject(i);
+				Stock newStock = Stock.makeStock(stockObject);
+				stocks.add(newStock);
+			}
+			start = Utilities.addDaysToSqlDate(end, 1);
+		}
 		
 		return stocks;
 	}
@@ -70,7 +96,7 @@ public class YQLQuery
 		String queryString = queryStringCurrentData(stockSymbol);
 		
 		//encode queryString into UTF-8 format
-		String urlString = baseUrlStart + URLEncoder.encode(queryString, "UTF-8").replace("+", "%20") + baseUrlEnd;
+		String urlString = BASE_URL_START + URLEncoder.encode(queryString, "UTF-8").replace("+", "%20") + BASE_URL_END;
 		String urlData = readStreamFromUrl(urlString);
 		
 		//parse the JSON data returned from the query
@@ -118,7 +144,7 @@ public class YQLQuery
 	 */
 	private static String queryStringHistoricalData(String stockSymbol, String startDate, String endDate)
 	{
-		String queryString = "SELECT * FROM " + yahooFinanceHistoricalData + " " +
+		String queryString = "SELECT * FROM " + YAHOO_FINANCE_HISTORICAL_DATA + " " +
 		                     "WHERE symbol = \"" + stockSymbol + "\" " +
 		                     "AND startDate = \"" + startDate + "\" " +
 		                     "AND endDate = \"" + endDate + "\"";
@@ -134,7 +160,7 @@ public class YQLQuery
 	 */
 	private static String queryStringCurrentData(String stockSymbol)
 	{
-		String queryString = "SELECT * FROM " + yahooFinanceQuote + " " +
+		String queryString = "SELECT * FROM " + YAHOO_FINANCE_QUOTE + " " +
 		                     "WHERE symbol = \"" + stockSymbol + "\"";
 		
 		return queryString;
