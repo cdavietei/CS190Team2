@@ -12,24 +12,30 @@ import javax.swing.JCheckBox;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JToolBar;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.JScrollPane;
 
 import com.finance.main.java.database.StockDatabaseInterface;
 import com.finance.main.java.enums.*;
+import com.finance.main.java.search.search;
 import com.finance.main.java.stock.Stock;
 import com.finance.main.java.util.*;
 import javax.swing.JComboBox;
 public class HistTableView extends JPanel implements Localized {
 
-	private HistTableSettings settingsFrame; //= new HistTableSettings();
+	private HistTableSettings settingsFrame = new HistTableSettings();
 	private JTable table;
 	DefaultTableModel data;
 	public JScrollPane scrollpane;
 	public ArrayList<Stock> stockArray = null;
+	 private JComboBox comboBox = null;
 	/**
 	 * Create the panel.
 	 */
@@ -91,10 +97,50 @@ public class HistTableView extends JPanel implements Localized {
 		updateTable();
 		table.setEnabled(false);
 		
-		JComboBox comboBox = new JComboBox();
+		comboBox = new JComboBox();
+		ArrayList<String> stockNames = search.getStockNames();
+		comboBox.addItem("");
+		for(int i = 0; i < search.getStockNames().size();i++)
+			comboBox.addItem(stockNames.get(i));
+		comboBox.addItemListener(new ItemListener(){
+			@Override
+			public void itemStateChanged(ItemEvent e){
+				if(comboBox.getSelectedItem().toString().equals(""))
+					clearTable();
+				else
+					getStockData(comboBox.getSelectedItem().toString());
+			}
+		});
+		comboBox.addPopupMenuListener(new PopupMenuListener(){
+
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				// TODO Auto-generated method stub
+				addItems();
+			}
+
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 		comboBox.setBounds(147, 0, 123, 20);
 		add(comboBox);
 
+	}
+	private void addItems(){
+		comboBox.removeAllItems();
+		ArrayList<String> stockNames = search.getStockNames();
+		for(int i = 0; i < stockNames.size(); i++)
+			comboBox.addItem(stockNames.get(i));
 	}
 	public void getStockData(String stockName){
 		StockDatabaseInterface inter = new StockDatabaseInterface();
@@ -204,5 +250,11 @@ public class HistTableView extends JPanel implements Localized {
 				LocalizedStrings.getLocalString(TextFields.TABLE_ADJCLOSE)};
 		this.updateTable();
 		return true;
+	}
+	private void clearTable(){
+		data = (DefaultTableModel)table.getModel();
+		for(int i = data.getRowCount() -1; i >= 0; i--)
+			data.removeRow(i);
+		table.setModel(data);
 	}
 }

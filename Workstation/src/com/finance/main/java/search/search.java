@@ -95,7 +95,11 @@ public class search extends JPanel implements Localized {
 		}
 	}
 	public static ArrayList<String> getStockNames(){
-		return stockNames;
+		//return stockNames;
+		ArrayList<String> a = new ArrayList<String>();
+		a.add("GOOG");
+		a.add("YHOO");
+		return a;
 	}
 	@Override
 	public boolean updateLabels()
