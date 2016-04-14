@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<text>
+    <label id="FILE">File</label>
+    <label id="HELP">Help</label>
+    <label id="SEARCH">Search</label>
+    <label id="GRAPH">Graph</label>
+    <label id="TABLE">Table</label>
+    <label id="MODULE">Module</label>
+    <label id="STOCK">Stock</label>
+    <label id="RESET">Reset</label>
+    <label id="RECENT">Recent</label>
+    <label id="TABLE_DAYHIGH">Day High</label>
+    <label id="TABLE_DAYLOW">Day Low</label>
+	<label id="TABLE_YEARHIGH">Year High</label>
+    <label id="TABLE_YEARLOW">Year Low</label>
+    <label id="TABLE_EXCHANGE">Exchange</label>
+    <label id="TABLE_CHANGE">Change</label>
+    <label id="TABLE_STOCKNAME">Stock Name</label>
+    <label id="TABLE_VOLUME">Volume</label>
+    <label id="TABLE_LASTTRADE">Last Trade Price</label>
+    <label id="TABLE_AVERAGEDAILY">Average Daily</label>
+    <label id="TABLE_DATAPOINTS">Data Points</label>
+    <label id="TABLE_VALUE">Value</label>
+    <label id="TABLE_APPLY">Apply</label>
+    <label id="TABLE_CANCEL">Cancel</label>
+	<label id="TABLE_OPEN">Open</label>
+	<label id="TABLE_CLOSE">Close</label>
+	<label id="TABLE_HIGH">High</label>
+	<label id="TABLE_LOW">Low</label>
+	<label id="TABLE_DATE">Date</label>
+	<label id="TABLE_SYMBOL">Symbol</label>
+	<label id="TABLE_ADJCLOSE">Adjusted Close</label>
+	
+</text>

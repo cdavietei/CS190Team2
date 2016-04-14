@@ -98,7 +98,7 @@ public class search extends JPanel implements Localized {
 		//return stockNames;
 		ArrayList<String> a = new ArrayList<String>();
 		a.add("GOOG");
-		a.add("YHOO");
+		a.add("YHOO");// 										Uncomment these lines and comment return stockNames for testing Historical Table.
 		return a;
 	}
 	@Override

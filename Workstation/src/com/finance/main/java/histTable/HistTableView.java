@@ -34,7 +34,7 @@ public class HistTableView extends JPanel implements Localized {
 	private JTable table;
 	DefaultTableModel data;
 	public JScrollPane scrollpane;
-	public ArrayList<Stock> stockArray = null;
+	public ArrayList<Stock> stockArray = new ArrayList<Stock>();
 	 private JComboBox comboBox = null;
 	/**
 	 * Create the panel.
@@ -105,10 +105,10 @@ public class HistTableView extends JPanel implements Localized {
 		comboBox.addItemListener(new ItemListener(){
 			@Override
 			public void itemStateChanged(ItemEvent e){
-				if(comboBox.getSelectedItem().toString().equals(""))
-					clearTable();
-				else
-					getStockData(comboBox.getSelectedItem().toString());
+				if(e.getStateChange() == ItemEvent.SELECTED){
+					if(!comboBox.getSelectedItem().toString().equals(""))
+						getStockData(comboBox.getSelectedItem().toString());
+				}
 			}
 		});
 		comboBox.addPopupMenuListener(new PopupMenuListener(){
@@ -139,6 +139,7 @@ public class HistTableView extends JPanel implements Localized {
 	private void addItems(){
 		comboBox.removeAllItems();
 		ArrayList<String> stockNames = search.getStockNames();
+		comboBox.addItem("");
 		for(int i = 0; i < stockNames.size(); i++)
 			comboBox.addItem(stockNames.get(i));
 	}
