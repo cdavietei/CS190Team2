@@ -13,6 +13,7 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
+import javax.swing.border.BevelBorder;
 
 public class search extends JPanel implements Localized {
 	private JTextField textField;
@@ -23,6 +24,7 @@ public class search extends JPanel implements Localized {
 	 * Create the panel.
 	 */
 	public search() {
+		setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		setLayout(null);
 		LocalizedStrings.setLanguage(Languages.SPANISH);
 		LocalizedStrings.update();
@@ -33,7 +35,7 @@ public class search extends JPanel implements Localized {
 				searchFunction(textField.getText());
 			}
 		});
-		textField.setBounds(123, 120, 209, 20);
+		textField.setBounds(74, 21, 209, 20);
 		add(textField);
 		textField.setColumns(10);
 
@@ -43,12 +45,14 @@ public class search extends JPanel implements Localized {
 				searchFunction(textField.getText());
 			}
 		});
+		stockNames.add("GOOG");
+		stockNames.add("YHOO");
 		btnNewButton.setIcon(new ImageIcon("C:\\Users\\Carl\\workspace\\search2\\source\\5-search-icon.png"));
-		btnNewButton.setBounds(342, 120, 20, 20);
+		btnNewButton.setBounds(293, 21, 20, 20);
 		add(btnNewButton);
 		
 		JLabel lblSearch = new JLabel(searchLabel);
-		lblSearch.setBounds(75, 123, 46, 14);
+		lblSearch.setBounds(26, 24, 46, 14);
 		add(lblSearch);
 	}
 	public String isCompanyName(String userInput){
@@ -95,11 +99,7 @@ public class search extends JPanel implements Localized {
 		}
 	}
 	public static ArrayList<String> getStockNames(){
-		//return stockNames;
-		ArrayList<String> a = new ArrayList<String>();
-		a.add("GOOG");
-		a.add("YHOO");// 										Uncomment these lines and comment return stockNames for testing Historical Table.
-		return a;
+		return stockNames;
 	}
 	@Override
 	public boolean updateLabels()

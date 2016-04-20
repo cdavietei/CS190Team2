@@ -20,7 +20,7 @@ import javax.swing.JTextField;
 
 class SettingsFrame implements Subject
 {
-	private StockChart observer;
+	private StockChartPanel observer;
 	
 	protected JFrame frame = new JFrame("Settings for Stock Chart");
 	protected JPanel mainPanel = new JPanel();
@@ -164,11 +164,10 @@ class SettingsFrame implements Subject
 		
 		frame.pack();
 	}
-	
 	@Override
-	public void attach(StockChart observer)
+	public void attach(StockChartPanel stockChartPanel)
 	{
-		this.observer = observer;
+		this.observer = stockChartPanel;
 	}
 	
 	@Override

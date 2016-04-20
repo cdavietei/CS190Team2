@@ -5,11 +5,19 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+
+import com.finance.main.java.chart.StockChart;
+import com.finance.main.java.chart.StockChartPanel;
+import com.finance.main.java.histTable.HistTableView;
+import com.finance.main.java.search.search;
+
 import javax.swing.JDesktopPane;
 import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JInternalFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -23,6 +31,9 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import javax.swing.border.BevelBorder;
+import javax.swing.JButton;
+import java.awt.SystemColor;
 
 public class MainWindow extends JFrame implements ActionListener {
 	
@@ -59,54 +70,65 @@ public class MainWindow extends JFrame implements ActionListener {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-
+		
 		JDesktopPane desktopPane = new JDesktopPane();
-		desktopPane.setBackground(Color.WHITE);
-		desktopPane.setBounds(0, 0, 434, 240);
+		desktopPane.setBackground(Color.LIGHT_GRAY);
+		desktopPane.setBounds(0, 60, 716, 379);
 		contentPane.add(desktopPane);
-
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
 		
-		JMenuBar menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(595, 0, 121, 71);
+		desktopPane.add(panel_1);
+		panel_1.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		panel_1.setLayout(null);
 		
-		JMenu mnStocks = new JMenu("Stocks...");
-		menuBar.add(mnStocks);
+		JButton btnHistoricalTable = new JButton("Historical Table");
 		
-		JMenuItem mntmDis = new JMenuItem("DIS");
-
-		mntmDis.addMouseListener(new MouseAdapter() {
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				JInternalFrame newInternalFrame = new JInternalFrame("NEW");
-				newInternalFrame.setBounds(e.getX(), e.getY(), 100, 100);
-				desktopPane.add(newInternalFrame);
-				newInternalFrame.setVisible(true);
-				newInternalFrame.setClosable(true);
-				newInternalFrame.setResizable(true);
+				btnHistoricalTable.setBounds(10, 11, 105, 23);
+				panel_1.add(btnHistoricalTable);
 				
-				screenX = e.getXOnScreen();
-				screenY = e.getYOnScreen();
-				
-				myX = newInternalFrame.getX();
-				myY = newInternalFrame.getY();
-				
-				mntmDis.addMouseMotionListener(new MouseMotionAdapter() {
-					@Override
-					public void mouseDragged(MouseEvent e) {
-						int deltaX = e.getXOnScreen() - screenX;
-						int deltaY = e.getYOnScreen() - screenY;
-						
-						newInternalFrame.setLocation(myX + deltaX, myY + deltaY);
+				JButton btnGraph = new JButton("Graph");
+				btnGraph.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						JInternalFrame fr =  new JInternalFrame("Graph View");
+						fr.setBounds(110, 130, 700, 445);                 
+						desktopPane.add(fr);
+						StockChartPanel stockPan = new StockChartPanel();
+						fr.getContentPane().add(stockPan);
+						fr.setVisible(true);
+						fr.setClosable(true);
+						fr.setBorder(new LineBorder(new Color(0,0,0)));
 					}
 				});
+				btnGraph.setBounds(10, 39, 105, 23);
+				panel_1.add(btnGraph);
 				
-			}
-		});
-		
-		mnStocks.add(mntmDis);
+				JDesktopPane desktopPane_1 = new JDesktopPane();
+				desktopPane_1.setBackground(SystemColor.control);
+				desktopPane_1.setBounds(0, 0, 716, 61);
+				contentPane.add(desktopPane_1);
+				search searchPan = new search();
+				desktopPane_1.add(searchPan);
+				searchPan.setVisible(true);
+				searchPan.setBounds(144, 0, 360, 61);
+				btnHistoricalTable.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						JInternalFrame fr =  new JInternalFrame("Historical Table"); 
+						desktopPane.add(fr);
+						HistTableView histTable = new HistTableView();
+						histTable.setBounds(110, 130, 105, 70);
+						histTable.setVisible(true);
+						fr.getContentPane().add(histTable);
+						fr.setBounds(110, 130,870,300);
+						fr.setResizable(true);
+						fr.setVisible(true);
+						fr.setClosable(true);
+						fr.setBorder(new LineBorder(new Color(0,0,0)));
+						}
+				});
+
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 732, 478);
 
 		
 		
@@ -129,6 +151,11 @@ public class MainWindow extends JFrame implements ActionListener {
 			public void componentResized(ComponentEvent e) {
 				Dimension newSize = getSize();
 				desktopPane.setSize(newSize);
+				desktopPane_1.setSize(newSize);
+				Dimension pan = panel_1.getSize();
+				Dimension ser = searchPan.getSize();
+				searchPan.setBounds(newSize.width/2 - 180,0,ser.width,ser.height);
+				panel_1.setBounds(newSize.width-125,0,pan.width,pan.height);
 				
 			}
 

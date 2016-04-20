@@ -66,7 +66,7 @@ public class HistTableView extends JPanel implements Localized {
 			}
 		});
 		btnNewButton.setIcon(new ImageIcon("Resources/Images/settingsIcon.gif"));
-		btnNewButton.setBounds(280, 0, 23, 23);
+		btnNewButton.setBounds(813, 0, 23, 23);
 		add(btnNewButton);
 
 		table = new JTable();
@@ -132,7 +132,7 @@ public class HistTableView extends JPanel implements Localized {
 			}
 			
 		});
-		comboBox.setBounds(147, 0, 123, 20);
+		comboBox.setBounds(680, 0, 123, 20);
 		add(comboBox);
 
 	}
@@ -234,11 +234,9 @@ public class HistTableView extends JPanel implements Localized {
 			}
 			data.addRow(row);
 
-		}		//data = new DefaultTableModel(rows,columns);
+		}
 		table.setModel(data);
 		settingsFrame.setVisible(false);
-		//scrollpane.setSize(table.getSize());
-		//scrollpane.setBounds(23,23,table.getWidth(),table.getHeight());
 
 	}
 	@Override
