@@ -1,6 +1,7 @@
 package com.finance.main.java.chart;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -11,6 +12,7 @@ import java.util.Enumeration;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,9 +20,9 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-class SettingsFrame implements Subject
+public class SettingsFrame implements Subject
 {
-	private StockChartPanel observer;
+	private StockChart observer;
 	
 	protected JFrame frame = new JFrame("Settings for Stock Chart");
 	protected JPanel mainPanel = new JPanel();
@@ -44,6 +46,7 @@ class SettingsFrame implements Subject
 	protected String prevStartDate;
 	protected String prevEndDate;
 	protected String prevRangeType;
+	protected ArrayList<Component> tempComponents = new ArrayList<>();
 	
 	public SettingsFrame()
 	{
@@ -56,9 +59,14 @@ class SettingsFrame implements Subject
 		frame.setVisible(true);
 	}
 	
-	protected void initializeComponents()
+	public void hideFrame()
 	{
 		frame.setVisible(false);
+	}
+	
+	protected void initializeComponents()
+	{
+		hideFrame();
 		mainPanel.setLayout(layout);
 		
 		mainPanel.add(new JLabel("Enter Dates for stock data (in mm/dd/yyyy):"), buildConstraints(0,0,2));
@@ -83,6 +91,24 @@ class SettingsFrame implements Subject
 		frame.pack();
 	}
 	
+	public JButton createSettingsButton()
+	{
+		JButton settings = new JButton(new ImageIcon("Resources/Images/settingsIcon.gif"));
+		settings.setPreferredSize(new Dimension(25, 25));
+		
+		settings.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				update();
+				showFrame();
+				
+			}
+		});
+		
+		return settings;
+	}
+	
 	protected int countLayoutRows()
 	{
 		return layout.getLayoutDimensions()[1].length;
@@ -91,11 +117,6 @@ class SettingsFrame implements Subject
 	protected int countLayoutCols()
 	{
 		return layout.getLayoutDimensions()[0].length;
-	}
-	
-	protected JLabel buildLabel(String labelName)
-	{
-		return new JLabel(labelName);
 	}
 	
 	protected GridBagConstraints buildConstraints(int row, int col, int rowsToSpan)
@@ -158,16 +179,17 @@ class SettingsFrame implements Subject
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				frame.setVisible(false);
+				hideFrame();
 			}
 		});
 		
 		frame.pack();
 	}
+	
 	@Override
-	public void attach(StockChartPanel stockChartPanel)
+	public void attach(StockChart observer)
 	{
-		this.observer = stockChartPanel;
+		this.observer = observer;
 	}
 	
 	@Override
@@ -206,12 +228,14 @@ class SettingsFrame implements Subject
 	
 	protected void addCurrentChartLabels()
 	{
+		removeTemporaryComponents();
+		
 		if (observer.getNumberOfSeries() > 0) {
-			ArrayList<Component> newComponents = new ArrayList<>();
+			//ArrayList<Component> newComponents = new ArrayList<>();
 			int layoutRows = countLayoutRows();
 			
 			JLabel header = new JLabel("Current Stocks displayed:");
-			newComponents.add(header);
+			tempComponents.add(header);
 			mainPanel.add(header, buildConstraints(layoutRows++,0,2));
 			
 			for (String series : observer.currentStocksDisplayed()) {
@@ -221,17 +245,13 @@ class SettingsFrame implements Subject
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						observer.removeSeries(series);
-						for (Component comp : newComponents) {
-							mainPanel.remove(comp);
-							mainPanel.revalidate();
-						}
 						addCurrentChartLabels();
 					}
 				});
 				
 				JLabel name = new JLabel(series);
-				newComponents.add(name);
-				newComponents.add(remove);
+				tempComponents.add(name);
+				tempComponents.add(remove);
 				mainPanel.add(name, buildConstraints(layoutRows, 1, 1));
 				mainPanel.add(remove, buildConstraints(layoutRows++, 2, 1));
 			}
@@ -240,5 +260,13 @@ class SettingsFrame implements Subject
 		}
 		
 		addApplyCancelButtons();     //add last
+	}
+	
+	protected void removeTemporaryComponents()
+	{
+		for (Component comp : tempComponents) {
+			mainPanel.remove(comp);
+			mainPanel.revalidate();
+		}
 	}
 }

@@ -1,14 +1,16 @@
 package com.finance.main.java.window;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import com.finance.main.java.chart.SettingsFrame;
 import com.finance.main.java.chart.StockChart;
-import com.finance.main.java.chart.StockChartPanel;
 import com.finance.main.java.histTable.HistTableView;
 import com.finance.main.java.search.search;
 
@@ -91,10 +93,16 @@ public class MainWindow extends JFrame implements ActionListener {
 				btnGraph.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						JInternalFrame fr =  new JInternalFrame("Graph View");
-						fr.setBounds(110, 130, 700, 445);                 
+						fr.setBounds(110, 130, 700, 445);
+						fr.setLayout(new GridBagLayout());
 						desktopPane.add(fr);
-						StockChartPanel stockPan = new StockChartPanel();
-						fr.getContentPane().add(stockPan);
+						SettingsFrame settings = new SettingsFrame();
+						StockChart stockPan = new StockChart(settings);
+						
+						GridBagConstraints constraint = new GridBagConstraints();
+		            	constraint.anchor = GridBagConstraints.NORTHEAST;
+						fr.getContentPane().add(stockPan.getPanel());
+						fr.getContentPane().add(settings.createSettingsButton(), constraint);
 						fr.setVisible(true);
 						fr.setClosable(true);
 						fr.setBorder(new LineBorder(new Color(0,0,0)));

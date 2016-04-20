@@ -1,13 +1,12 @@
 package com.finance.main.java.chart;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Paint;
 import java.awt.Shape;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,8 +14,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -93,8 +90,6 @@ public class StockChart implements Localized
 	protected boolean rangeTypeHigh = false;
 	protected boolean rangeTypeLow = false;
 	
-	SettingsFrame settingsFrame = new SettingsFrame();
-	
 	/**
 	 * Default constructor for StockChart. Creates a chart layout in a panel.
 	 * Every time a new dataset is added to the chart, the panel updates automatically.
@@ -107,10 +102,21 @@ public class StockChart implements Localized
 		
 		chartPanel = new ChartPanel(chart);
 		chartPanel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+		chartPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+	}
+	
+	public StockChart(Subject settingsMenu)
+	{
+		dataset = new TimeSeriesCollection();
+		JFreeChart chart = ChartFactory.createTimeSeriesChart(chartTitle, xAxisLabel, yAxisLabel, dataset, 
+		                       showLegend, showTooltips, generateUrls);
+		
+		chartPanel = new ChartPanel(chart);
+		chartPanel.setPreferredSize(new Dimension(panelWidth, panelHeight));
 		//chartPanel.setBorder(new CompoundBorder(new EmptyBorder(10,10,10,10), 
 		//BorderFactory.createLineBorder(Color.black)));
 		chartPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-		settingsFrame.attach(this);
+		settingsMenu.attach(this);
 	}
 	
 	/**
@@ -451,22 +457,6 @@ public class StockChart implements Localized
 		return true;
 	}
 	
-	public JButton createSettingsButton()
-	{
-		JButton settings = new JButton("Settings", new ImageIcon("Resources/Images/settingsIcon.gif"));
-		settings.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				settingsFrame.update();
-				settingsFrame.showFrame();
-				
-			}
-		});
-		
-		return settings;
-	}
-	
 	protected ArrayList<Stock> getStockData(String stockSymbol, String startDate, String endDate) throws Exception
 	{
 		StockDatabaseInterface stockData = new StockDatabaseInterface();
@@ -533,36 +523,29 @@ public class StockChart implements Localized
 		LocalizedStrings.language = Languages.ENGLISH_US;
 		LocalizedStrings.update();
 		
-		//SettingsFrame settingsFrame = new SettingsFrame();
-		
-		/*JButton settings = new JButton("Settings");
-		settings.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				settings.setVisible(true);
-				
-			}
-		});*/
-		
 		EventQueue.invokeLater(new Runnable() {
             public void run() {
             	JFrame frame = new JFrame();
-				
-            	StockChart contentPane = new StockChart();
+            	//JLayeredPane lpane = new JLayeredPane();
             	
+            	frame.setLayout(new GridBagLayout());
+            	//frame.add(lpane, BorderLayout.CENTER);
+				//lpane.setBounds(0, 0, 600, 400);
             	
+            	SettingsFrame settings = new SettingsFrame();
+            	StockChart contentPane = new StockChart(settings);
             	
-				frame.add(contentPane.getPanel(), BorderLayout.NORTH);
-				frame.add(contentPane.createSettingsButton());
-				//settingsFrame.attach(contentPane);
-				
+            	GridBagConstraints con = new GridBagConstraints();
+            	con.anchor = GridBagConstraints.NORTHEAST;
+				frame.add(contentPane.getPanel());
+				frame.add(settings.createSettingsButton(), con);
+				//lpane.add(contentPane.getPanel(), new Integer(0), 0);
+				//lpane.add(settings.createSettingsButton(), new Integer(1), 0);
 				
 				try {
 					contentPane.addSeries("GOOG");
 					contentPane.addSeries("YHOO");
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
