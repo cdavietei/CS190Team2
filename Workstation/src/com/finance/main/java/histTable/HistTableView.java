@@ -62,7 +62,8 @@ public class HistTableView extends JPanel implements Localized {
 		});
 		settingsFrame.apply.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				updateTable();
+				if(!comboBox.getSelectedItem().toString().equals(""))
+					getStockData(comboBox.getSelectedItem().toString());
 			}
 		});
 		btnNewButton.setIcon(new ImageIcon("Resources/Images/settingsIcon.gif"));
@@ -145,18 +146,21 @@ public class HistTableView extends JPanel implements Localized {
 	}
 	public void getStockData(String stockName){
 		StockDatabaseInterface inter = new StockDatabaseInterface();
-		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
 		java.util.Date date1 = new java.util.Date();
 		try {
-			date1 = formatter.parse("20/03/2016");
+			if(!settingsFrame.startDate.getText().equals(""))
+				date1 = formatter.parse(settingsFrame.startDate.getText());
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		java.util.Date date2 = new java.util.Date();
 		try {
-			date2 = formatter.parse("30/03/2016");
+			if(!settingsFrame.endDate.getText().equals(""))
+				date2 = formatter.parse(settingsFrame.endDate.getText());
 		} catch (ParseException e1) {
+			
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
@@ -242,18 +246,24 @@ public class HistTableView extends JPanel implements Localized {
 	@Override
 	public boolean updateLabels()
 	{
-		this.columnNames = new String[] {LocalizedStrings.getLocalString(TextFields.TABLE_SYMBOL),
+		columnNames = new String[] {LocalizedStrings.getLocalString(TextFields.TABLE_SYMBOL),
 				LocalizedStrings.getLocalString(TextFields.TABLE_DATE),LocalizedStrings.getLocalString(TextFields.TABLE_HIGH),
 				LocalizedStrings.getLocalString(TextFields.TABLE_LOW),LocalizedStrings.getLocalString(TextFields.TABLE_OPEN),
 				LocalizedStrings.getLocalString(TextFields.TABLE_CLOSE),LocalizedStrings.getLocalString(TextFields.TABLE_VOLUME),
 				LocalizedStrings.getLocalString(TextFields.TABLE_ADJCLOSE)};
-		this.updateTable();
+		System.out.println(LocalizedStrings.language+"*****");
+		data = (DefaultTableModel)table.getModel();
+		data.setColumnIdentifiers(columnNames);
 		return true;
-	}
+	}	
 	private void clearTable(){
 		data = (DefaultTableModel)table.getModel();
 		for(int i = data.getRowCount() -1; i >= 0; i--)
 			data.removeRow(i);
 		table.setModel(data);
+	}
+	public void setLang(Languages lang){
+		System.out.println("set lang "+lang);
+		LocalizedStrings.setLanguage(lang);
 	}
 }

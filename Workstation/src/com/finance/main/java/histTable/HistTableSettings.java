@@ -9,14 +9,18 @@ import javax.swing.border.EmptyBorder;
 
 import com.finance.main.java.enums.Languages;
 import com.finance.main.java.enums.TextFields;
+import com.finance.main.java.util.Localized;
 import com.finance.main.java.util.LocalizedStrings;
 
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JFormattedTextField;
+import javax.swing.JTextField;
+import javax.swing.JLabel;
 
-public class HistTableSettings extends JFrame {
+public class HistTableSettings extends JFrame implements Localized {
 	public JButton apply;
 	private JPanel contentPane;
 	public boolean symbol;
@@ -35,7 +39,11 @@ public class HistTableSettings extends JFrame {
 	public JCheckBox volumeBox;
 	public JCheckBox adjCloseBox;
 	public JCheckBox dateBox;
-	
+	public JTextField startDate;
+	public JTextField endDate;
+	public JButton btnCancel;
+	public JLabel lblEndDate;
+	public JLabel lblStartDate;
 	/**
 	 * Launch the application.
 	 */
@@ -108,7 +116,7 @@ public class HistTableSettings extends JFrame {
 		apply.setBounds(49, 192, 89, 23);
 		contentPane.add(apply);
 		
-		JButton btnCancel = new JButton(LocalizedStrings.getLocalString(TextFields.TABLE_CANCEL));
+		btnCancel = new JButton(LocalizedStrings.getLocalString(TextFields.TABLE_CANCEL));
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				HistTableSettings.this.setVisible(false);
@@ -117,5 +125,41 @@ public class HistTableSettings extends JFrame {
 		});
 		btnCancel.setBounds(171, 192, 89, 23);
 		contentPane.add(btnCancel);
+		
+		startDate = new JTextField();
+		startDate.setBounds(60, 161, 78, 20);
+		contentPane.add(startDate);
+		startDate.setColumns(10);
+		
+		lblStartDate = new JLabel("Start Date:");
+		lblStartDate.setBounds(6, 164, 63, 14);
+		contentPane.add(lblStartDate);
+		
+		lblEndDate = new JLabel("End Date:");
+		lblEndDate.setBounds(148, 164, 57, 14);
+		contentPane.add(lblEndDate);
+		
+		endDate = new JTextField();
+		endDate.setBounds(199, 161, 86, 20);
+		contentPane.add(endDate);
+		endDate.setColumns(10);
+	}
+
+	@Override
+	public boolean updateLabels() {
+
+		btnCancel.setText(LocalizedStrings.getLocalString(TextFields.TABLE_CANCEL));
+		apply.setText(LocalizedStrings.getLocalString(TextFields.TABLE_APPLY));
+		lblEndDate.setText(LocalizedStrings.getLocalString(TextFields.END_DATE));
+		lblStartDate.setText(LocalizedStrings.getLocalString(TextFields.START_DATE));
+		symbolBox.setText(LocalizedStrings.getLocalString(TextFields.TABLE_SYMBOL));
+		openBox.setText(LocalizedStrings.getLocalString(TextFields.TABLE_OPEN));
+		closeBox.setText(LocalizedStrings.getLocalString(TextFields.TABLE_CLOSE));
+		highBox.setText(LocalizedStrings.getLocalString(TextFields.TABLE_HIGH));
+		lowBox.setText(LocalizedStrings.getLocalString(TextFields.TABLE_LOW));
+		volumeBox.setText(LocalizedStrings.getLocalString(TextFields.TABLE_VOLUME));
+		adjCloseBox.setText(LocalizedStrings.getLocalString(TextFields.TABLE_ADJCLOSE));
+		dateBox.setText(LocalizedStrings.getLocalString(TextFields.TABLE_DATE));
+		return false;
 	}
 }

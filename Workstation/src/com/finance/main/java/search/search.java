@@ -18,6 +18,7 @@ import javax.swing.border.BevelBorder;
 public class search extends JPanel implements Localized {
 	private JTextField textField;
 	private static ArrayList<String> stockNames = new ArrayList<String>();
+	public JLabel lblSearch;
 	//LocalizedSrings.lang = Languages.English;
 
 	/**
@@ -26,8 +27,6 @@ public class search extends JPanel implements Localized {
 	public search() {
 		setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		setLayout(null);
-		LocalizedStrings.setLanguage(Languages.SPANISH);
-		LocalizedStrings.update();
 		String searchLabel = LocalizedStrings.getLocalString(TextFields.SEARCH)+ ":";
 		textField = new JTextField();
 		textField.addActionListener(new ActionListener() {
@@ -51,7 +50,7 @@ public class search extends JPanel implements Localized {
 		btnNewButton.setBounds(293, 21, 20, 20);
 		add(btnNewButton);
 		
-		JLabel lblSearch = new JLabel(searchLabel);
+		lblSearch = new JLabel(searchLabel);
 		lblSearch.setBounds(26, 24, 46, 14);
 		add(lblSearch);
 	}
@@ -104,7 +103,7 @@ public class search extends JPanel implements Localized {
 	@Override
 	public boolean updateLabels()
 	{
-
+		lblSearch.setText(LocalizedStrings.getLocalString(TextFields.SEARCH) + ":");
 		
 		return true;
 	}

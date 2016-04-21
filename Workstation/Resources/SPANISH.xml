@@ -16,6 +16,7 @@
     <label id="TABLE_EXCHANGE">Intercambio</label>
     <label id="TABLE_CHANGE">Cambio</label>
     <label id="TABLE_STOCKNAME">Nombre de archivo</label>
+	<label id="TABLE_ADJCLOSE">Cerrar ajustado</label>
     <label id="TABLE_VOLUME">Volumen</label>
     <label id="TABLE_LASTTRADE">Última cotización de precios</label>
     <label id="TABLE_AVERAGEDAILY">Precio Promedio Diario</label>
@@ -23,6 +24,14 @@
     <label id="TABLE_VALUE">Valer</label>
     <label id="TABLE_APPLY">Aplicar</label>
     <label id="TABLE_CANCEL">Cancelar</label>
+	<label id="TABLE_HIGH">Alto</label>
+	<label id="TABLE_LOW">Bajo</label>
+	<label id="TABLE_SYMBOL">Símbolo</label>
+	<label id="TABLE_OPEN">Abierto</label>
+	<label id="TABLE_CLOSE">Cerca</label>	
     <label id="CHART_XAXIS">Hora</label>
 	<label id="CHART_YAXIS">Precio de Mercado</label>
+	<label id="START_DATE">Comenzando:</label>
+	<label id="END_DATE">Fecha Final:</label>
+	<label id="TABLE_DATE">Fecha</label>
 </text>

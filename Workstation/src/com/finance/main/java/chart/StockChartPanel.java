@@ -37,39 +37,8 @@ import com.finance.main.java.stock.Stock;
 import com.finance.main.java.util.Localized;
 import com.finance.main.java.util.LocalizedStrings;
 
+public class StockChartPanel extends JPanel implements Localized {
 
-/**
- * Displays graphical view of one or more stocks.
- * 
- * The chart(s) implements tool-tip generator. Hovering mouse over a data point in the chart
- * will display the stock name, the time and the stock price in the format:
- * 			stockName: (time, price)
- * 
- * 
- * To get the panel containing chart(s),
- * instantiate the class with no parameters, and call getPanel().
- * 
- * This class uses the Builder design pattern. Therefore, to change the panel's width or height
- * or other default parameters, use the following:
- * 
- * StockChart newChart = new StockChart().setPanelSize(800, 600)
- *                                       .setPanelHeight(400)
- *                                       .setXAxisLabel("Date")
- *                                       .setShowLegend(false); 
- * 
- * To compare two or more stocks on the same panel, calling addDataset(...) will create
- * chart for each stock. For example, to compare Google and Yahoo stocks over May 20, 2015 to 
- * May 30, 2015, use the following:
- * 
- * StockChart newChart = new StockChart();
- * newChart.addDataset("GOOG", "05/20/2015", "05/30/2015");
- * newChart.addDataset("YHOO", "05/20/2015", "05/30/2015");
- * 
- * @author MI ONIM
- *
- */
-public class StockChart implements Localized
-{
 	protected ChartPanel chartPanel;
 	protected TimeSeriesCollection dataset;
 	
@@ -99,7 +68,7 @@ public class StockChart implements Localized
 	 * Default constructor for StockChart. Creates a chart layout in a panel.
 	 * Every time a new dataset is added to the chart, the panel updates automatically.
 	 */
-	public StockChart()
+	public StockChartPanel()
 	{
 		dataset = new TimeSeriesCollection();
 		JFreeChart chart = ChartFactory.createTimeSeriesChart(chartTitle, xAxisLabel, yAxisLabel, dataset, 
@@ -110,7 +79,19 @@ public class StockChart implements Localized
 		//chartPanel.setBorder(new CompoundBorder(new EmptyBorder(10,10,10,10), 
 		//BorderFactory.createLineBorder(Color.black)));
 		chartPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-		//settingsFrame.attach(this);
+		settingsFrame.attach(this);
+		
+		add(chartPanel, BorderLayout.NORTH);
+		add(createSettingsButton());
+		
+		
+		try {
+			addSeries("GOOG");
+			addSeries("YHOO");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -252,9 +233,9 @@ public class StockChart implements Localized
 	/**
 	 * Legend is added to the chart by default. Calling this method will remove them.
 	 * 
-	 * @return Current StockChart object
+	 * @return Current StockChartPanel object
 	 */
-	public StockChart removeLegend()
+	public StockChartPanel removeLegend()
 	{
 		this.showLegend = false;
 		getChart().removeLegend();
@@ -286,7 +267,7 @@ public class StockChart implements Localized
 		return chartTitle;
 	}
 	
-	public StockChart setChartTitle(String chartTitle)
+	public StockChartPanel setChartTitle(String chartTitle)
 	{
 		this.chartTitle = chartTitle;
 		getChart().setTitle(chartTitle);
@@ -299,7 +280,7 @@ public class StockChart implements Localized
 		return xAxisLabel;
 	}
 	
-	public StockChart setXAxisLabel(String xAxisLabel)
+	public StockChartPanel setXAxisLabel(String xAxisLabel)
 	{
 		this.xAxisLabel = xAxisLabel;
 		getPlot().getDomainAxis().setLabel(xAxisLabel);
@@ -312,7 +293,7 @@ public class StockChart implements Localized
 		return yAxisLabel;
 	}
 	
-	public StockChart setYAxisLabel(String yAxisLabel)
+	public StockChartPanel setYAxisLabel(String yAxisLabel)
 	{
 		this.yAxisLabel = yAxisLabel;
 		getPlot().getRangeAxis().setLabel(yAxisLabel);
@@ -338,7 +319,7 @@ public class StockChart implements Localized
 		return new Dimension(panelWidth, panelHeight);
 	}
 	
-	public StockChart setPanelSize(int panelWidth, int panelHeight)
+	public StockChartPanel setPanelSize(int panelWidth, int panelHeight)
 	{
 		this.panelWidth = panelWidth;
 		this.panelHeight = panelHeight;
@@ -347,7 +328,7 @@ public class StockChart implements Localized
 		return this;
 	}
 	
-	public StockChart setShowTooltips(boolean showTooltips)
+	public StockChartPanel setShowTooltips(boolean showTooltips)
 	{
 		this.showTooltips = showTooltips;
 		chartPanel.setDisplayToolTips(showTooltips);
@@ -360,7 +341,7 @@ public class StockChart implements Localized
 		return panelWidth;
 	}
 	
-	public StockChart setPanelWidth(int panelWidth)
+	public StockChartPanel setPanelWidth(int panelWidth)
 	{
 		return setPanelSize(panelWidth, panelHeight);
 	}
@@ -370,7 +351,7 @@ public class StockChart implements Localized
 		return panelHeight;
 	}
 	
-	public StockChart setPanelHeight(int panelHeight)
+	public StockChartPanel setPanelHeight(int panelHeight)
 	{
 		return setPanelSize(panelWidth, panelHeight);
 	}
@@ -547,9 +528,9 @@ public class StockChart implements Localized
 		
 		EventQueue.invokeLater(new Runnable() {
             public void run() {
-            	JFrame frame = new JFrame();
+            	JPanel frame = new JPanel();
 				
-            	StockChart contentPane = new StockChart();
+            	StockChartPanel contentPane = new StockChartPanel();
             	
             	
             	
@@ -567,10 +548,8 @@ public class StockChart implements Localized
 				}
 				
 				frame.setVisible(true);
-				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frame.pack();
-				frame.setLocationRelativeTo(null);
             }
          });
 	}
+
 }

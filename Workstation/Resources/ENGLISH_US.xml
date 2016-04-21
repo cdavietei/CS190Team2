@@ -16,19 +16,22 @@
     <label id="TABLE_EXCHANGE">Exchange</label>
     <label id="TABLE_CHANGE">Change</label>
     <label id="TABLE_STOCKNAME">Stock Name</label>
-    <label id="TABLE_VOLUME">Volume</label>
+    <label id="TABLE_ADJCLOSE">Adjusted Close</label>
+	<label id="TABLE_VOLUME">Volume</label>
     <label id="TABLE_LASTTRADE">Last Trade Price</label>
     <label id="TABLE_AVERAGEDAILY">Average Daily</label>
     <label id="TABLE_DATAPOINTS">Data Points</label>
     <label id="TABLE_VALUE">Value</label>
     <label id="TABLE_APPLY">Apply</label>
     <label id="TABLE_CANCEL">Cancel</label>
-	<label id="TABLE_OPEN">Open</label>
-	<label id="TABLE_CLOSE">Close</label>
 	<label id="TABLE_HIGH">High</label>
 	<label id="TABLE_LOW">Low</label>
-	<label id="TABLE_DATE">Date</label>
 	<label id="TABLE_SYMBOL">Symbol</label>
-	<label id="TABLE_ADJCLOSE">Adjusted Close</label>
-	
+	<label id="TABLE_OPEN">Open</label>
+	<label id="TABLE_CLOSE">Close</label>
+	<label id="TABLE_DATE">Date</label>
+	<label id="START_DATE">Start Date:</label>
+	<label id="END_DATE">End Date:</label>
+    <label id="CHART_XAXIS">Hour</label>
+	<label id="CHART_YAXIS">Market Price</label>
 </text>

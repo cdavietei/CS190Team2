@@ -104,7 +104,7 @@ public enum TextFields
 	 * Table Data Points label
 	 * @since 1.0
 	 */
-	TABLE_DATAPOINTS,	/**
+	TABLE_DATAPOINTS,	/** 	
 	 * Table Value label
 	 * @since 1.0
 	 */
@@ -170,4 +170,13 @@ public enum TextFields
 	 * Chart y-Axis label
 	 */
 	CHART_YAXIS,
+	/**
+	 *  Start Date label
+	 */
+	START_DATE,
+	/**
+	 * End date label
+	 */
+	 END_DATE
+	
 }//TextFields enum

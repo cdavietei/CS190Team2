@@ -7,6 +7,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.finance.main.java.enums.Languages;
+import com.finance.main.java.enums.TextFields;
+import com.finance.main.java.util.LocalizedStrings;
+
 public class HistTableWrapper extends JFrame {
 
 	private JPanel contentPane;

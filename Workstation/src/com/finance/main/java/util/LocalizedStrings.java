@@ -59,7 +59,7 @@ public class LocalizedStrings
 	public static boolean setLanguage(Languages lang)
 	{
 		/* Checks to see if new language is the one already set */
-		if(language != null && lang == prevLang)
+		if(language != null && lang == language)
 			return true;
 		else
 		{
