@@ -4,7 +4,8 @@ public enum Tables {
 	
 	EXCHANGE_INFORMATION("Exchange_Information"),
 	CURRENT_STOCKS("Current_Stocks"),
-	STOCK_TEMPLATE("Stock_Template");
+	STOCK_TEMPLATE("Stock_Template"), 
+	COMPANIES("Companies");
 	
 	
 	private String value;

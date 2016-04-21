@@ -257,11 +257,12 @@ public class SQLiteConnector
 			 * If results is automatically closed, nothing was returned from the
 			 * SELECT statement
 			 */
-			if (!results.isClosed())
+			if (!results.isClosed() && results.next())
 				retval = true;
-
-			stmt.close();
+			
 			results.close();
+			stmt.close();
+			
 		} // try
 		catch (SQLException e)
 		{
@@ -302,5 +303,32 @@ public class SQLiteConnector
 			connected = false;
 		} // finally
 	}// close()
+	
+	public boolean batchUpdate(String query, String[] values)
+	{
+		if (!connected)
+			connect();
+		
+		PreparedStatement stmt = null;
+		boolean value = false;
+		
+		try
+		{
+			stmt = con.prepareStatement(query);
+			
+			for(int i=0; i<values.length-1; i+=2)
+			{
+				stmt.setString(0, values[i]);
+				stmt.setString(1, values[i+1]);
+				value = value && stmt.execute();
+			}			
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.getLocalizedMessage());
+		}
+		
+		return value;
+	}
 
 }// SQliteConnector class
