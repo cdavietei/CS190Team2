@@ -46,16 +46,14 @@ public class SearchToDB
 	public boolean checkTable()
 	{
 		boolean value = false;
-		
-		if(!connection.tableExists(Tables.COMPANIES.toString()))
+		if(!connection.tableExists(Tables.COMPANIES.toString())){
 				value = createTable();
+		}
 		else
 		{
-			String query = String.format("SELECT %s FROM %s WHERE %s = 'A%';",
-					TableFields.SYMBOL.toString(), Tables.COMPANIES.toString(), TableFields.SYMBOL.toString());
-			
+			String query = String.format("SELECT %s FROM %s;",
+					"Symbol", Tables.COMPANIES.toString());
 			ResultSet results = connection.executeQuery(query);
-			
 			try
 			{
 				if(!results.next())
@@ -75,13 +73,11 @@ public class SearchToDB
 	
 	public String isCompanyName(String userInput)
 	{
-		String query = String.format("SELECT * FROM %s WHERE %s LIKE %%s%;",Tables.COMPANIES.toString(), 
+		String query = String.format("SELECT * FROM %s WHERE %s LIKE '%%%s%%';",Tables.COMPANIES.toString(), 
 				TableFields.COMPANY_NAME.toString(), userInput);
-		
 		ResultSet results = connection.executeQuery(query);
 		
-		String symbol = null;
-		
+		String symbol = "";
 		try
 		{
 			if(results.next())
@@ -95,7 +91,6 @@ public class SearchToDB
 		}
 		
 		connection.close();
-		
 		return symbol;
 	}
 	
@@ -103,8 +98,7 @@ public class SearchToDB
 	{
 		if(userInput.length() > 5)
 			return false;
-		
-		String query = String.format("SELECT %s FROM %s WHERE %s = '%s' ",
+		String query = String.format("SELECT %s FROM %s WHERE %s = '%%%s%%' ",
 				TableFields.SYMBOL.toString(), Tables.COMPANIES.toString(),
 				TableFields.SYMBOL.toString(),userInput);
 		
@@ -152,12 +146,12 @@ public class SearchToDB
 			
 			String query = String.format("INSERT INTO %s (%s,%s) VALUES (?,?)",
 					Tables.COMPANIES.toString(), TableFields.SYMBOL.toString(), TableFields.COMPANY_NAME.toString());
-			
-			created = connection.batchUpdate(query, (String[])list.toArray());			
+			String[] arr = list.toArray(new String[list.size()]);
+			created = connection.batchUpdate(query, arr);
 		}
 		catch(Exception e)
 		{
-			System.out.println(e.getLocalizedMessage());
+			System.out.println("createTable()"+e.getLocalizedMessage());
 		}
 		
 		return created;

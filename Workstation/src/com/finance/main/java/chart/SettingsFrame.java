@@ -21,7 +21,7 @@ import javax.swing.JTextField;
 class SettingsFrame implements Subject
 {
 	private StockChartPanel observer;
-	
+	protected ArrayList<Component> newComponents = new ArrayList<>();
 	protected JFrame frame = new JFrame("Settings for Stock Chart");
 	protected JPanel mainPanel = new JPanel();
 	protected JLabel startDate = new JLabel("Start Date:");
@@ -131,39 +131,7 @@ class SettingsFrame implements Subject
         return null;
     }
 	
-	protected void addApplyCancelButtons()
-	{
-		mainPanel.add(apply, buildConstraints(countLayoutRows(), 1, 1));
-		
-		apply.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String newStartDate = startDateText.getText();
-				String newEndDate = endDateText.getText();
-				String newRangeType = getSelectedButtonText();
-				
-				if (!prevStartDate.equals(newStartDate) || !prevEndDate.equals(newEndDate)
-						|| !prevRangeType.equals(newRangeType)) {
-					observer.settingsChanged(newStartDate, newEndDate, newRangeType);
-				}
-				
-				frame.setVisible(false);
-			}
-		});
-		
-		mainPanel.add(cancel, buildConstraints(countLayoutRows(), 2, 1));
-		
-		cancel.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				frame.setVisible(false);
-			}
-		});
-		
-		frame.pack();
-	}
+	
 	@Override
 	public void attach(StockChartPanel stockChartPanel)
 	{
@@ -206,8 +174,12 @@ class SettingsFrame implements Subject
 	
 	protected void addCurrentChartLabels()
 	{
+		if(newComponents.size() > 0){
+			for(int i =0; i < newComponents.size(); i++)
+				mainPanel.remove(newComponents.get(i));
+		}
 		if (observer.getNumberOfSeries() > 0) {
-			ArrayList<Component> newComponents = new ArrayList<>();
+			newComponents = new ArrayList<>();
 			int layoutRows = countLayoutRows();
 			
 			JLabel header = new JLabel("Current Stocks displayed:");
@@ -238,7 +210,41 @@ class SettingsFrame implements Subject
 			
 			frame.pack();
 		}
+		addApplyCancelButtons();  	
+	}
+
+	protected void addApplyCancelButtons()
+	{
+		mainPanel.add(apply, buildConstraints(countLayoutRows(), 1, 1));
 		
-		addApplyCancelButtons();     //add last
+		apply.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String newStartDate = startDateText.getText();
+				String newEndDate = endDateText.getText();
+				String newRangeType = getSelectedButtonText();
+				
+				if (!prevStartDate.equals(newStartDate) || !prevEndDate.equals(newEndDate)
+						|| !prevRangeType.equals(newRangeType)) {
+					observer.settingsChanged(newStartDate, newEndDate, newRangeType);
+				}
+				
+				frame.setVisible(false);
+			}
+		});
+		
+		mainPanel.add(cancel, buildConstraints(countLayoutRows(), 2, 1));
+		
+		cancel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.setVisible(false);
+			}
+		});
+		
+		frame.pack();
+		
 	}
 }

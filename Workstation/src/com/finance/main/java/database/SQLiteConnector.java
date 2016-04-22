@@ -28,7 +28,7 @@ public class SQLiteConnector
 
 	/* The Database connection object */
 	protected Connection con;
-
+	
 	/**
 	 * Default Constructor for the SQLiteConnector
 	 * 
@@ -183,9 +183,7 @@ public class SQLiteConnector
 		/* Stores variables outside try/catch block to properly close them */
 		BufferedReader reader = null;
 		Statement stmt = null;
-
 		boolean retval = false;
-
 		/* Creates a database from default schema file */
 		try
 		{
@@ -195,7 +193,6 @@ public class SQLiteConnector
 			while (reader.ready())
 			{
 				String sql = reader.readLine();
-
 				stmt = con.createStatement();
 
 				stmt.executeUpdate(sql);
@@ -259,7 +256,6 @@ public class SQLiteConnector
 			 */
 			if (!results.isClosed() && results.next())
 				retval = true;
-			
 			results.close();
 			stmt.close();
 			
@@ -308,26 +304,25 @@ public class SQLiteConnector
 	{
 		if (!connected)
 			connect();
-		
 		PreparedStatement stmt = null;
-		boolean value = false;
-		
+		boolean value = true;
 		try
 		{
-			stmt = con.prepareStatement(query);
-			
 			for(int i=0; i<values.length-1; i+=2)
 			{
-				stmt.setString(0, values[i]);
-				stmt.setString(1, values[i+1]);
+				System.out.println(i);
+				stmt = con.prepareStatement(query);
+				stmt.setString(1, values[i]);
+				stmt.setString(2, values[i+1]);
 				value = value && stmt.execute();
+				
 			}			
 		}
 		catch(Exception e)
 		{
+			e.printStackTrace();
 			System.out.println(e.getLocalizedMessage());
 		}
-		
 		return value;
 	}
 

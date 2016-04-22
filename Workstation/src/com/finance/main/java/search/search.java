@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.border.BevelBorder;
 
+import org.sqlite.core.DB;
+
+import com.finance.main.java.search.*;
 public class search extends JPanel implements Localized {
 	private JTextField textField;
 	private static ArrayList<String> stockNames = new ArrayList<String>();
@@ -44,8 +47,6 @@ public class search extends JPanel implements Localized {
 				searchFunction(textField.getText());
 			}
 		});
-		stockNames.add("GOOG");
-		stockNames.add("YHOO");
 		btnNewButton.setIcon(new ImageIcon("C:\\Users\\Carl\\workspace\\search2\\source\\5-search-icon.png"));
 		btnNewButton.setBounds(293, 21, 20, 20);
 		add(btnNewButton);
@@ -54,30 +55,16 @@ public class search extends JPanel implements Localized {
 		lblSearch.setBounds(26, 24, 46, 14);
 		add(lblSearch);
 	}
-	public String isCompanyName(String userInput){
-		return "";
-	}
-	public boolean isStockName(String userInput){
-		return true;
-	}
-	public boolean searchYQL(String userInput){
-		return true;
-	}
 	public void searchFunction(String userInput){
+		SearchToDB db = new SearchToDB();
 		JFrame frame = new JFrame();
 		JOptionPane mess = new JOptionPane();
 		if(!userInput.equals("")){
-			String returns = isCompanyName(userInput);
+			String returns = db.isCompanyName(userInput);
 			if(returns.equals("")){
-				if(isStockName(userInput)){
+				if(db.isStockName(userInput)){
 					stockNames.add(userInput);
-					if(searchYQL(userInput)){
-						mess.showMessageDialog(frame,"Search successful!"/*LocalizedStrings.getLocalString(TextFields.SEARCHSUCCESS*/);
-					}
-					else{
-						mess.showMessageDialog(frame, "Search failed!"/*LocalizedStrings.getLocalString(TextFields.SEARCHFAIL*/);
-					}
-					
+					mess.showMessageDialog(frame, "Search failed!"/*LocalizedStrings.getLocalString(TextFields.SEARCHFAIL*/);
 				}
 				else{
 					mess.showMessageDialog(frame, "Invalid input, not a stock or company.");
@@ -85,12 +72,7 @@ public class search extends JPanel implements Localized {
 			}
 			else{
 				stockNames.add(returns);
-				if(searchYQL(returns)){
 					mess.showMessageDialog(frame, "Search successful"/*LocalizedStrings.getLocalString(TextFields.SEARCHSUCCESS*/);
-				}
-				else{
-					mess.showMessageDialog(frame, "Search Failed"/*LocalizedStrings.getLocalString(TextFields.SEARCHFAIL*/);
-				}
 			}
 		}
 		else{
