@@ -50,7 +50,6 @@ public class search extends JPanel implements Localized {
 		btnNewButton.setIcon(new ImageIcon("C:\\Users\\Carl\\workspace\\search2\\source\\5-search-icon.png"));
 		btnNewButton.setBounds(293, 21, 20, 20);
 		add(btnNewButton);
-		
 		lblSearch = new JLabel(searchLabel);
 		lblSearch.setBounds(26, 24, 46, 14);
 		add(lblSearch);
@@ -61,8 +60,10 @@ public class search extends JPanel implements Localized {
 		JOptionPane mess = new JOptionPane();
 		if(!userInput.equals("")){
 			String returns = db.isCompanyName(userInput);
+			db = new SearchToDB();
 			if(returns.equals("")){
 				if(db.isStockName(userInput)){
+					System.out.println("isstock");
 					stockNames.add(userInput);
 					mess.showMessageDialog(frame, "Search failed!"/*LocalizedStrings.getLocalString(TextFields.SEARCHFAIL*/);
 				}

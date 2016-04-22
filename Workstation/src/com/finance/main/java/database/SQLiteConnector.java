@@ -310,11 +310,13 @@ public class SQLiteConnector
 		{
 			for(int i=0; i<values.length-1; i+=2)
 			{
-				System.out.println(i);
 				stmt = con.prepareStatement(query);
+				System.out.println(values[i]+ " " + values[i+1]);
 				stmt.setString(1, values[i]);
 				stmt.setString(2, values[i+1]);
-				value = value && stmt.execute();
+				int a = stmt.executeUpdate();
+				System.out.println("" +
+				a);
 				
 			}			
 		}

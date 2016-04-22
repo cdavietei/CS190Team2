@@ -101,9 +101,7 @@ public class SearchToDB
 		String query = String.format("SELECT %s FROM %s WHERE %s = '%%%s%%' ",
 				TableFields.SYMBOL.toString(), Tables.COMPANIES.toString(),
 				TableFields.SYMBOL.toString(),userInput);
-		
 		ResultSet results = connection.executeQuery(query);
-		
 		boolean value = false;
 		try
 		{
@@ -162,8 +160,8 @@ public class SearchToDB
 		int comma = full.indexOf(',');
 		String[] values = new String[2];
 		
-		values[0] = full.substring(0, comma);
-		values[1] = full.substring(comma+1,full.length());
+		values[0] = full.substring(0, comma).replaceAll("\"", "");
+		values[1] = full.substring(comma+1,full.length()).replaceAll("\"", "");
 			
 		return values;		
 	}
