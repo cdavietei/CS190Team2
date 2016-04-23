@@ -53,7 +53,7 @@ public class MainWindow extends JFrame implements ActionListener,Localized {
 	private volatile int myY = 0;
 	public search searchPan;
 	public Languages currentLang = Languages.ENGLISH_US;
-	public ArrayList<JInternalFrame> views = new ArrayList<JInternalFrame>();
+	public static ArrayList<JInternalFrame> views = new ArrayList<JInternalFrame>();
 	private JPanel contentPane;
 
 	/**
@@ -125,6 +125,8 @@ public class MainWindow extends JFrame implements ActionListener,Localized {
 						fr.setBounds(110, 130, 700, 445);                 
 						desktopPane.add(fr);
 						StockChartPanel stockPan = new StockChartPanel();
+						for(String s : search.stockNames)
+							stockPan.addSeries(s);
 						fr.getContentPane().add(stockPan);
 						fr.setVisible(true);
 						StockChartPanel pan = (StockChartPanel)fr.getContentPane().getComponents()[fr.getContentPane().getComponentCount()-1];
@@ -255,7 +257,20 @@ public class MainWindow extends JFrame implements ActionListener,Localized {
 		}
 		updateLabels();
 	}
-
+	public static void addToCharts(String stock){
+		for(int i = 0; i < views.size(); i++){
+			if(views.get(i).isVisible()){
+				for(int j =0; j < views.get(i).getContentPane().getComponentCount();j++){
+					if(views.get(i).getContentPane().getComponent(j).getClass().equals(new HistTableView().getClass())){
+					}
+					else{
+						StockChartPanel vw =  (StockChartPanel)views.get(i).getContentPane().getComponent(j);
+						vw.addSeries(stock);
+					}
+				}
+			}
+		}
+	}
 	@Override
 	public boolean updateLabels(){
 		searchPan.updateLabels();

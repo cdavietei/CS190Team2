@@ -83,15 +83,6 @@ public class StockChartPanel extends JPanel implements Localized {
 		
 		add(chartPanel, BorderLayout.NORTH);
 		add(createSettingsButton());
-		
-		
-		try {
-			addSeries("GOOG");
-			addSeries("YHOO");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	/**

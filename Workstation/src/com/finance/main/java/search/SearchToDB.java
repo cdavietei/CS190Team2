@@ -73,8 +73,8 @@ public class SearchToDB
 	
 	public String isCompanyName(String userInput)
 	{
-		String query = String.format("SELECT * FROM %s WHERE %s LIKE '%%%s%%';",Tables.COMPANIES.toString(), 
-				TableFields.COMPANY_NAME.toString(), userInput);
+		String query = String.format("SELECT %s FROM %s WHERE %s LIKE '%%%s%%' OR %s = '%s';",TableFields.SYMBOL.toString(),Tables.COMPANIES.toString(), 
+				TableFields.COMPANY_NAME.toString(), userInput,TableFields.COMPANY_NAME.toString(),userInput);
 		ResultSet results = connection.executeQuery(query);
 		
 		String symbol = "";
@@ -98,9 +98,10 @@ public class SearchToDB
 	{
 		if(userInput.length() > 5)
 			return false;
-		String query = String.format("SELECT %s FROM %s WHERE %s = '%%%s%%' ",
+		String query = String.format("SELECT %s FROM %s WHERE %s LIKE '%%%s%%' OR %s = '%s';",
 				TableFields.SYMBOL.toString(), Tables.COMPANIES.toString(),
-				TableFields.SYMBOL.toString(),userInput);
+				TableFields.SYMBOL.toString(),userInput,TableFields.SYMBOL.toString(),userInput);
+		System.out.println(query);
 		ResultSet results = connection.executeQuery(query);
 		boolean value = false;
 		try

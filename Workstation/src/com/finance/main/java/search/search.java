@@ -5,6 +5,7 @@ import com.finance.main.java.util.*;
 import javax.swing.JTextField;
 
 import com.finance.main.java.util.LocalizedStrings;
+import com.finance.main.java.window.MainWindow;
 
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
@@ -20,7 +21,7 @@ import org.sqlite.core.DB;
 import com.finance.main.java.search.*;
 public class search extends JPanel implements Localized {
 	private JTextField textField;
-	private static ArrayList<String> stockNames = new ArrayList<String>();
+	public static ArrayList<String> stockNames = new ArrayList<String>();
 	public JLabel lblSearch;
 	//LocalizedSrings.lang = Languages.English;
 
@@ -63,17 +64,20 @@ public class search extends JPanel implements Localized {
 			db = new SearchToDB();
 			if(returns.equals("")){
 				if(db.isStockName(userInput)){
-					System.out.println("isstock");
-					stockNames.add(userInput);
-					mess.showMessageDialog(frame, "Search failed!"/*LocalizedStrings.getLocalString(TextFields.SEARCHFAIL*/);
+					if(!stockNames.contains(userInput))
+						stockNames.add(userInput);
+					MainWindow.addToCharts(userInput);
+					mess.showMessageDialog(frame, "Search Successful!"/*LocalizedStrings.getLocalString(TextFields.SEARCHFAIL*/);
 				}
 				else{
 					mess.showMessageDialog(frame, "Invalid input, not a stock or company.");
 				}
 			}
 			else{
-				stockNames.add(returns);
-					mess.showMessageDialog(frame, "Search successful"/*LocalizedStrings.getLocalString(TextFields.SEARCHSUCCESS*/);
+				if(!stockNames.contains(returns))
+					stockNames.add(returns);
+				MainWindow.addToCharts(userInput);
+						mess.showMessageDialog(frame, "Search successful"/*LocalizedStrings.getLocalString(TextFields.SEARCHSUCCESS*/);
 			}
 		}
 		else{

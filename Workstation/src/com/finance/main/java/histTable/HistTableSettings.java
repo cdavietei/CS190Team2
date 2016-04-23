@@ -127,6 +127,7 @@ public class HistTableSettings extends JFrame implements Localized {
 		contentPane.add(btnCancel);
 		
 		startDate = new JTextField();
+		startDate.setText("03/05/2016");
 		startDate.setBounds(60, 161, 78, 20);
 		contentPane.add(startDate);
 		startDate.setColumns(10);
@@ -140,6 +141,7 @@ public class HistTableSettings extends JFrame implements Localized {
 		contentPane.add(lblEndDate);
 		
 		endDate = new JTextField();
+		endDate.setText("04/05/2016");
 		endDate.setBounds(199, 161, 86, 20);
 		contentPane.add(endDate);
 		endDate.setColumns(10);
