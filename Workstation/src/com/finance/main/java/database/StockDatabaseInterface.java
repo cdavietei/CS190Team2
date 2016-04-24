@@ -42,7 +42,7 @@ public class StockDatabaseInterface
 		 * Creates and executes the SQL query to insert into the Current_Stocks
 		 * table
 		 */
-		String query = String.format("INSERT INTO %s (%s,%s) VALUES ('%s','%s_info'", Tables.CURRENT_STOCKS,
+		String query = String.format("INSERT INTO %s (%s,%s) VALUES ('%s','%s_info')", Tables.CURRENT_STOCKS,
 				TableFields.SYMBOL, TableFields.TABLE_NAME, stock, stock);
 
 		connection.executeUpdate(query);
@@ -121,8 +121,8 @@ public class StockDatabaseInterface
 	protected boolean dateRangeExists(String symbol, Date start, Date end)
 	{
 
-		String query1 = String.format("SELECT Date FROM %s_info WHERE Date ='%s';", symbol, start.toString());
-		String query2 = String.format("SELECT Date FROM %s_info WHERE Date ='%s';", symbol, end.toString());
+		String query1 = String.format("SELECT Date FROM %s_info WHERE Date >='%s';", symbol, start.toString());
+		String query2 = String.format("SELECT Date FROM %s_info WHERE Date <='%s';", symbol, end.toString());
 
 		ResultSet results1 = connection.executeQuery(query1);
 		ResultSet results2 = connection.executeQuery(query2);
@@ -131,7 +131,7 @@ public class StockDatabaseInterface
 
 		try
 		{
-			retval = !results1.isClosed() && !results2.isClosed();
+			retval = results1.next() && results2.next();
 
 			results1.close();
 			results2.close();

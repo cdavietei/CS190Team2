@@ -98,7 +98,7 @@ public class SearchToDB
 	{
 		if(userInput.length() > 5)
 			return false;
-		String query = String.format("SELECT %s FROM %s WHERE %s LIKE '%%%s%%' OR %s = '%s';",
+		String query = String.format("SELECT %s FROM %s WHERE %s = '%s' OR %s LIKE '%%%s%%';",
 				TableFields.SYMBOL.toString(), Tables.COMPANIES.toString(),
 				TableFields.SYMBOL.toString(),userInput,TableFields.SYMBOL.toString(),userInput);
 		System.out.println(query);
