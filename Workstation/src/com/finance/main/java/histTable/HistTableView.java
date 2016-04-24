@@ -265,5 +265,6 @@ public class HistTableView extends JPanel implements Localized {
 	public void setLang(Languages lang){
 		System.out.println("set lang "+lang);
 		LocalizedStrings.setLanguage(lang);
+		settingsFrame.setLanguage(lang);
 	}
 }

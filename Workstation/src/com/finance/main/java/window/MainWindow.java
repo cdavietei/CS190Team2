@@ -113,7 +113,7 @@ public class MainWindow extends JFrame implements ActionListener,Localized {
 		panel_1.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panel_1.setLayout(null);
 		
-		JButton btnHistoricalTable = new JButton("Historical Table");
+		JButton btnHistoricalTable = new JButton("Historical");
 		
 				btnHistoricalTable.setBounds(10, 11, 105, 23);
 				panel_1.add(btnHistoricalTable);

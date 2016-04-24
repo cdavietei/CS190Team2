@@ -18,25 +18,29 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-class SettingsFrame implements Subject
+import com.finance.main.java.enums.TextFields;
+import com.finance.main.java.util.Localized;
+import com.finance.main.java.util.LocalizedStrings;
+
+class SettingsFrame implements Subject,Localized
 {
 	private StockChartPanel observer;
 	protected ArrayList<Component> newComponents = new ArrayList<>();
 	protected JFrame frame = new JFrame("Settings for Stock Chart");
 	protected JPanel mainPanel = new JPanel();
-	protected JLabel startDate = new JLabel("Start Date:");
-	protected JLabel endDate = new JLabel("End Date:");
+	protected JLabel startDate = new JLabel(LocalizedStrings.getLocalString(TextFields.START_DATE)+":");
+	protected JLabel endDate = new JLabel(LocalizedStrings.getLocalString(TextFields.END_DATE)+":");
 	protected JTextField startDateText = new JTextField(10);
 	protected JTextField endDateText = new JTextField(10);
-	protected JButton apply = new JButton("Apply");
-	protected JButton cancel = new JButton("Cancel");
+	protected JButton apply = new JButton(LocalizedStrings.getLocalString(TextFields.TABLE_APPLY));
+	protected JButton cancel = new JButton(LocalizedStrings.getLocalString(TextFields.TABLE_CANCEL));
 	protected ButtonGroup buttonGroup = new ButtonGroup();
-	protected JRadioButton open = new JRadioButton("Open");
-	protected JRadioButton close = new JRadioButton("Close");
-	protected JRadioButton adjClose = new JRadioButton("Adjusted Close");
-	protected JRadioButton volume = new JRadioButton("Volume");
-	protected JRadioButton high = new JRadioButton("High");
-	protected JRadioButton low = new JRadioButton("Low");
+	protected JRadioButton open = new JRadioButton(LocalizedStrings.getLocalString(TextFields.TABLE_OPEN));
+	protected JRadioButton close = new JRadioButton(LocalizedStrings.getLocalString(TextFields.TABLE_CLOSE));
+	protected JRadioButton adjClose = new JRadioButton(LocalizedStrings.getLocalString(TextFields.TABLE_ADJCLOSE));
+	protected JRadioButton volume = new JRadioButton(LocalizedStrings.getLocalString(TextFields.TABLE_VOLUME));
+	protected JRadioButton high = new JRadioButton(LocalizedStrings.getLocalString(TextFields.TABLE_HIGH));
+	protected JRadioButton low = new JRadioButton(LocalizedStrings.getLocalString(TextFields.TABLE_LOW));
 	
 	protected GridBagLayout layout = new GridBagLayout();
 	protected GridBagConstraints constraints = new GridBagConstraints();
@@ -246,5 +250,20 @@ class SettingsFrame implements Subject
 		
 		frame.pack();
 		
+	}
+
+	@Override
+	public boolean updateLabels() {
+		startDate.setText(LocalizedStrings.getLocalString(TextFields.START_DATE)+":");
+		endDate.setText(LocalizedStrings.getLocalString(TextFields.END_DATE)+":");
+		apply.setText(LocalizedStrings.getLocalString(TextFields.TABLE_APPLY));
+		cancel.setText(LocalizedStrings.getLocalString(TextFields.TABLE_CANCEL));
+		open.setText(LocalizedStrings.getLocalString(TextFields.TABLE_OPEN));
+		close.setText(LocalizedStrings.getLocalString(TextFields.TABLE_CLOSE));
+		adjClose.setText(LocalizedStrings.getLocalString(TextFields.TABLE_ADJCLOSE));
+		volume.setText(LocalizedStrings.getLocalString(TextFields.TABLE_VOLUME));
+		high.setText(LocalizedStrings.getLocalString(TextFields.TABLE_HIGH));
+		low.setText(LocalizedStrings.getLocalString(TextFields.TABLE_LOW));
+		return false;
 	}
 }

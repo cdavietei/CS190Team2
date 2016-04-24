@@ -164,4 +164,8 @@ public class HistTableSettings extends JFrame implements Localized {
 		dateBox.setText(LocalizedStrings.getLocalString(TextFields.TABLE_DATE));
 		return false;
 	}
+	public void setLanguage(Languages lang){
+		//LocalizedStrings.setLanguage(lang);
+		updateLabels();
+	}
 }

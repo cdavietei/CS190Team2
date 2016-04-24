@@ -48,7 +48,7 @@ public class search extends JPanel implements Localized {
 				searchFunction(textField.getText());
 			}
 		});
-		btnNewButton.setIcon(new ImageIcon("C:\\Users\\Carl\\workspace\\search2\\source\\5-search-icon.png"));
+		btnNewButton.setIcon(new ImageIcon("Resources/Images/5-search-icon.png"));
 		btnNewButton.setBounds(293, 21, 20, 20);
 		add(btnNewButton);
 		lblSearch = new JLabel(searchLabel);
