@@ -9,6 +9,7 @@ import javax.swing.border.LineBorder;
 
 import com.finance.main.java.chart.StockChart;
 import com.finance.main.java.chart.StockChartPanel;
+import com.finance.main.java.database.SQLiteConnector;
 import com.finance.main.java.enums.Languages;
 import com.finance.main.java.histTable.HistTableView;
 import com.finance.main.java.search.search;
@@ -37,6 +38,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.border.BevelBorder;
@@ -95,7 +97,7 @@ public class MainWindow extends JFrame implements ActionListener,Localized {
 				
 		}
 		});
-
+		
 		mnNewMenu.add(rdbtnmntmEnglish);
 		JRadioButtonMenuItem rdbtnmntmSpanish = new JRadioButtonMenuItem("Spanish");
 		mnNewMenu.add(rdbtnmntmSpanish);
@@ -113,7 +115,7 @@ public class MainWindow extends JFrame implements ActionListener,Localized {
 		panel_1.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panel_1.setLayout(null);
 		
-		JButton btnHistoricalTable = new JButton("Historical");
+		JButton btnHistoricalTable = new JButton("Table");
 		
 				btnHistoricalTable.setBounds(10, 11, 105, 23);
 				panel_1.add(btnHistoricalTable);
@@ -125,8 +127,8 @@ public class MainWindow extends JFrame implements ActionListener,Localized {
 						fr.setBounds(110, 130, 700, 445);                 
 						desktopPane.add(fr);
 						StockChartPanel stockPan = new StockChartPanel();
-						for(String s : search.stockNames)
-							stockPan.addSeries(s);
+						//for(String s : search.stockNames)
+						//	stockPan.addSeries(s);
 						fr.getContentPane().add(stockPan);
 						fr.setVisible(true);
 						StockChartPanel pan = (StockChartPanel)fr.getContentPane().getComponents()[fr.getContentPane().getComponentCount()-1];
@@ -159,7 +161,7 @@ public class MainWindow extends JFrame implements ActionListener,Localized {
 						histTable.updateLabels();
 						fr.getContentPane().add(histTable);
 						fr.setBounds(110, 130,870,300);
-						fr.setResizable(true);
+						fr.setResizable(false);
 						fr.setVisible(true);
 						fr.setClosable(true);
 						fr.setBorder(new LineBorder(new Color(0,0,0)));

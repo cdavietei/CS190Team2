@@ -170,7 +170,6 @@ public class SQLiteConnector
 
 		return retval;
 	}// executeUpdate(String)
-
 	/**
 	 * Creates a new Database if the previous is lost with the schema found in
 	 * 'default.txt'
