@@ -177,6 +177,10 @@ public enum TextFields
 	/**
 	 * End date label
 	 */
-	 END_DATE
+	 END_DATE,
+	 
+	 SEARCH_SUCCESS,
+	 
+	 SEARCH_FAILURE
 	
 }//TextFields enum

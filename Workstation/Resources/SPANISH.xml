@@ -28,10 +28,12 @@
 	<label id="TABLE_LOW">Bajo</label>
 	<label id="TABLE_SYMBOL">Símbolo</label>
 	<label id="TABLE_OPEN">Abierto</label>
-	<label id="TABLE_CLOSE">Cerca</label>	
+	<label id="TABLE_CLOSE">Cerca</label>
     <label id="CHART_XAXIS">Hora</label>
 	<label id="CHART_YAXIS">Precio de Mercado</label>
 	<label id="START_DATE">Comenzando:</label>
 	<label id="END_DATE">Fecha Final:</label>
 	<label id="TABLE_DATE">Fecha</label>
+    <label id="SEARCH_SUCCESS">Búsqueda con Éxito</label>
+    <label id="SEARCH_FAILURE">Entrada no válida, no una acción o empresa.</label
 </text>

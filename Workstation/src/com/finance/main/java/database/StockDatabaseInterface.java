@@ -63,7 +63,7 @@ public class StockDatabaseInterface
 	protected String createStockTableQuery(String tableName)
 	{
 		return String.format(
-				"CREATE TABLE %s (%s DATE PRIMART KEY NOT NULL, %s FLOAT NOT NULL, %s FLOAT NOT NULL, "
+				"CREATE TABLE %s (%s DATE PRIMARY KEY NOT NULL, %s FLOAT NOT NULL, %s FLOAT NOT NULL, "
 						+ "%s FLOAT NOT NULL, %s FLOAT NOT NULL, %s INTEGER NOT NULL, %s FLOAT NOT NULL);",
 				tableName, TableFields.DATE, TableFields.OPEN, TableFields.HIGH, TableFields.LOW, TableFields.CLOSE,
 				TableFields.VOLUME, TableFields.ADJ_CLOSE);
@@ -81,7 +81,7 @@ public class StockDatabaseInterface
 	 * @throws Exception Throws an Exception if the starting date is greater
 	 *             than the ending date.
 	 */
-	public ArrayList<Stock> getStocks(String symbol, Date startDate, Date endDate) throws Exception
+	public ArrayList<Stock> getStocksAsynch(String symbol, Date startDate, Date endDate) throws Exception
 	{
 		/* Checks to see if the given date ranges are valid */
 		if (startDate.compareTo(endDate) > 0)
@@ -98,8 +98,8 @@ public class StockDatabaseInterface
 		if (!dateRangeExists(symbol, startDate, endDate))
 			queryYQL(symbol, startDate.toString(), endDate.toString());
 
-		String query = String.format("SELECT * FROM %s_info WHERE Date >= '%s' AND Date <= '%s';", symbol,
-				startDate.toString(), endDate.toString());
+		String query = String.format("SELECT * FROM %s_info WHERE Date >= '%s' AND Date <= '%s' ORDER BY %s DESC;", symbol,
+				startDate.toString(), endDate.toString(), TableFields.DATE);
 
 		ResultSet results = connection.executeQuery(query);
 
@@ -110,6 +110,24 @@ public class StockDatabaseInterface
 
 		return stocks;
 	}// getStocks(String,Date,Date)
+	
+	
+	public ArrayList<Stock> getStocks(String symbol, Date startDate, Date endDate) throws Exception
+	{
+		ArrayList<Stock> stocks = getStocksAsynch(symbol, startDate, endDate);
+		
+		int counter = 0;
+		
+		
+		while((stocks.isEmpty() || stocks.get(0) == null) && counter <3)
+		{
+			Thread.sleep(1000);
+			stocks = getStocksAsynch(symbol, startDate, endDate);
+			counter++;
+		}
+		
+		return stocks;
+	}
 
 	/**
 	 * 
@@ -121,8 +139,8 @@ public class StockDatabaseInterface
 	protected boolean dateRangeExists(String symbol, Date start, Date end)
 	{
 
-		String query1 = String.format("SELECT Date FROM %s_info WHERE Date >='%s';", symbol, start.toString());
-		String query2 = String.format("SELECT Date FROM %s_info WHERE Date <='%s';", symbol, end.toString());
+		String query1 = String.format("SELECT Date FROM %s_info WHERE Date ='%s';", symbol, start.toString());
+		String query2 = String.format("SELECT Date FROM %s_info WHERE Date ='%s';", symbol, end.toString());
 
 		ResultSet results1 = connection.executeQuery(query1);
 		ResultSet results2 = connection.executeQuery(query2);
@@ -131,7 +149,16 @@ public class StockDatabaseInterface
 
 		try
 		{
-			retval = results1.next() && results2.next();
+			boolean r1, r2;
+			
+			r1 = results1.next();
+			r2 = results2.next();
+			
+			//if(r1)
+				
+			
+			
+			retval = r1 && r2;
 
 			results1.close();
 			results2.close();
@@ -159,11 +186,12 @@ public class StockDatabaseInterface
 	 * @return An Array/List of Stocks, one for each date in the date range.
 	 * @throws Exception
 	 */
-	protected boolean queryYQL(String stockName, String startDate, String endDate) throws Exception
+	protected void queryYQL(String stockName, String startDate, String endDate) throws Exception
 	{
 		System.out.printf("Start: %s End: %s\n", startDate, endDate);
-		batchUpdateStock(YQLQuery.getHistoricalData(stockName, startDate, endDate));
-		return false;
+		
+		new Thread(new QueryYQLAsynch(stockName, startDate, endDate)).start();;
+		
 	}
 
 	/**
@@ -214,5 +242,60 @@ public class StockDatabaseInterface
 		return stock;
 
 	}// createStock(ResultSet)
+	
+	public ArrayList<String> getAvailableStocks()
+	{
+		String query = String.format("SELECT %s FROM %s ORDER BY %s DESC", TableFields.SYMBOL, 
+				Tables.CURRENT_STOCKS, TableFields.SYMBOL);
+		
+		ArrayList<String> stocks = new ArrayList<String>();
+		
+		
+		ResultSet results = connection.executeQuery(query);
+		
+		try
+		{
+			while(results.next())
+				stocks.add(results.getString(1));
+			
+			results.close();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return stocks;
+	}
 
 }// StockAdapter class
+
+class QueryYQLAsynch implements Runnable
+{
+
+	protected String symbol, startDate, endDate;
+	
+	
+	public QueryYQLAsynch(String symbol, String sDate, String eDate)
+	{
+		this.symbol = symbol;
+		startDate = sDate;
+		endDate = eDate;
+	}
+	
+	@Override
+	public void run()
+	{
+		StockDatabaseInterface stockInter = new StockDatabaseInterface();
+		
+		try
+		{
+			stockInter.batchUpdateStock(YQLQuery.getHistoricalData(symbol, startDate.toString(), endDate.toString()));
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+}

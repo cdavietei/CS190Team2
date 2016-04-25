@@ -57,6 +57,8 @@ public class MainWindow extends JFrame implements ActionListener,Localized {
 	public Languages currentLang = Languages.ENGLISH_US;
 	public static ArrayList<JInternalFrame> views = new ArrayList<JInternalFrame>();
 	private JPanel contentPane;
+	
+	
 
 	/**
 	 * Launch the application.

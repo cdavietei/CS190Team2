@@ -21,6 +21,7 @@ public class SQLiteConnector
 	public static final String DB_NAME = "financial_workstation.db";
 	public static final String RESOURCES = "Resources/";
 	public static final String DEFAULT_DB_FILE = RESOURCES + "default.txt";
+	
 
 	/* Instance variables for the database connection */
 	protected boolean connected = false;
@@ -319,7 +320,7 @@ public class SQLiteConnector
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			System.out.println(e.getLocalizedMessage());
+			System.out.println("batchUpdate(): "+e.getLocalizedMessage());
 		}
 		return value;
 	}

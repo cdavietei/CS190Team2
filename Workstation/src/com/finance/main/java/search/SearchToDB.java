@@ -64,7 +64,7 @@ public class SearchToDB
 			}
 			catch(Exception e)
 			{
-				System.out.println(e.getLocalizedMessage());
+				System.out.println("checkTable(): "+e.getLocalizedMessage());
 			}
 		}
 		
@@ -87,7 +87,7 @@ public class SearchToDB
 		}
 		catch (SQLException e)
 		{
-			System.out.println(e.getLocalizedMessage());
+			System.out.println("isCompanyName(): "+e.getLocalizedMessage());
 		}
 		
 		connection.close();
@@ -101,7 +101,7 @@ public class SearchToDB
 		String query = String.format("SELECT %s FROM %s WHERE %s = '%s' OR %s LIKE '%%%s%%';",
 				TableFields.SYMBOL.toString(), Tables.COMPANIES.toString(),
 				TableFields.SYMBOL.toString(),userInput,TableFields.SYMBOL.toString(),userInput);
-		System.out.println(query);
+		//System.out.println(query);
 		ResultSet results = connection.executeQuery(query);
 		boolean value = false;
 		try

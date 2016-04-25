@@ -1,5 +1,7 @@
 package com.finance.main.java.search;
 import javax.swing.JPanel;
+
+import com.finance.main.java.database.StockDatabaseInterface;
 import com.finance.main.java.enums.*;
 import com.finance.main.java.util.*;
 import javax.swing.JTextField;
@@ -12,6 +14,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.*;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.border.BevelBorder;
@@ -23,6 +26,8 @@ public class search extends JPanel implements Localized {
 	private JTextField textField;
 	public static ArrayList<String> stockNames = new ArrayList<String>();
 	public JLabel lblSearch;
+	
+	protected StockDatabaseInterface stockInter;
 	//LocalizedSrings.lang = Languages.English;
 
 	/**
@@ -38,9 +43,15 @@ public class search extends JPanel implements Localized {
 				searchFunction(textField.getText());
 			}
 		});
+		
+		stockInter = new StockDatabaseInterface();
+		
+		stockNames = stockInter.getAvailableStocks();
 		textField.setBounds(74, 21, 209, 20);
 		add(textField);
 		textField.setColumns(10);
+		
+		stockInter = new StockDatabaseInterface();
 
 		JButton btnNewButton = new JButton("");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -59,6 +70,7 @@ public class search extends JPanel implements Localized {
 		SearchToDB db = new SearchToDB();
 		JFrame frame = new JFrame();
 		JOptionPane mess = new JOptionPane();
+				
 		if(!userInput.equals("")){
 			String returns = db.isCompanyName(userInput);
 			db = new SearchToDB();
@@ -67,17 +79,28 @@ public class search extends JPanel implements Localized {
 					if(!stockNames.contains(userInput))
 						stockNames.add(userInput);
 					MainWindow.addToCharts(userInput);
-					mess.showMessageDialog(frame, "Search Successful!"/*LocalizedStrings.getLocalString(TextFields.SEARCHFAIL*/);
+					mess.showMessageDialog(frame, LocalizedStrings.getLocalString(TextFields.SEARCH_SUCCESS));//"Search Successful!"/*LocalizedStrings.getLocalString(TextFields.SEARCHFAIL*/);
+					
+					try
+					{
+						stockInter.getStocksAsynch(userInput, 
+								new Date(System.currentTimeMillis() - ((long)(20*1000*60*60*24) )), 
+										new Date(System.currentTimeMillis()));
+					}
+					catch (Exception e)
+					{
+						e.printStackTrace();
+					}
 				}
 				else{
-					mess.showMessageDialog(frame, "Invalid input, not a stock or company.");
+					mess.showMessageDialog(frame,LocalizedStrings.getLocalString(TextFields.SEARCH_FAILURE));// "Invalid input, not a stock or company.");
 				}
 			}
 			else{
 				if(!stockNames.contains(returns))
 					stockNames.add(returns);
 				MainWindow.addToCharts(userInput);
-						mess.showMessageDialog(frame, "Search successful"/*LocalizedStrings.getLocalString(TextFields.SEARCHSUCCESS*/);
+						mess.showMessageDialog(frame, LocalizedStrings.getLocalString(TextFields.SEARCH_SUCCESS));//"Search successful"/*LocalizedStrings.getLocalString(TextFields.SEARCHSUCCESS*/);
 			}
 		}
 		else{

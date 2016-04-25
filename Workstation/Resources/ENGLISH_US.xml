@@ -34,4 +34,7 @@
 	<label id="END_DATE">End Date:</label>
     <label id="CHART_XAXIS">Hour</label>
 	<label id="CHART_YAXIS">Market Price</label>
+    <label id="SEARCH_SUCCESS">Search Successful</label>
+    <label id="SEARCH_FAILURE">Invalid input, not a stock or company.</label>
+
 </text>
