@@ -80,21 +80,22 @@ public class search extends JPanel implements Localized {
 					if(!stockNames.contains(userInput))
 						stockNames.add(userInput);
 					MainWindow.addToCharts(userInput);
-					mess.showMessageDialog(frame, LocalizedStrings.getLocalString(TextFields.SEARCH_SUCCESS));//"Search Successful!"/*LocalizedStrings.getLocalString(TextFields.SEARCHFAIL*/);
+					
 					
 					try
 					{
 						stockInter.getStocksAsynch(userInput, 
 								new Date(System.currentTimeMillis() - ((long)(20*1000*60*60*24) )), 
-										new Date(System.currentTimeMillis()));
+										new Date(System.currentTimeMillis()), true);
+						//mess.showMessageDialog(frame, LocalizedStrings.getLocalString(TextFields.SEARCH_SUCCESS));
 					}
 					catch (Exception e)
 					{
-						e.printStackTrace();
+						
 					}
 				}
 				else{
-					mess.showMessageDialog(frame,LocalizedStrings.getLocalString(TextFields.SEARCH_FAILURE));// "Invalid input, not a stock or company.");
+					//mess.showMessageDialog(frame,LocalizedStrings.getLocalString(TextFields.SEARCH_FAILURE));// "Invalid input, not a stock or company.");
 				}
 			}
 			else{

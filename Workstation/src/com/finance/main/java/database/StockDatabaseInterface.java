@@ -1,11 +1,15 @@
 package com.finance.main.java.database;
 
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import com.finance.main.java.stock.Stock;
+import com.finance.main.java.util.LocalizedStrings;
 import com.finance.main.java.util.Utilities;
 import com.finance.main.java.enums.*;
 import com.finance.main.java.yql.YQLQuery;
@@ -81,7 +85,7 @@ public class StockDatabaseInterface
 	 * @throws Exception Throws an Exception if the starting date is greater
 	 *             than the ending date.
 	 */
-	public ArrayList<Stock> getStocksAsynch(String symbol, Date startDate, Date endDate) throws Exception
+	public ArrayList<Stock> getStocksAsynch(String symbol, Date startDate, Date endDate, boolean alert) throws Exception
 	{
 		/* Checks to see if the given date ranges are valid */
 		if (startDate.compareTo(endDate) > 0)
@@ -96,7 +100,7 @@ public class StockDatabaseInterface
 		ArrayList<Stock> stocks = new ArrayList<Stock>(diff);
 
 		if (!dateRangeExists(symbol, startDate, endDate))
-			queryYQL(symbol, startDate.toString(), endDate.toString());
+			queryYQL(symbol, startDate.toString(), endDate.toString(),alert);
 
 		String query = String.format("SELECT * FROM %s_info WHERE Date >= '%s' AND Date <= '%s' ORDER BY %s DESC;", symbol,
 				startDate.toString(), endDate.toString(), TableFields.DATE);
@@ -114,7 +118,7 @@ public class StockDatabaseInterface
 	
 	public ArrayList<Stock> getStocks(String symbol, Date startDate, Date endDate) throws Exception
 	{
-		ArrayList<Stock> stocks = getStocksAsynch(symbol, startDate, endDate);
+		ArrayList<Stock> stocks = getStocksAsynch(symbol, startDate, endDate, false);
 		
 		int counter = 0;
 		
@@ -122,7 +126,7 @@ public class StockDatabaseInterface
 		while((stocks.isEmpty() || stocks.get(0) == null) && counter <3)
 		{
 			Thread.sleep(1000);
-			stocks = getStocksAsynch(symbol, startDate, endDate);
+			stocks = getStocksAsynch(symbol, startDate, endDate, false);
 			counter++;
 		}
 		
@@ -186,12 +190,14 @@ public class StockDatabaseInterface
 	 * @return An Array/List of Stocks, one for each date in the date range.
 	 * @throws Exception
 	 */
-	protected void queryYQL(String stockName, String startDate, String endDate) throws Exception
+	protected void queryYQL(String stockName, String startDate, String endDate, boolean alert) throws Exception
 	{
 		System.out.printf("Start: %s End: %s\n", startDate, endDate);
 		
-		new Thread(new QueryYQLAsynch(stockName, startDate, endDate)).start();;
+		Thread t = new Thread(new QueryYQLAsynch(stockName, startDate, endDate, alert));
 		
+		t.start();
+		UncaughtExceptionHandler handler = t.getUncaughtExceptionHandler();		
 	}
 
 	/**
@@ -274,13 +280,15 @@ class QueryYQLAsynch implements Runnable
 {
 
 	protected String symbol, startDate, endDate;
+	public boolean alert = false;
 	
 	
-	public QueryYQLAsynch(String symbol, String sDate, String eDate)
+	public QueryYQLAsynch(String symbol, String sDate, String eDate, boolean alert)
 	{
 		this.symbol = symbol;
 		startDate = sDate;
 		endDate = eDate;
+		this.alert = alert;
 	}
 	
 	@Override
@@ -291,10 +299,13 @@ class QueryYQLAsynch implements Runnable
 		try
 		{
 			stockInter.batchUpdateStock(YQLQuery.getHistoricalData(symbol, startDate.toString(), endDate.toString()));
+			if(alert)
+				JOptionPane.showMessageDialog(null, LocalizedStrings.getLocalString(TextFields.SEARCH_SUCCESS));
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, LocalizedStrings.getLocalString(TextFields.SEARCH_FAILURE), 
+					"Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
