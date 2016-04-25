@@ -1,11 +1,16 @@
 package com.finance.main.java.yql;
 
 import java.util.ArrayList;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.sql.Date;
 
 import com.finance.main.java.stock.*;
@@ -125,11 +130,12 @@ public class YQLQuery
 			while((inputLine = input.readLine()) !=null) {
 				urlData += inputLine;
 			} //while
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
 			input.close();
-		} //try-catch-finally
+		} catch (UnknownHostException e) {
+			JFrame frame = new JFrame();
+			JOptionPane mess = new JOptionPane();
+			mess.showMessageDialog(frame, "Check your internet connection.");
+		}
 		
 		return urlData;
 	}

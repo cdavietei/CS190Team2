@@ -35,6 +35,9 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -43,8 +46,11 @@ import java.util.ArrayList;
 
 import javax.swing.border.BevelBorder;
 import javax.swing.JButton;
+import javax.swing.JComponent;
+
 import java.awt.SystemColor;
 import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
 import javax.swing.JRadioButtonMenuItem;
 
 public class MainWindow extends JFrame implements ActionListener,Localized {
@@ -128,6 +134,7 @@ public class MainWindow extends JFrame implements ActionListener,Localized {
 						JInternalFrame fr =  new JInternalFrame("Graph View");
 						fr.setBounds(110, 130, 700, 445);                 
 						desktopPane.add(fr);
+						
 						StockChartPanel stockPan = new StockChartPanel();
 						//for(String s : search.stockNames)
 						//	stockPan.addSeries(s);
@@ -154,7 +161,7 @@ public class MainWindow extends JFrame implements ActionListener,Localized {
 				searchPan.setBounds(144, 0, 360, 61);
 				btnHistoricalTable.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						JInternalFrame fr =  new JInternalFrame("Historical Table"); 
+						JInternalFrame fr =  new JInternalFrame("Historical Table");
 						desktopPane.add(fr);
 						HistTableView histTable = new HistTableView();
 						histTable.setBounds(110, 130, 105, 70);
@@ -173,10 +180,6 @@ public class MainWindow extends JFrame implements ActionListener,Localized {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 732, 478);
-
-		
-		
-		
 		addComponentListener(new ComponentListener(){
 
 			@Override
@@ -218,7 +221,6 @@ public class MainWindow extends JFrame implements ActionListener,Localized {
 		
 	}
 	public void stateChange(ItemEvent e){
-
 		if(e.getStateChange() == ItemEvent.SELECTED){
 			LocalizedStrings.setLanguage(Languages.ENGLISH_US);
 			for(int i = 0; i < views.size();i++){

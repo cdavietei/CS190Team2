@@ -41,6 +41,7 @@ public class search extends JPanel implements Localized {
 		textField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				searchFunction(textField.getText());
+				textField.setText("");
 			}
 		});
 		
