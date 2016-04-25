@@ -1,9 +1,7 @@
 package com.finance.main.java.chart;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Paint;
 import java.awt.Shape;
 import java.text.DecimalFormat;
@@ -13,7 +11,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.jfree.chart.ChartFactory;
@@ -27,7 +24,6 @@ import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
 import com.finance.main.java.database.StockDatabaseInterface;
-import com.finance.main.java.enums.Languages;
 import com.finance.main.java.enums.TextFields;
 import com.finance.main.java.stock.Stock;
 import com.finance.main.java.util.Localized;
@@ -101,10 +97,7 @@ public class StockChart implements Localized
 		
 		chartPanel = new ChartPanel(chart);
 		chartPanel.setPreferredSize(new Dimension(panelWidth, panelHeight));
-		//chartPanel.setBorder(new CompoundBorder(new EmptyBorder(10,10,10,10), 
-		//BorderFactory.createLineBorder(Color.black)));
 		chartPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-		//settingsFrame.attach(this);
 	}
 	
 	public StockChart(Subject settingsMenu)
@@ -140,9 +133,14 @@ public class StockChart implements Localized
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean addSeries(String stockSymbol)
+	public void addSeries(String stockSymbol)
 	{
-		return addSeries(stockSymbol, chartStartDate, chartEndDate);
+		stockSymbol = stockSymbol.toUpperCase();
+		
+		//add the series only if the series is not currently displayed in the chart
+		if (dataset.getSeries(stockSymbol) == null) {
+			addSeries(stockSymbol, chartStartDate, chartEndDate);
+		}
 	}
 	
 	/**
@@ -155,19 +153,14 @@ public class StockChart implements Localized
 	 * @return True if the stock data chart has been created successfully or false otherwise
 	 * @throws Exception
 	 */
-	public boolean addSeries(String stockSymbol, String startDate, String endDate)
+	public void addSeries(String stockSymbol, String startDate, String endDate)
 	{
-		/* overwrites the default date values, so that next stock data chart will have the same
-		 * date range as the existing stock chart */
-		chartStartDate = startDate;
-		chartEndDate = endDate;
-		
 		ArrayList<Stock> stockArray = null;
 		try {
 			stockArray = getStockData(stockSymbol, startDate, endDate);
 		}
 		catch (Exception e) {
-			return false;     //stock data could not be retrieved successfully
+			e.printStackTrace();
 		}
 		
 		TimeSeries newSeries = new TimeSeries(stockSymbol);
@@ -188,8 +181,6 @@ public class StockChart implements Localized
 		renderTooltip(getPlot());
 		dataset.addSeries(newSeries);
 		updateYAxisLabel();
-		
-		return true;
 	}
 	
 	/**
@@ -226,6 +217,8 @@ public class StockChart implements Localized
 	
 	public void updateDataset(String newStartDate, String newEndDate)
 	{
+		/* overwrites the default date values, so that next stock data chart will have the same
+		 * date range as the existing stock chart */
 		chartStartDate = newStartDate;
 		chartEndDate = newEndDate;
 		
@@ -249,17 +242,28 @@ public class StockChart implements Localized
 		}
 	}
 	
+	public boolean isShowLegend()
+	{
+		return showLegend;
+	}
+	
 	/**
 	 * Legend is added to the chart by default. Calling this method will remove them.
 	 * 
 	 * @return Current StockChart object
 	 */
-	public StockChart removeLegend()
+	public StockChart hideLegend()
 	{
-		this.showLegend = false;
-		getChart().removeLegend();
+		getChart().getLegend().setVisible(false);
+		showLegend = false;
 		
 		return this;
+	}
+	
+	public void showLegend()
+	{
+		getChart().getLegend().setVisible(true);
+		showLegend = true;
 	}
 	
 	protected ArrayList<String> currentStocksDisplayed()
@@ -510,51 +514,5 @@ public class StockChart implements Localized
 	    rangeTypeVolume = false;
 	    rangeTypeHigh = false;
 	    rangeTypeLow = false;
-	}
-	
-	public static void main(String[] args)
-	{
-		LocalizedStrings.language = Languages.ENGLISH_US;
-		LocalizedStrings.update();
-		
-		//SettingsFrame settingsFrame = new SettingsFrame();
-		
-		/*JButton settings = new JButton("Settings");
-		settings.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				settings.setVisible(true);
-				
-			}
-		});*/
-		
-		EventQueue.invokeLater(new Runnable() {
-            public void run() {
-            	JFrame frame = new JFrame();
-				
-            	StockChart contentPane = new StockChart();
-            	
-            	
-            	
-				frame.add(contentPane.getPanel(), BorderLayout.NORTH);
-				//frame.add(contentPane.createSettingsButton());
-				//settingsFrame.attach(contentPane);
-				
-				
-				try {
-					contentPane.addSeries("GOOG");
-					contentPane.addSeries("YHOO");
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				frame.setVisible(true);
-				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frame.pack();
-				frame.setLocationRelativeTo(null);
-            }
-         });
 	}
 }

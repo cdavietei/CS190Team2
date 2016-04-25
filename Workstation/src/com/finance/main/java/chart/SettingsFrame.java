@@ -97,6 +97,7 @@ class SettingsFrame implements Subject, Localized
 		mainPanel.add(new JLabel("End Date:"), buildConstraints(ROW_2,COL_3,CENTER));
 		mainPanel.add(endDateText, buildConstraints(ROW_2,COL_4));
 		
+		addLegendAndResetButton();
 		//mainPanel.add(Box.createRigidArea(new Dimension(20,20)));
 		mainPanel.add(new JLabel("Select the type of Stock data to display:"), buildConstraintsHeader(ROW_4,COL_1));
 		mainPanel.add(open, buildConstraints(ROW_5,COL_1));
@@ -196,6 +197,41 @@ class SettingsFrame implements Subject, Localized
 
         return null;
     }
+	
+	protected void addLegendAndResetButton()
+	{
+		JButton toggleLegend = new JButton("Hide Legend");
+		mainPanel.add(toggleLegend, buildConstraints(ROW_3, COL_2));
+		toggleLegend.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if (observer.isShowLegend()) {
+					observer.hideLegend();
+					toggleLegend.setText("Show Legend");
+				}
+				else if (!observer.isShowLegend()) {
+					observer.showLegend();
+					toggleLegend.setText("Hide Legend");
+				}
+			}
+		});
+		
+		JButton resetPanel = new JButton("Reset Panel");
+		mainPanel.add(resetPanel, buildConstraints(ROW_3, COL_3));
+		resetPanel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				observer.resetPanel();
+				addCurrentChartLabels();
+			}
+		});
+		
+		frame.pack();
+	}
 	
 	protected void addApplyAndCancelButton()
 	{
