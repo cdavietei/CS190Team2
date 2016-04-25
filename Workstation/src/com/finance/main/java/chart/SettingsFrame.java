@@ -26,8 +26,24 @@ import com.finance.main.java.util.LocalizedStrings;
 
 class SettingsFrame implements Subject, Localized
 {
+	/* Constants to use for GridBag Constraints */
+	public static int ROW_1 = 0;
+	public static int ROW_2 = 1;
+	public static int ROW_3 = 2;
+	public static int ROW_4 = 3;
+	public static int ROW_5 = 4;
+	public static int ROW_6 = 5;
+	public static int COL_1 = 0;
+	public static int COL_2 = 1;
+	public static int COL_3 = 2;
+	public static int COL_4 = 3;
+	
+	public static int LEFT = 1;
+	public static int CENTER = 2;
+	public static int RIGHT = 3;
+	
 	private StockChart observer;
-	protected ArrayList<Component> newComponents = new ArrayList<>();
+	
 	protected JFrame frame = new JFrame("Settings for Stock Chart");
 	protected JPanel mainPanel = new JPanel();
 	protected JLabel startDate = new JLabel(LocalizedStrings.getLocalString(TextFields.START_DATE)+":");
@@ -45,11 +61,11 @@ class SettingsFrame implements Subject, Localized
 	protected JRadioButton low = new JRadioButton(LocalizedStrings.getLocalString(TextFields.TABLE_LOW));
 	
 	protected GridBagLayout layout = new GridBagLayout();
-	protected GridBagConstraints constraints = new GridBagConstraints();
 	
 	protected String prevStartDate;
 	protected String prevEndDate;
 	protected String prevRangeType;
+	protected ArrayList<Component> tempComponents = new ArrayList<>();
 	
 	public SettingsFrame()
 	{
@@ -62,31 +78,71 @@ class SettingsFrame implements Subject, Localized
 		frame.setVisible(true);
 	}
 	
-	protected void initializeComponents()
+	public void hideFrame()
 	{
 		frame.setVisible(false);
+	}
+	
+	protected void initializeComponents()
+	{
+		hideFrame();
 		mainPanel.setLayout(layout);
 		
-		mainPanel.add(new JLabel("Enter Dates for stock data (in mm/dd/yyyy):"), buildConstraints(0,0,2));
+		mainPanel.add(new JLabel("Enter Dates for search (in mm/dd/yyyy):"), buildConstraintsHeader(ROW_1,COL_1));
 		//enterDate.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, Color.BLACK));
 		//mainPanel.add(buildLabel("<html><hr></html"));
 		
-		mainPanel.add(startDate, buildConstraints(1,0,1));
-		mainPanel.add(startDateText, buildConstraints(1,1,1));
-		mainPanel.add(endDate, buildConstraints(1,2,1));
-		mainPanel.add(endDateText, buildConstraints(1,3,1));
+		mainPanel.add(new JLabel("Start Date:"), buildConstraints(ROW_2,COL_1,CENTER));
+		mainPanel.add(startDateText, buildConstraints(ROW_2,COL_2));
+		mainPanel.add(new JLabel("End Date:"), buildConstraints(ROW_2,COL_3,CENTER));
+		mainPanel.add(endDateText, buildConstraints(ROW_2,COL_4));
 		
 		//mainPanel.add(Box.createRigidArea(new Dimension(20,20)));
-		mainPanel.add(new JLabel("Select the type of Stock data to display:"), buildConstraints(2,0,2));
-		mainPanel.add(open, buildConstraints(3,0,1));
-		mainPanel.add(close, buildConstraints(3,1,1));
-		mainPanel.add(adjClose, buildConstraints(3,2,1));
-		mainPanel.add(volume, buildConstraints(4,0,1));
-		mainPanel.add(high, buildConstraints(4,1,1));
-		mainPanel.add(low, buildConstraints(4,2,1));
+		mainPanel.add(new JLabel("Select the type of Stock data to display:"), buildConstraintsHeader(ROW_4,COL_1));
+		mainPanel.add(open, buildConstraints(ROW_5,COL_1));
+		mainPanel.add(close, buildConstraints(ROW_5,COL_2));
+		mainPanel.add(adjClose, buildConstraints(ROW_5,COL_3));
+		mainPanel.add(volume, buildConstraints(ROW_6,COL_1));
+		mainPanel.add(high, buildConstraints(ROW_6,COL_2));
+		mainPanel.add(low, buildConstraints(ROW_6,COL_3));
+		//System.out.println(startDateText.getPreferredSize().height);
+		//System.out.println(open.getPreferredSize().height);
+		open.setPreferredSize(new Dimension(110,25));
+		close.setPreferredSize(new Dimension(110,25));
+		adjClose.setPreferredSize(new Dimension(110,25));
+		endDateText.setPreferredSize(new Dimension(110,25));
 		
 		frame.setContentPane(mainPanel);
 		frame.pack();
+	}
+	
+	protected GridBagConstraints buildConstraints(int row, int col)
+	{
+		return buildConstraints(row, col, LEFT);
+	}
+	
+	protected GridBagConstraints buildConstraints(int row, int col, int orientation)
+	{
+		GridBagConstraints constraints = new GridBagConstraints();
+		
+		constraints.gridy = row;
+		constraints.gridx = col;
+		constraints.insets = new Insets(5, 5, 5, 5);
+		constraints.anchor = orientation == LEFT   ? GridBagConstraints.LINE_START
+		                   : orientation == CENTER ? GridBagConstraints.CENTER
+		                   : orientation == RIGHT  ? GridBagConstraints.LINE_END
+		                   : GridBagConstraints.LINE_START;
+		
+		return constraints;
+	}
+	
+	protected GridBagConstraints buildConstraintsHeader(int row, int col)
+	{
+		GridBagConstraints constraints = buildConstraints(row, col);
+		constraints.gridwidth = 4;
+		constraints.insets = new Insets(10, 5, 5, 5);
+		
+		return constraints;
 	}
 	
 	public JButton createSettingsButton()
@@ -97,7 +153,8 @@ class SettingsFrame implements Subject, Localized
 		settings.addActionListener(new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e)
+			{
 				update();
 				showFrame();
 				
@@ -117,22 +174,6 @@ class SettingsFrame implements Subject, Localized
 		return layout.getLayoutDimensions()[0].length;
 	}
 	
-	protected JLabel buildLabel(String labelName)
-	{
-		return new JLabel(labelName);
-	}
-	
-	protected GridBagConstraints buildConstraints(int row, int col, int rowsToSpan)
-	{
-		constraints.gridwidth = rowsToSpan;
-		constraints.gridy = row;
-		constraints.gridx = col;
-		constraints.insets = new Insets(5, 5, 5, 5);
-		constraints.fill = GridBagConstraints.EAST;
-		
-		return constraints;
-	}
-	
 	protected void configureButtons()
 	{
 		buttonGroup.add(open);
@@ -143,7 +184,8 @@ class SettingsFrame implements Subject, Localized
 		buttonGroup.add(low);
 	}
 	
-	protected String getSelectedButtonText() {
+	protected String getSelectedButtonText()
+	{
         for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
             AbstractButton button = buttons.nextElement();
 
@@ -155,6 +197,43 @@ class SettingsFrame implements Subject, Localized
         return null;
     }
 	
+	protected void addApplyAndCancelButton()
+	{
+		JButton apply = new JButton("Apply");
+		mainPanel.add(apply, buildConstraints(countLayoutRows(), 1, CENTER));
+		tempComponents.add(apply);
+		apply.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				String newStartDate = startDateText.getText();
+				String newEndDate = endDateText.getText();
+				String newRangeType = getSelectedButtonText();
+				
+				if (!prevStartDate.equals(newStartDate) || !prevEndDate.equals(newEndDate)
+						|| !prevRangeType.equals(newRangeType)) {
+					observer.settingsChanged(newStartDate, newEndDate, newRangeType);
+				}
+				
+				frame.setVisible(false);
+			}
+		});
+		
+		JButton cancel = new JButton("Cancel");
+		mainPanel.add(cancel, buildConstraints(countLayoutRows(), 2, CENTER));
+		tempComponents.add(cancel);
+		cancel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				hideFrame();
+			}
+		});
+		
+		frame.pack();
+	}
 	
 	@Override
 	public void attach(StockChart observer)
@@ -198,78 +277,46 @@ class SettingsFrame implements Subject, Localized
 	
 	protected void addCurrentChartLabels()
 	{
-		if(newComponents.size() > 0){
-			for(int i =0; i < newComponents.size(); i++)
-				mainPanel.remove(newComponents.get(i));
-		}
+		removeTemporaryComponents();
+		
 		if (observer.getNumberOfSeries() > 0) {
-			newComponents = new ArrayList<>();
 			int layoutRows = countLayoutRows();
 			
 			JLabel header = new JLabel("Current Stocks displayed:");
-			newComponents.add(header);
-			mainPanel.add(header, buildConstraints(layoutRows++,0,2));
+			tempComponents.add(header);
+			mainPanel.add(header, buildConstraintsHeader(layoutRows++,0));
 			
 			for (String series : observer.currentStocksDisplayed()) {
 				JButton remove = new JButton("Remove");
 				remove.addActionListener(new ActionListener() {
 					
 					@Override
-					public void actionPerformed(ActionEvent e) {
+					public void actionPerformed(ActionEvent e)
+					{
 						observer.removeSeries(series);
-						for (Component comp : newComponents) {
-							mainPanel.remove(comp);
-							mainPanel.revalidate();
-						}
 						addCurrentChartLabels();
 					}
 				});
 				
 				JLabel name = new JLabel(series);
-				newComponents.add(name);
-				newComponents.add(remove);
-				mainPanel.add(name, buildConstraints(layoutRows, 1, 1));
-				mainPanel.add(remove, buildConstraints(layoutRows++, 2, 1));
+				tempComponents.add(name);
+				tempComponents.add(remove);
+				mainPanel.add(name, buildConstraints(layoutRows, 1, CENTER));
+				mainPanel.add(remove, buildConstraints(layoutRows++, 2, CENTER));
 			}
 			
 			frame.pack();
 		}
-		addApplyCancelButtons();  	
+		
+		addApplyAndCancelButton();     //add at last
 	}
-
-	protected void addApplyCancelButtons()
+	
+	protected void removeTemporaryComponents()
 	{
-		mainPanel.add(apply, buildConstraints(countLayoutRows(), 1, 1));
-		
-		apply.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String newStartDate = startDateText.getText();
-				String newEndDate = endDateText.getText();
-				String newRangeType = getSelectedButtonText();
-				
-				if (!prevStartDate.equals(newStartDate) || !prevEndDate.equals(newEndDate)
-						|| !prevRangeType.equals(newRangeType)) {
-					observer.settingsChanged(newStartDate, newEndDate, newRangeType);
-				}
-				
-				frame.setVisible(false);
-			}
-		});
-		
-		mainPanel.add(cancel, buildConstraints(countLayoutRows(), 2, 1));
-		
-		cancel.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				frame.setVisible(false);
-			}
-		});
-		
-		frame.pack();
-		
+		for (Component comp : tempComponents) {
+			mainPanel.remove(comp);
+			mainPanel.revalidate();
+		}
 	}
 
 	@Override
