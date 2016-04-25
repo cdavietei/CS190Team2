@@ -6,8 +6,6 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Paint;
 import java.awt.Shape;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,8 +13,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -93,8 +89,6 @@ public class StockChart implements Localized
 	protected boolean rangeTypeHigh = false;
 	protected boolean rangeTypeLow = false;
 	
-	SettingsFrame settingsFrame = new SettingsFrame();
-	
 	/**
 	 * Default constructor for StockChart. Creates a chart layout in a panel.
 	 * Every time a new dataset is added to the chart, the panel updates automatically.
@@ -111,6 +105,12 @@ public class StockChart implements Localized
 		//BorderFactory.createLineBorder(Color.black)));
 		chartPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		//settingsFrame.attach(this);
+	}
+	
+	public StockChart(Subject settingsMenu)
+	{
+		this();
+		settingsMenu.attach(this);
 	}
 	
 	/**
@@ -451,22 +451,6 @@ public class StockChart implements Localized
 		return true;
 	}
 	
-	public JButton createSettingsButton()
-	{
-		JButton settings = new JButton("Settings", new ImageIcon("Resources/Images/settingsIcon.gif"));
-		settings.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				settingsFrame.update();
-				settingsFrame.showFrame();
-				
-			}
-		});
-		
-		return settings;
-	}
-	
 	protected ArrayList<Stock> getStockData(String stockSymbol, String startDate, String endDate) throws Exception
 	{
 		StockDatabaseInterface stockData = new StockDatabaseInterface();
@@ -554,7 +538,7 @@ public class StockChart implements Localized
             	
             	
 				frame.add(contentPane.getPanel(), BorderLayout.NORTH);
-				frame.add(contentPane.createSettingsButton());
+				//frame.add(contentPane.createSettingsButton());
 				//settingsFrame.attach(contentPane);
 				
 				

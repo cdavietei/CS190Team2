@@ -1,6 +1,7 @@
 package com.finance.main.java.chart;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -11,6 +12,7 @@ import java.util.Enumeration;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,9 +24,9 @@ import com.finance.main.java.enums.TextFields;
 import com.finance.main.java.util.Localized;
 import com.finance.main.java.util.LocalizedStrings;
 
-class SettingsFrame implements Subject,Localized
+class SettingsFrame implements Subject, Localized
 {
-	private StockChartPanel observer;
+	private StockChart observer;
 	protected ArrayList<Component> newComponents = new ArrayList<>();
 	protected JFrame frame = new JFrame("Settings for Stock Chart");
 	protected JPanel mainPanel = new JPanel();
@@ -87,6 +89,24 @@ class SettingsFrame implements Subject,Localized
 		frame.pack();
 	}
 	
+	public JButton createSettingsButton()
+	{
+		JButton settings = new JButton(new ImageIcon("Resources/Images/settingsIcon.gif"));
+		settings.setPreferredSize(new Dimension(25, 25));
+		
+		settings.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				update();
+				showFrame();
+				
+			}
+		});
+		
+		return settings;
+	}
+	
 	protected int countLayoutRows()
 	{
 		return layout.getLayoutDimensions()[1].length;
@@ -137,9 +157,9 @@ class SettingsFrame implements Subject,Localized
 	
 	
 	@Override
-	public void attach(StockChartPanel stockChartPanel)
+	public void attach(StockChart observer)
 	{
-		this.observer = stockChartPanel;
+		this.observer = observer;
 	}
 	
 	@Override
