@@ -181,6 +181,16 @@ public enum TextFields
 	 
 	 SEARCH_SUCCESS,
 	 
-	 SEARCH_FAILURE
+	 SEARCH_FAILURE,
+	 
+	 CHART_DATERANGE,
+	 
+	 CHART_DATATYPE,
+	 
+	 SETTINGS,
+	 
+	 GRAPHVIEW,
+	 
+	 HISTTABLE
 	
 }//TextFields enum

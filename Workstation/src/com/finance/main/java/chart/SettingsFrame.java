@@ -26,7 +26,7 @@ class SettingsFrame implements Subject,Localized
 {
 	private StockChartPanel observer;
 	protected ArrayList<Component> newComponents = new ArrayList<>();
-	protected JFrame frame = new JFrame("Settings for Stock Chart");
+	protected JFrame frame = new JFrame(LocalizedStrings.getLocalString(TextFields.SETTINGS));
 	protected JPanel mainPanel = new JPanel();
 	protected JLabel startDate = new JLabel(LocalizedStrings.getLocalString(TextFields.START_DATE)+":");
 	protected JLabel endDate = new JLabel(LocalizedStrings.getLocalString(TextFields.END_DATE)+":");
@@ -41,7 +41,8 @@ class SettingsFrame implements Subject,Localized
 	protected JRadioButton volume = new JRadioButton(LocalizedStrings.getLocalString(TextFields.TABLE_VOLUME));
 	protected JRadioButton high = new JRadioButton(LocalizedStrings.getLocalString(TextFields.TABLE_HIGH));
 	protected JRadioButton low = new JRadioButton(LocalizedStrings.getLocalString(TextFields.TABLE_LOW));
-	
+	protected JLabel dateRange = new JLabel(LocalizedStrings.getLocalString(TextFields.CHART_DATERANGE)+" (in mm/dd/yyyy):");
+	protected JLabel dataType = new JLabel(LocalizedStrings.getLocalString(TextFields.CHART_DATATYPE));
 	protected GridBagLayout layout = new GridBagLayout();
 	protected GridBagConstraints constraints = new GridBagConstraints();
 	
@@ -65,7 +66,7 @@ class SettingsFrame implements Subject,Localized
 		frame.setVisible(false);
 		mainPanel.setLayout(layout);
 		
-		mainPanel.add(new JLabel("Enter Dates for stock data (in mm/dd/yyyy):"), buildConstraints(0,0,2));
+		mainPanel.add(dateRange, buildConstraints(0,0,2));
 		//enterDate.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, Color.BLACK));
 		//mainPanel.add(buildLabel("<html><hr></html"));
 		
@@ -75,7 +76,7 @@ class SettingsFrame implements Subject,Localized
 		mainPanel.add(endDateText, buildConstraints(1,3,1));
 		
 		//mainPanel.add(Box.createRigidArea(new Dimension(20,20)));
-		mainPanel.add(new JLabel("Select the type of Stock data to display:"), buildConstraints(2,0,2));
+		mainPanel.add(dataType, buildConstraints(2,0,2));
 		mainPanel.add(open, buildConstraints(3,0,1));
 		mainPanel.add(close, buildConstraints(3,1,1));
 		mainPanel.add(adjClose, buildConstraints(3,2,1));
@@ -254,8 +255,8 @@ class SettingsFrame implements Subject,Localized
 
 	@Override
 	public boolean updateLabels() {
-		startDate.setText(LocalizedStrings.getLocalString(TextFields.START_DATE)+":");
-		endDate.setText(LocalizedStrings.getLocalString(TextFields.END_DATE)+":");
+		startDate.setText(LocalizedStrings.getLocalString(TextFields.START_DATE));
+		endDate.setText(LocalizedStrings.getLocalString(TextFields.END_DATE));
 		apply.setText(LocalizedStrings.getLocalString(TextFields.TABLE_APPLY));
 		cancel.setText(LocalizedStrings.getLocalString(TextFields.TABLE_CANCEL));
 		open.setText(LocalizedStrings.getLocalString(TextFields.TABLE_OPEN));
@@ -264,6 +265,9 @@ class SettingsFrame implements Subject,Localized
 		volume.setText(LocalizedStrings.getLocalString(TextFields.TABLE_VOLUME));
 		high.setText(LocalizedStrings.getLocalString(TextFields.TABLE_HIGH));
 		low.setText(LocalizedStrings.getLocalString(TextFields.TABLE_LOW));
+		dataType.setText(LocalizedStrings.getLocalString(TextFields.CHART_DATATYPE));
+		dateRange.setText(LocalizedStrings.getLocalString(TextFields.CHART_DATERANGE)+" (in mm/dd/yyyy):");
+		frame.setTitle(LocalizedStrings.getLocalString(TextFields.SETTINGS));
 		return false;
 	}
 }

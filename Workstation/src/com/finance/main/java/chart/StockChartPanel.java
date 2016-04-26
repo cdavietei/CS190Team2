@@ -61,7 +61,7 @@ public class StockChartPanel extends JPanel implements Localized {
 	protected boolean rangeTypeVolume = false;
 	protected boolean rangeTypeHigh = false;
 	protected boolean rangeTypeLow = false;
-	
+	protected JButton settings;
 	SettingsFrame settingsFrame = new SettingsFrame();
 	
 	/**
@@ -80,9 +80,19 @@ public class StockChartPanel extends JPanel implements Localized {
 		//BorderFactory.createLineBorder(Color.black)));
 		chartPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		settingsFrame.attach(this);
+		settings = new JButton(LocalizedStrings.getLocalString(TextFields.SETTINGS));
 		
+		settings.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				settingsFrame.update();
+				settingsFrame.showFrame();
+				
+			}
+		});
 		add(chartPanel, BorderLayout.NORTH);
-		add(createSettingsButton());
+		add(settings);
 	}
 	
 	/**
@@ -419,22 +429,17 @@ public class StockChartPanel extends JPanel implements Localized {
 		
 		setXAxisLabel(xAxisLabel);
 		setYAxisLabel(yAxisLabel);
-		
+		settings.setText(LocalizedStrings.getLocalString(TextFields.SETTINGS));
 		return true;
 	}
-	
+	public void setLange(Languages lang){
+		LocalizedStrings.setLanguage(lang);
+		updateLabels();
+		settingsFrame.updateLabels();
+	}
 	public JButton createSettingsButton()
 	{
-		JButton settings = new JButton("Settings", new ImageIcon("Resources/Images/settingsIcon.gif"));
-		settings.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				settingsFrame.update();
-				settingsFrame.showFrame();
-				
-			}
-		});
+
 		
 		return settings;
 	}

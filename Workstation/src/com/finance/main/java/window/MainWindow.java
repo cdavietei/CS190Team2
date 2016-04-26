@@ -11,6 +11,7 @@ import com.finance.main.java.chart.StockChart;
 import com.finance.main.java.chart.StockChartPanel;
 import com.finance.main.java.database.SQLiteConnector;
 import com.finance.main.java.enums.Languages;
+import com.finance.main.java.enums.TextFields;
 import com.finance.main.java.histTable.HistTableView;
 import com.finance.main.java.search.search;
 import com.finance.main.java.util.*;
@@ -63,6 +64,8 @@ public class MainWindow extends JFrame implements ActionListener,Localized {
 	public Languages currentLang = Languages.ENGLISH_US;
 	public static ArrayList<JInternalFrame> views = new ArrayList<JInternalFrame>();
 	private JPanel contentPane;
+	private JButton btnGraph;
+	JButton btnHistoricalTable;
 	
 	
 
@@ -123,60 +126,57 @@ public class MainWindow extends JFrame implements ActionListener,Localized {
 		panel_1.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panel_1.setLayout(null);
 		
-		JButton btnHistoricalTable = new JButton("Table");
+		btnHistoricalTable = new JButton(LocalizedStrings.getLocalString(TextFields.TABLE));
+		btnHistoricalTable.setBounds(10, 11, 105, 23);
+		btnHistoricalTable.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JInternalFrame fr =  new JInternalFrame(LocalizedStrings.getLocalString(TextFields.HISTTABLE));
+				desktopPane.add(fr);
+				HistTableView histTable = new HistTableView();
+				histTable.setBounds(110, 130, 105, 70);
+				histTable.setVisible(true);
+				histTable.setLang(currentLang);
+				histTable.updateLabels();
+				fr.getContentPane().add(histTable);
+				fr.setBounds(110, 130,870,300);
+				fr.setResizable(false);
+				fr.setVisible(true);
+				fr.setClosable(true);
+				fr.setBorder(new LineBorder(new Color(0,0,0)));
+				views.add(fr);
+				}
+		});
 		
-				btnHistoricalTable.setBounds(10, 11, 105, 23);
-				panel_1.add(btnHistoricalTable);
+		panel_1.add(btnHistoricalTable);
+		
+		btnGraph = new JButton(LocalizedStrings.getLocalString(TextFields.GRAPH));
+		btnGraph.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JInternalFrame fr =  new JInternalFrame(LocalizedStrings.getLocalString(TextFields.GRAPHVIEW));
+				fr.setBounds(110, 130, 700, 445);                 
+				desktopPane.add(fr);
+				StockChartPanel stockPan = new StockChartPanel();
+				fr.getContentPane().add(stockPan);
+				fr.setVisible(true);
+				StockChartPanel pan = (StockChartPanel)fr.getContentPane().getComponents()[fr.getContentPane().getComponentCount()-1];
+				pan.updateLabels();
+				fr.setClosable(true);
+				fr.setBorder(new LineBorder(new Color(0,0,0)));
+				views.add(fr);
+			}
+		});
+		btnGraph.setBounds(10, 39, 105, 23);
+		panel_1.add(btnGraph);
 				
-				JButton btnGraph = new JButton("Graph");
-				btnGraph.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						JInternalFrame fr =  new JInternalFrame("Graph View");
-						fr.setBounds(110, 130, 700, 445);                 
-						desktopPane.add(fr);
-						
-						StockChartPanel stockPan = new StockChartPanel();
-						//for(String s : search.stockNames)
-						//	stockPan.addSeries(s);
-						fr.getContentPane().add(stockPan);
-						fr.setVisible(true);
-						StockChartPanel pan = (StockChartPanel)fr.getContentPane().getComponents()[fr.getContentPane().getComponentCount()-1];
-						pan.updateLabels();
-						fr.setClosable(true);
-						fr.setBorder(new LineBorder(new Color(0,0,0)));
-						views.add(fr);
-					}
-				});
-				btnGraph.setBounds(10, 39, 105, 23);
-				panel_1.add(btnGraph);
-				
-				JDesktopPane desktopPane_1 = new JDesktopPane();
-				desktopPane_1.setBackground(SystemColor.control);
-				desktopPane_1.setBounds(0, 21, 716, 64);
-				contentPane.add(desktopPane_1);
-				searchPan = new search();
-				desktopPane_1.add(searchPan);
-				searchPan.updateLabels();
-				searchPan.setVisible(true);
-				searchPan.setBounds(144, 0, 360, 61);
-				btnHistoricalTable.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						JInternalFrame fr =  new JInternalFrame("Historical Table");
-						desktopPane.add(fr);
-						HistTableView histTable = new HistTableView();
-						histTable.setBounds(110, 130, 105, 70);
-						histTable.setVisible(true);
-						histTable.setLang(currentLang);
-						histTable.updateLabels();
-						fr.getContentPane().add(histTable);
-						fr.setBounds(110, 130,870,300);
-						fr.setResizable(false);
-						fr.setVisible(true);
-						fr.setClosable(true);
-						fr.setBorder(new LineBorder(new Color(0,0,0)));
-						views.add(fr);
-						}
-				});
+		JDesktopPane desktopPane_1 = new JDesktopPane();
+		desktopPane_1.setBackground(SystemColor.control);
+		desktopPane_1.setBounds(0, 21, 716, 64);
+		contentPane.add(desktopPane_1);
+		searchPan = new search();
+		desktopPane_1.add(searchPan);
+		searchPan.updateLabels();
+		searchPan.setVisible(true);
+		searchPan.setBounds(144, 0, 360, 61);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 732, 478);
@@ -223,44 +223,49 @@ public class MainWindow extends JFrame implements ActionListener,Localized {
 	public void stateChange(ItemEvent e){
 		if(e.getStateChange() == ItemEvent.SELECTED){
 			LocalizedStrings.setLanguage(Languages.ENGLISH_US);
+			LocalizedStrings.update();
+			currentLang = Languages.ENGLISH_US;
 			for(int i = 0; i < views.size();i++){
 				if(views.get(i).isVisible()){
 					for(int j =0; j < views.get(i).getContentPane().getComponentCount();j++){
 						if(views.get(i).getContentPane().getComponent(j).getClass().equals(new HistTableView().getClass())){
+							views.get(i).setTitle(LocalizedStrings.getLocalString(TextFields.HISTTABLE));
 							HistTableView vw = (HistTableView)views.get(i).getContentPane().getComponent(j);
 							vw.setLang(Languages.ENGLISH_US);
 							vw.updateLabels();
-							currentLang = Languages.ENGLISH_US;
 						}
 						else{
+							views.get(i).setTitle(LocalizedStrings.getLocalString(TextFields.GRAPHVIEW));
 							StockChartPanel vw =  (StockChartPanel)views.get(i).getContentPane().getComponent(j);
-							vw.updateLabels();
+							vw.setLange(Languages.ENGLISH_US);
 						}
 					}
 				}
-				
 			}
 		}
 		else{		
-			for(int i = 0; i < views.size();i++){
-			if(views.get(i).isVisible()){
-				for(int j =0; j < views.get(i).getContentPane().getComponentCount();j++){
-					if(views.get(i).getContentPane().getComponent(j).getClass().equals(new HistTableView().getClass())){
-						HistTableView vw = (HistTableView)views.get(i).getContentPane().getComponent(j);
-						vw.setLang(Languages.SPANISH);
-						currentLang = Languages.SPANISH;
-						vw.updateLabels();
-					}
-					else{
-						StockChartPanel vw =  (StockChartPanel)views.get(i).getContentPane().getComponent(j);
-						vw.updateLabels();
-					}
-				}
-			}
-			
-		}
 			LocalizedStrings.setLanguage(Languages.SPANISH);
-		}
+			LocalizedStrings.update();
+			currentLang = Languages.SPANISH;
+			for(int i = 0; i < views.size();i++){
+				if(views.get(i).isVisible()){
+					for(int j =0; j < views.get(i).getContentPane().getComponentCount();j++){
+						if(views.get(i).getContentPane().getComponent(j).getClass().equals(new HistTableView().getClass())){
+
+							views.get(i).setTitle(LocalizedStrings.getLocalString(TextFields.HISTTABLE));
+							HistTableView vw = (HistTableView)views.get(i).getContentPane().getComponent(j);
+							vw.setLang(Languages.SPANISH);
+							vw.updateLabels();
+						}//if	
+						else{
+							views.get(i).setTitle(LocalizedStrings.getLocalString(TextFields.GRAPHVIEW));
+							StockChartPanel vw =  (StockChartPanel)views.get(i).getContentPane().getComponent(j);
+							vw.setLange(Languages.SPANISH);
+						}//else
+					}//for
+				}//if	
+			}//for
+		}//else
 		updateLabels();
 	}
 	public static void addToCharts(String stock){
@@ -280,23 +285,8 @@ public class MainWindow extends JFrame implements ActionListener,Localized {
 	@Override
 	public boolean updateLabels(){
 		searchPan.updateLabels();
-		/*for(int i = 0; i < views.size();i++){
-			if(views.get(i).isVisible()){
-				for(int j =0; j < views.get(i).getContentPane().getComponentCount();j++){
-					if(views.get(i).getContentPane().getComponent(j).getClass().equals(new HistTableView().getClass())){
-						HistTableView vw = (HistTableView)views.get(i).getContentPane().getComponent(j);
-						vw.setLang(LocalizedStrings.language);
-						System.out.println("main " + LocalizedStrings.language);
-						vw.updateLabels();
-					}
-					else{
-						StockChartPanel vw =  (StockChartPanel)views.get(i).getContentPane().getComponent(j);
-						vw.updateLabels();
-					}
-				}
-			}
-			
-		}*/
+		btnHistoricalTable.setText(LocalizedStrings.getLocalString(TextFields.TABLE));
+		btnGraph.setText(LocalizedStrings.getLocalString(TextFields.GRAPH));
 		return false;
 	}
 }

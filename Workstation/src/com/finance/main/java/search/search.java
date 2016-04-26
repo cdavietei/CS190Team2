@@ -80,8 +80,6 @@ public class search extends JPanel implements Localized {
 					if(!stockNames.contains(userInput))
 						stockNames.add(userInput);
 					MainWindow.addToCharts(userInput);
-					
-					
 					try
 					{
 						stockInter.getStocksAsynch(userInput, 
@@ -95,7 +93,7 @@ public class search extends JPanel implements Localized {
 					}
 				}
 				else{
-					//mess.showMessageDialog(frame,LocalizedStrings.getLocalString(TextFields.SEARCH_FAILURE));// "Invalid input, not a stock or company.");
+					mess.showMessageDialog(frame,LocalizedStrings.getLocalString(TextFields.SEARCH_FAILURE));// "Invalid input, not a stock or company.");
 				}
 			}
 			else{

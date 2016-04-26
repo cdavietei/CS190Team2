@@ -146,7 +146,7 @@ public class HistTableView extends JPanel implements Localized {
 	}
 	public void getStockData(String stockName){
 		StockDatabaseInterface inter = new StockDatabaseInterface();
-		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		java.util.Date date1 = new java.util.Date();
 		try {
 			if(!settingsFrame.startDate.getText().equals(""))

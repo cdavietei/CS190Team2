@@ -15,6 +15,7 @@ import com.finance.main.java.util.LocalizedStrings;
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
@@ -127,22 +128,22 @@ public class HistTableSettings extends JFrame implements Localized {
 		contentPane.add(btnCancel);
 		
 		startDate = new JTextField();
-		startDate.setText("03/05/2016");
-		startDate.setBounds(60, 161, 78, 20);
+		startDate.setText(new Date(System.currentTimeMillis() - ((long)(20*1000*60*60*24))).toString());
+		startDate.setBounds(80, 161, 78, 20);
 		contentPane.add(startDate);
 		startDate.setColumns(10);
 		
 		lblStartDate = new JLabel("Start Date:");
-		lblStartDate.setBounds(6, 164, 63, 14);
+		lblStartDate.setBounds(6, 164, 78, 14);
 		contentPane.add(lblStartDate);
 		
 		lblEndDate = new JLabel("End Date:");
-		lblEndDate.setBounds(148, 164, 57, 14);
+		lblEndDate.setBounds(171, 164, 78, 14);
 		contentPane.add(lblEndDate);
 		
 		endDate = new JTextField();
-		endDate.setText("04/05/2016");
-		endDate.setBounds(199, 161, 86, 20);
+		endDate.setText(new Date(System.currentTimeMillis()).toString());
+		endDate.setBounds(259, 161, 86, 20);
 		contentPane.add(endDate);
 		endDate.setColumns(10);
 	}
