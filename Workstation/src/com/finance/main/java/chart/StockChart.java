@@ -47,9 +47,9 @@ import com.finance.main.java.util.Utilities;
  * or other default parameters, use the following way:
  * 
  * <p><pre>StockChart newChart = new StockChart().setPanelSize(800, 600)
- *                                       .setPanelHeight(400)
- *                                       .setXAxisLabel("Date")
- *                                       .setShowLegend(false); 
+ *                                               .setPanelHeight(400)
+ *                                               .setXAxisLabel("Date")
+ *                                               .setShowLegend(false); 
  * 
  * <p>To compare two or more stocks on the same panel, calling addDataset(...) will create
  * chart for each stock. For example, to compare Google and Yahoo stocks over May 20, 2015 to 

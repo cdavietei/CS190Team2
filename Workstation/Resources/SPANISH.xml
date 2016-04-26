@@ -35,5 +35,5 @@
 	<label id="END_DATE">Fecha Final:</label>
 	<label id="TABLE_DATE">Fecha</label>
     <label id="SEARCH_SUCCESS">Búsqueda con Éxito</label>
-    <label id="SEARCH_FAILURE">Entrada no válida, no una acción o empresa.</label
+    <label id="SEARCH_FAILURE">Entrada no válida, no una acción o empresa.</label>
 </text>
