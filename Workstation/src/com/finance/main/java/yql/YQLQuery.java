@@ -18,6 +18,16 @@ import com.finance.main.java.util.Utilities;
 
 import org.json.*;
 
+
+/**
+ * <p>This class provides functionality to query stock information from Yahoo Finance using
+ * Yahoo Query Language. The data is collected through HTTP get method.
+ * 
+ * <p>This class includes methods to get the current and historical data for any stock.
+ * 
+ * @author MI ONIM
+ *
+ */
 public class YQLQuery
 {
 	public static final String BASE_URL_START = "https://query.yahooapis.com/v1/public/yql?q=";
@@ -26,13 +36,6 @@ public class YQLQuery
 	//the Data-tables YQL looks into
 	public static final String YAHOO_FINANCE_HISTORICAL_DATA = "yahoo.finance.historicaldata";
 	public static final String YAHOO_FINANCE_QUOTE = "yahoo.finance.quote";
-	
-	/* test the query methods here */
-	public static void main(String[] args) throws Exception
-	{
-		//getHistoricalData("GOOG","2016-03-12","2016-03-22");
-		//getCurrentData("GOOG");
-	}
 	
 	/**
 	 * Retrieves historical data of the stock
@@ -129,9 +132,10 @@ public class YQLQuery
 			String inputLine = "";
 			while((inputLine = input.readLine()) !=null) {
 				urlData += inputLine;
-			} //while
+			}
 			input.close();
-		} catch (UnknownHostException e) {
+		}
+		catch (UnknownHostException e) {
 			JFrame frame = new JFrame();
 			JOptionPane mess = new JOptionPane();
 			mess.showMessageDialog(frame, "Check your internet connection.");

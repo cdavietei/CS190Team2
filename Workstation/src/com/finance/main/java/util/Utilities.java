@@ -29,20 +29,25 @@ public class Utilities
 		return new SimpleDateFormat("yyyy-MM-dd").parse(date);
 	}
 	
-	public static Date stringToSqlDate(String date)
+	public static Date stringToSqlDate(String date, String format)
 	{
 		java.util.Date utilDate = new java.util.Date();
 		
 		try
 		{
-			utilDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+			utilDate = new SimpleDateFormat(format).parse(date);
 		}
 		catch(Exception e)
 		{
-			System.out.println("createDate(): "+e.getLocalizedMessage());
+			System.out.println("stringToSqlDate(): "+e.getLocalizedMessage());
 		}
 		
 		return (utilDate != null) ? new Date(utilDate.getTime()) : null;
+	}
+	
+	public static Date stringToSqlDate(String date)
+	{
+		return stringToSqlDate(date, "yyyy-MM-dd");
 	}
 
 	/**

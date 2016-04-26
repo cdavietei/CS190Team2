@@ -7,10 +7,20 @@ import javax.swing.JPanel;
 
 import com.finance.main.java.util.Localized;
 
+
+/**
+ * <p>This is an adapter class that is used by MainWindow. This class maps methods called from
+ * MainWindow to methods defined in StockChart class.
+ * 
+ * <p>This class is a panel that contains a panel returned by StockChart, and a panel 
+ * containing settings icon for the chart.  
+ * 
+ * @author MI ONIM
+ *
+ */
 @SuppressWarnings("serial")
 public class StockChartPanel extends JPanel implements Localized
 {
-
 	protected StockChart stockChart;
 	
 	public StockChartPanel()
@@ -19,7 +29,7 @@ public class StockChartPanel extends JPanel implements Localized
 		stockChart = new StockChart(settings);
 		
 		GridBagConstraints constraint = new GridBagConstraints();
-    	constraint.anchor = GridBagConstraints.NORTHEAST;
+    	constraint.anchor = GridBagConstraints.NORTHEAST;     //placed in top right corner
     	
     	this.setLayout(new GridBagLayout());
 		this.add(stockChart.getPanel());

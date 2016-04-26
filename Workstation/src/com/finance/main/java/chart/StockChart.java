@@ -8,6 +8,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -28,34 +29,37 @@ import com.finance.main.java.enums.TextFields;
 import com.finance.main.java.stock.Stock;
 import com.finance.main.java.util.Localized;
 import com.finance.main.java.util.LocalizedStrings;
+import com.finance.main.java.util.Utilities;
 
 
 /**
- * Displays graphical view of one or more stocks.
+ * <p>Displays graphical view of one or more stocks.
  * 
- * The chart(s) implements tool-tip generator. Hovering mouse over a data point in the chart
+ * <p>The chart(s) implements tool-tip generator. Hovering mouse over a data point in the chart
  * will display the stock name, the time and the stock price in the format:
  * 			stockName: (time, price)
  * 
  * 
- * To get the panel containing chart(s),
+ * <p>To get the panel containing chart(s),
  * instantiate the class with no parameters, and call getPanel().
  * 
- * This class uses the Builder design pattern. Therefore, to change the panel's width or height
- * or other default parameters, use the following:
+ * <p>This class uses the Builder design pattern. Therefore, to change the panel's width or height
+ * or other default parameters, use the following way:
  * 
- * StockChart newChart = new StockChart().setPanelSize(800, 600)
+ * <p><pre>StockChart newChart = new StockChart().setPanelSize(800, 600)
  *                                       .setPanelHeight(400)
  *                                       .setXAxisLabel("Date")
  *                                       .setShowLegend(false); 
  * 
- * To compare two or more stocks on the same panel, calling addDataset(...) will create
+ * <p>To compare two or more stocks on the same panel, calling addDataset(...) will create
  * chart for each stock. For example, to compare Google and Yahoo stocks over May 20, 2015 to 
  * May 30, 2015, use the following:
  * 
- * StockChart newChart = new StockChart();
+ * <p>StockChart newChart = new StockChart();
  * newChart.addDataset("GOOG", "05/20/2015", "05/30/2015");
  * newChart.addDataset("YHOO", "05/20/2015", "05/30/2015");
+ * 
+ * <p>Calling addDataset() without the dates will return data over a default period of time.
  * 
  * @author MI ONIM
  *
@@ -85,9 +89,13 @@ public class StockChart implements Localized
 	protected boolean rangeTypeHigh = false;
 	protected boolean rangeTypeLow = false;
 	
+	/* Used to maintain consistent colors and shapes for plots */
+	HashMap<String, Paint> plotColors = new HashMap<>();
+	HashMap<String, Shape> plotShapes = new HashMap<>();
+	
 	/**
 	 * Default constructor for StockChart. Creates a chart layout in a panel.
-	 * Every time a new dataset is added to the chart, the panel updates automatically.
+	 * Every time a new series is added to the chart, the panel updates automatically.
 	 */
 	public StockChart()
 	{
@@ -100,6 +108,11 @@ public class StockChart implements Localized
 		chartPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 	}
 	
+	/**
+	 * Creates a StockChart object, with a settings menu attached.
+	 * 
+	 * @param settingsMenu Settings menu which can trigger changes to StockChart objects
+	 */
 	public StockChart(Subject settingsMenu)
 	{
 		this();
@@ -108,7 +121,7 @@ public class StockChart implements Localized
 	
 	/**
 	 * Returns the panel containing the chart(s).
-	 * Before adding any stock data, returns a chart layout. 
+	 * Before adding any stock data, returns an empty chart layout. 
 	 * 
 	 * @return The panel
 	 */
@@ -127,20 +140,23 @@ public class StockChart implements Localized
 	
 	/**
 	 * Collects historical stock data over a default start date and end date. Adds the stock
-	 * data in the chart. 
+	 * data in the chart.
 	 * 
-	 * @param stockSymbol
-	 * @return
+	 * @param stockSymbol The symbol of the stock
 	 * @throws Exception
 	 */
 	public void addSeries(String stockSymbol)
 	{
+		storeChartStyle();
+		
 		stockSymbol = stockSymbol.toUpperCase();
 		
 		//add the series only if the series is not currently displayed in the chart
 		if (dataset.getSeries(stockSymbol) == null) {
 			addSeries(stockSymbol, chartStartDate, chartEndDate);
-		}
+		}		
+		
+		restoreChartStyle();
 	}
 	
 	/**
@@ -150,7 +166,6 @@ public class StockChart implements Localized
 	 * @param stockSymbol The symbol of the stock
 	 * @param startDate Start date for the search, in mm/dd/yyyy format
 	 * @param endDate End date for the search, in mm/dd/yyyy format
-	 * @return True if the stock data chart has been created successfully or false otherwise
 	 * @throws Exception
 	 */
 	public void addSeries(String stockSymbol, String startDate, String endDate)
@@ -166,6 +181,7 @@ public class StockChart implements Localized
 		TimeSeries newSeries = new TimeSeries(stockSymbol);
 		
 		for (int i = 0; i < stockArray.size(); i++) {
+			//identity the type of data requested by user:
 			double rangeValue = rangeTypeClose    ? stockArray.get(i).getClose()
 			                  : rangeTypeOpen     ? stockArray.get(i).getOpen()
 			                  : rangeTypeAdjClose ? stockArray.get(i).getAdjClose()
@@ -184,20 +200,24 @@ public class StockChart implements Localized
 	}
 	
 	/**
-	 * Removes the chart for the given stock.
+	 * Removes the chart corresponding to the given stock.
 	 * 
 	 * @param stockSymbol Symbol of the stock
 	 */
 	public void removeSeries(String stockSymbol)
 	{
+		storeChartStyle();
+		
 		dataset.removeSeries(dataset.getSeries(stockSymbol));
+		
+		restoreChartStyle();
 	}
 	
 	/**
 	 * Renders tool-tip in the chart. Hovering mouse over any data point will display
 	 * the stock name, x-Axis value (Time) and the y-Axis value (Stock Price) 
 	 * 
-	 * @param plot
+	 * @param plot plot where tool tip will be activated
 	 */
 	protected void renderTooltip(XYPlot plot)
 	{
@@ -215,6 +235,13 @@ public class StockChart implements Localized
 		plot.setRenderer(renderer);
 	}
 	
+	/**
+	 * Updates all the charts with new values for start and end dates or type of
+	 * stock data requested.
+	 * 
+	 * @param newStartDate start date for stock data
+	 * @param newEndDate end date for stock data
+	 */
 	public void updateDataset(String newStartDate, String newEndDate)
 	{
 		/* overwrites the default date values, so that next stock data chart will have the same
@@ -222,26 +249,47 @@ public class StockChart implements Localized
 		chartStartDate = newStartDate;
 		chartEndDate = newEndDate;
 		
-		XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) getPlot().getRenderer();
-		ArrayList<Paint> plotColors = new ArrayList<>();
-		ArrayList<Shape> plotShapes = new ArrayList<>();
 		ArrayList<String> currentStocks = currentStocksDisplayed();
 		
 		for (int i = 0; i < currentStocks.size(); i++) {
-			plotColors.add(renderer.getSeriesPaint(i));
-			plotShapes.add(renderer.getSeriesShape(i));
-			
 			removeSeries(currentStocks.get(i));
 			addSeries(currentStocks.get(i));
 		}
+	}
+	
+	/**
+	 * Stores the colors and shapes for all charts.
+	 */
+	public void storeChartStyle()
+	{
+		ArrayList<String> currentStocks = currentStocksDisplayed();
+		XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) getPlot().getRenderer();
 		
-		renderer = (XYLineAndShapeRenderer) getPlot().getRenderer();
 		for (int i = 0; i < currentStocks.size(); i++) {
-			renderer.setSeriesPaint(i, plotColors.get(i));
-			renderer.setSeriesShape(i, plotShapes.get(i));
+			plotColors.put(currentStocks.get(i), renderer.getSeriesPaint(i));
+			plotShapes.put(currentStocks.get(i), renderer.getSeriesShape(i));
 		}
 	}
 	
+	/**
+	 * Updates colors and shapes for all charts with their original styles.
+	 */
+	public void restoreChartStyle()
+	{
+		XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) getPlot().getRenderer();
+		
+		ArrayList<String> currentStocks = currentStocksDisplayed();
+		
+		for (int i = 0; i < currentStocks.size(); i++) {
+			renderer.setSeriesPaint(i, plotColors.get(currentStocks.get(i)));
+			renderer.setSeriesShape(i, plotShapes.get(currentStocks.get(i)));
+		}
+	}
+	
+	/**
+	 * Returns if the panel is showing legends for the charts or not.
+	 * @return true if legend is shown, or false otherwise.
+	 */
 	public boolean isShowLegend()
 	{
 		return showLegend;
@@ -260,12 +308,19 @@ public class StockChart implements Localized
 		return this;
 	}
 	
+	/**
+	 * Legend is added to the chart.
+	 */
 	public void showLegend()
 	{
 		getChart().getLegend().setVisible(true);
 		showLegend = true;
 	}
 	
+	/**
+	 * Returns names of stocks displayed currently in the panel.
+	 * @return ArrayList of stock names
+	 */
 	protected ArrayList<String> currentStocksDisplayed()
 	{
 		ArrayList<String> stockNames = new ArrayList<>();
@@ -280,6 +335,10 @@ public class StockChart implements Localized
 		return stockNames;
 	}
 	
+	/**
+	 * Returns number of charts in the panel.
+	 * @return Number of charts
+	 */
 	public int getNumberOfSeries()
 	{
 		return dataset.getSeriesCount();
@@ -324,6 +383,10 @@ public class StockChart implements Localized
 		return this;
 	}
 	
+	/**
+	 * Updates Y-Axis label with the correct string based on the type of data
+	 * displayed in the chart
+	 */
 	protected void updateYAxisLabel()
 	{
 		String label = rangeTypeClose    ? "Closing Price"
@@ -419,6 +482,10 @@ public class StockChart implements Localized
 		return rangeTypeLow;
 	}
 	
+	/**
+	 * Returns a string representation of the type of data displayed in the chart.
+	 * @return Range type
+	 */
 	public String rangeTypeToString()
 	{
 		return  rangeTypeClose    ? "Close"
@@ -441,7 +508,7 @@ public class StockChart implements Localized
 	}
 	
 	/**
-	 * Updates all labels with the current language setup
+	 * Updates all labels with the current language setup.
 	 */
 	@Override
 	public boolean updateLabels()
@@ -455,27 +522,37 @@ public class StockChart implements Localized
 		return true;
 	}
 	
-	protected ArrayList<Stock> getStockData(String stockSymbol, String startDate, String endDate) throws Exception
+	/**
+	 * Returns stock data for a given stock name, and given start and end dates.
+	 * 
+	 * @param stockSymbol The symbol of the stock
+	 * @param startDate Start date for the stock data
+	 * @param endDate End date for the stock data
+	 * @return ArrayList of Stock objects
+	 */
+	protected ArrayList<Stock> getStockData(String stockSymbol, String startDate, String endDate)
 	{
 		StockDatabaseInterface stockData = new StockDatabaseInterface();
-		
-		SimpleDateFormat dateFomatter = new SimpleDateFormat("MM/dd/yyyy");
-		Date date1 = dateFomatter.parse(startDate);
-		Date date2 = dateFomatter.parse(endDate);
 		
 		ArrayList<Stock> stockArray = null;
 		
 		try {
-			stockArray = stockData.getStocks(stockSymbol, new java.sql.Date(date1.getTime()), 
-					new java.sql.Date(date2.getTime()));
+			stockArray = stockData.getStocks(stockSymbol, Utilities.stringToSqlDate(startDate, "MM/dd/yyyy"),
+			                                              Utilities.stringToSqlDate(endDate, "MM/dd/yyyy"));
 		}
-		catch (Exception e){
+		catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 		return stockArray;
 	}
 	
+	/**
+	 * Notifies the StockChart object with changes in settings triggered by the settings menu.
+	 * 
+	 * @param newStartDate start date for stock data
+	 * @param newEndDate end date for stock data
+	 * @param newRangeType type of stock data
+	 */
 	public void settingsChanged(String newStartDate, String newEndDate, String newRangeType)
 	{
 		if (!rangeTypeToString().equals(newRangeType)) {

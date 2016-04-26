@@ -24,9 +24,18 @@ import com.finance.main.java.enums.TextFields;
 import com.finance.main.java.util.Localized;
 import com.finance.main.java.util.LocalizedStrings;
 
-class SettingsFrame implements Subject, Localized
+
+/**
+ * This is the settings menu for StockChart class. Using the observer pattern,
+ * any changes made by users in the settings window sends a notification to the
+ * StockChart, which will make the necessary updates.
+ * 
+ * @author MI ONIM
+ *
+ */
+public class SettingsFrame implements Subject, Localized
 {
-	/* Constants to use for GridBag Constraints */
+	/* Constants used for GridBag Constraints */
 	public static int ROW_1 = 0;
 	public static int ROW_2 = 1;
 	public static int ROW_3 = 2;
@@ -67,47 +76,57 @@ class SettingsFrame implements Subject, Localized
 	protected String prevRangeType;
 	protected ArrayList<Component> tempComponents = new ArrayList<>();
 	
+	/**
+	 * Default Constructor
+	 */
 	public SettingsFrame()
 	{
 		initializeComponents();
 		configureButtons();
 	}
 	
+	/**
+	 * Sets the settings window visible.
+	 */
 	public void showFrame()
 	{
 		frame.setVisible(true);
 	}
 	
+	/**
+	 * Hides the settings window.
+	 */
 	public void hideFrame()
 	{
 		frame.setVisible(false);
 	}
 	
+	/**
+	 * Sets up the permanent components in the settings window.
+	 */
 	protected void initializeComponents()
 	{
 		hideFrame();
 		mainPanel.setLayout(layout);
 		
-		mainPanel.add(new JLabel("Enter Dates for search (in mm/dd/yyyy):"), buildConstraintsHeader(ROW_1,COL_1));
-		//enterDate.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, Color.BLACK));
-		//mainPanel.add(buildLabel("<html><hr></html"));
+		mainPanel.add(new JLabel("Enter Dates for search (in mm/dd/yyyy):"), buildConstraintsHeader(ROW_1));
 		
-		mainPanel.add(new JLabel("Start Date:"), buildConstraints(ROW_2,COL_1,CENTER));
-		mainPanel.add(startDateText, buildConstraints(ROW_2,COL_2));
-		mainPanel.add(new JLabel("End Date:"), buildConstraints(ROW_2,COL_3,CENTER));
-		mainPanel.add(endDateText, buildConstraints(ROW_2,COL_4));
+		mainPanel.add(new JLabel("Start Date:"), buildConstraints(ROW_2, COL_1, CENTER));
+		mainPanel.add(startDateText, buildConstraints(ROW_2, COL_2));
+		mainPanel.add(new JLabel("End Date:"), buildConstraints(ROW_2, COL_3, CENTER));
+		mainPanel.add(endDateText, buildConstraints(ROW_2, COL_4));
 		
 		addLegendAndResetButton();
-		//mainPanel.add(Box.createRigidArea(new Dimension(20,20)));
-		mainPanel.add(new JLabel("Select the type of Stock data to display:"), buildConstraintsHeader(ROW_4,COL_1));
-		mainPanel.add(open, buildConstraints(ROW_5,COL_1));
-		mainPanel.add(close, buildConstraints(ROW_5,COL_2));
-		mainPanel.add(adjClose, buildConstraints(ROW_5,COL_3));
-		mainPanel.add(volume, buildConstraints(ROW_6,COL_1));
-		mainPanel.add(high, buildConstraints(ROW_6,COL_2));
-		mainPanel.add(low, buildConstraints(ROW_6,COL_3));
-		//System.out.println(startDateText.getPreferredSize().height);
-		//System.out.println(open.getPreferredSize().height);
+		
+		mainPanel.add(new JLabel("Select the type of Stock data to display:"), buildConstraintsHeader(ROW_4));
+		mainPanel.add(open, buildConstraints(ROW_5, COL_1));
+		mainPanel.add(close, buildConstraints(ROW_5, COL_2));
+		mainPanel.add(adjClose, buildConstraints(ROW_5, COL_3));
+		mainPanel.add(volume, buildConstraints(ROW_6, COL_1));
+		mainPanel.add(high, buildConstraints(ROW_6, COL_2));
+		mainPanel.add(low, buildConstraints(ROW_6, COL_3));
+		
+		/* Make the columns equal sized */
 		open.setPreferredSize(new Dimension(110,25));
 		close.setPreferredSize(new Dimension(110,25));
 		adjClose.setPreferredSize(new Dimension(110,25));
@@ -117,11 +136,28 @@ class SettingsFrame implements Subject, Localized
 		frame.pack();
 	}
 	
+	/**
+	 * Returns a GridBagConstraints to be used by GridBagLayout manager. Places the component
+	 * in the given position inside the window, and align to the left.
+	 * 
+	 * @param row The row number to place the component
+	 * @param col The column number to place the component
+	 * @return GridBagConstraints object
+	 */
 	protected GridBagConstraints buildConstraints(int row, int col)
 	{
 		return buildConstraints(row, col, LEFT);
 	}
 	
+	/**
+	 * Returns a GridBagConstraints to be used by GridBagLayout manager. Places the component
+	 * in the given position inside the window, and align to the given value.
+	 * 
+	 * @param row The row number to place the component
+	 * @param col The column number to place the component
+	 * @param orientation The alignment position
+	 * @return GridBagConstraints object
+	 */
 	protected GridBagConstraints buildConstraints(int row, int col, int orientation)
 	{
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -137,15 +173,28 @@ class SettingsFrame implements Subject, Localized
 		return constraints;
 	}
 	
-	protected GridBagConstraints buildConstraintsHeader(int row, int col)
+	/**
+	 * A specialized GridBagConstraints for the headers inside the Settings window.
+	 * The component is placed according the given row. The component takes the full width
+	 * of the row, and has a little padding in the top.
+	 * 
+	 * @param row The row number to place the component
+	 * @return GridBagConstraints object
+	 */
+	protected GridBagConstraints buildConstraintsHeader(int row)
 	{
-		GridBagConstraints constraints = buildConstraints(row, col);
+		GridBagConstraints constraints = buildConstraints(row, 0);
 		constraints.gridwidth = 4;
 		constraints.insets = new Insets(10, 5, 5, 5);
 		
 		return constraints;
 	}
 	
+	/**
+	 * Returns a JButton to open the settings window.
+	 * 
+	 * @return A Button
+	 */
 	public JButton createSettingsButton()
 	{
 		JButton settings = new JButton(new ImageIcon("Resources/Images/settingsIcon.gif"));
@@ -165,16 +214,29 @@ class SettingsFrame implements Subject, Localized
 		return settings;
 	}
 	
+	/**
+	 * Number of rows in the settings window as laid out by the layout manager.
+	 * 
+	 * @return Number of rows
+	 */
 	protected int countLayoutRows()
 	{
 		return layout.getLayoutDimensions()[1].length;
 	}
 	
+	/**
+	 * Number of columns in the settings window as laid out by the layout manager.
+	 * 
+	 * @return Number of columns
+	 */
 	protected int countLayoutCols()
 	{
 		return layout.getLayoutDimensions()[0].length;
 	}
 	
+	/**
+	 * Adds all the radio buttons to a ButtonGroup, so that only one of them can be selected at a time.
+	 */
 	protected void configureButtons()
 	{
 		buttonGroup.add(open);
@@ -185,6 +247,11 @@ class SettingsFrame implements Subject, Localized
 		buttonGroup.add(low);
 	}
 	
+	/**
+	 * Returns a string representation of the radio button selected.
+	 * 
+	 * @return Text of the selected radio button
+	 */
 	protected String getSelectedButtonText()
 	{
         for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
@@ -198,6 +265,10 @@ class SettingsFrame implements Subject, Localized
         return null;
     }
 	
+	/**
+	 * Adds a button to show/hide legend from the StockChart panel, and another button
+	 * to reset the panel with one click.
+	 */
 	protected void addLegendAndResetButton()
 	{
 		JButton toggleLegend = new JButton("Hide Legend");
@@ -233,6 +304,10 @@ class SettingsFrame implements Subject, Localized
 		frame.pack();
 	}
 	
+	/**
+	 * Adds an apply button that sends notification to the StockChart object, and another button
+	 * that exits from the settings window.
+	 */
 	protected void addApplyAndCancelButton()
 	{
 		JButton apply = new JButton("Apply");
@@ -271,12 +346,18 @@ class SettingsFrame implements Subject, Localized
 		frame.pack();
 	}
 	
+	/**
+	 * Attaches the StockChart object with this class.
+	 */
 	@Override
 	public void attach(StockChart observer)
 	{
 		this.observer = observer;
 	}
 	
+	/**
+	 * Updates the settings options based on the latest view of the StockChart panel.
+	 */
 	@Override
 	public void update()
 	{
@@ -311,6 +392,10 @@ class SettingsFrame implements Subject, Localized
 		addCurrentChartLabels();
 	}
 	
+	/**
+	 * Adds the list of current charts displayed in the StockChart panel and a button
+	 * to remove them from the settings window.
+	 */
 	protected void addCurrentChartLabels()
 	{
 		removeTemporaryComponents();
@@ -320,7 +405,7 @@ class SettingsFrame implements Subject, Localized
 			
 			JLabel header = new JLabel("Current Stocks displayed:");
 			tempComponents.add(header);
-			mainPanel.add(header, buildConstraintsHeader(layoutRows++,0));
+			mainPanel.add(header, buildConstraintsHeader(layoutRows++));
 			
 			for (String series : observer.currentStocksDisplayed()) {
 				JButton remove = new JButton("Remove");
@@ -347,6 +432,9 @@ class SettingsFrame implements Subject, Localized
 		addApplyAndCancelButton();     //add at last
 	}
 	
+	/**
+	 * Removes temporary components to avoid duplicate components.
+	 */
 	protected void removeTemporaryComponents()
 	{
 		for (Component comp : tempComponents) {
@@ -354,9 +442,13 @@ class SettingsFrame implements Subject, Localized
 			mainPanel.revalidate();
 		}
 	}
-
+	
+	/**
+	 * Updates all labels with the current language setup.
+	 */
 	@Override
-	public boolean updateLabels() {
+	public boolean updateLabels()
+	{
 		startDate.setText(LocalizedStrings.getLocalString(TextFields.START_DATE)+":");
 		endDate.setText(LocalizedStrings.getLocalString(TextFields.END_DATE)+":");
 		apply.setText(LocalizedStrings.getLocalString(TextFields.TABLE_APPLY));
@@ -367,6 +459,7 @@ class SettingsFrame implements Subject, Localized
 		volume.setText(LocalizedStrings.getLocalString(TextFields.TABLE_VOLUME));
 		high.setText(LocalizedStrings.getLocalString(TextFields.TABLE_HIGH));
 		low.setText(LocalizedStrings.getLocalString(TextFields.TABLE_LOW));
-		return false;
+		
+		return true;
 	}
 }
