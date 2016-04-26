@@ -41,4 +41,7 @@
 	<label id="SETTINGS">Settings</label>
 	<label id="GRAPHVIEW">Graph View</label>
 	<label id="HISTTABLE">Historical Table</label>
+    <label id="LANGUAGE">Language</label>
+    <label id="ENGLISH">English</label>
+    <label id="SPANISH">Español</label>
 </text>

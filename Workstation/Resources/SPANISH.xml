@@ -41,4 +41,7 @@
 	<label id="SETTINGS">Ajustes</label>
 	<label id="GRAPHVIEW">Ver Gráfico</label>
 	<label id="HISTTABLE">Tabla Histórica</label>
+    <label id="LANGUAGE">Idioma</label>
+    <label id="ENGLISH">English</label>
+    <label id="SPANISH">Español</label>
 </text>

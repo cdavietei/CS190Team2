@@ -66,6 +66,7 @@ public class MainWindow extends JFrame implements ActionListener,Localized {
 	private JPanel contentPane;
 	private JButton btnGraph;
 	JButton btnHistoricalTable;
+	JMenu mnNewMenu;
 	
 	
 
@@ -97,20 +98,19 @@ public class MainWindow extends JFrame implements ActionListener,Localized {
 		menuBar.setBounds(0, 0, 716, 21);
 		contentPane.add(menuBar);
 		LocalizedStrings.setLanguage(Languages.ENGLISH_US);
-		JMenu mnNewMenu = new JMenu("Language");
+		mnNewMenu = new JMenu(LocalizedStrings.getLocalString(TextFields.LANGUAGE));//"Language");
 		menuBar.add(mnNewMenu);
-		JRadioButtonMenuItem rdbtnmntmEnglish = new JRadioButtonMenuItem("English");
+		JRadioButtonMenuItem rdbtnmntmEnglish = new JRadioButtonMenuItem(LocalizedStrings.getLocalString(TextFields.ENGLISH));
 		rdbtnmntmEnglish.setSelected(true);
 		rdbtnmntmEnglish.addItemListener(new ItemListener(){
 			@Override
 			public void itemStateChanged(ItemEvent e){
 				stateChange(e);
-				
 		}
 		});
 		
 		mnNewMenu.add(rdbtnmntmEnglish);
-		JRadioButtonMenuItem rdbtnmntmSpanish = new JRadioButtonMenuItem("Spanish");
+		JRadioButtonMenuItem rdbtnmntmSpanish = new JRadioButtonMenuItem(LocalizedStrings.getLocalString(TextFields.SPANISH));
 		mnNewMenu.add(rdbtnmntmSpanish);
 		ButtonGroup group = new ButtonGroup();
 		group.add(rdbtnmntmSpanish);
@@ -225,6 +225,10 @@ public class MainWindow extends JFrame implements ActionListener,Localized {
 			LocalizedStrings.setLanguage(Languages.ENGLISH_US);
 			LocalizedStrings.update();
 			currentLang = Languages.ENGLISH_US;
+						
+			if(mnNewMenu != null)
+				mnNewMenu.setText(LocalizedStrings.getLocalString(TextFields.LANGUAGE));
+			
 			for(int i = 0; i < views.size();i++){
 				if(views.get(i).isVisible()){
 					for(int j =0; j < views.get(i).getContentPane().getComponentCount();j++){
@@ -247,6 +251,10 @@ public class MainWindow extends JFrame implements ActionListener,Localized {
 			LocalizedStrings.setLanguage(Languages.SPANISH);
 			LocalizedStrings.update();
 			currentLang = Languages.SPANISH;
+
+			if(mnNewMenu != null)
+				mnNewMenu.setText(LocalizedStrings.getLocalString(TextFields.LANGUAGE));
+			
 			for(int i = 0; i < views.size();i++){
 				if(views.get(i).isVisible()){
 					for(int j =0; j < views.get(i).getContentPane().getComponentCount();j++){

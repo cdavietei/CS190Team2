@@ -191,6 +191,12 @@ public enum TextFields
 	 
 	 GRAPHVIEW,
 	 
-	 HISTTABLE
+	 HISTTABLE,
+	 
+	 LANGUAGE,
+	 
+	 ENGLISH,
+	 
+	 SPANISH
 	
 }//TextFields enum

@@ -326,3 +326,12 @@ public class SQLiteConnector
 	}
 
 }// SQliteConnector class
+
+
+class CreateTable implements Runnable
+{
+	public void run()
+	{
+		
+	}
+}
