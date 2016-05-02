@@ -187,6 +187,10 @@ public enum TextFields
 	 
 	 CHART_DATATYPE,
 	 
+	 CHART_LEGEND,
+	 
+	 CHART_RESET,
+	 
 	 SETTINGS,
 	 
 	 GRAPHVIEW,

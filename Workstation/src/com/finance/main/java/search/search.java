@@ -48,7 +48,7 @@ public class search extends JPanel implements Localized {
 		stockInter = new StockDatabaseInterface();
 		
 		stockNames = stockInter.getAvailableStocks();
-		textField.setBounds(74, 21, 209, 20);
+		textField.setBounds(74, 21, 209, 30);
 		add(textField);
 		textField.setColumns(10);
 		

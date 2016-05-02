@@ -1,6 +1,7 @@
 package com.finance.main.java.chart;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -11,6 +12,7 @@ import java.util.Enumeration;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,18 +24,46 @@ import com.finance.main.java.enums.TextFields;
 import com.finance.main.java.util.Localized;
 import com.finance.main.java.util.LocalizedStrings;
 
-class SettingsFrame implements Subject,Localized
+
+/**
+ * This is the settings menu for StockChart class. Using the observer pattern,
+ * any changes made by users in the settings window sends a notification to the
+ * StockChart, which will make the necessary updates.
+ * 
+ * @author MI ONIM
+ *
+ */
+public class SettingsFrame implements Subject, Localized
 {
-	private StockChartPanel observer;
-	protected ArrayList<Component> newComponents = new ArrayList<>();
 	protected JFrame frame = new JFrame(LocalizedStrings.getLocalString(TextFields.SETTINGS));
+
+	/* Constants used for GridBag Constraints */
+	public static int ROW_1 = 0;
+	public static int ROW_2 = 1;
+	public static int ROW_3 = 2;
+	public static int ROW_4 = 3;
+	public static int ROW_5 = 4;
+	public static int ROW_6 = 5;
+	public static int COL_1 = 0;
+	public static int COL_2 = 1;
+	public static int COL_3 = 2;
+	public static int COL_4 = 3;
+	
+	public static int LEFT = 1;
+	public static int CENTER = 2;
+	public static int RIGHT = 3;
+	
+	private StockChart observer;
+	
 	protected JPanel mainPanel = new JPanel();
-	protected JLabel startDate = new JLabel(LocalizedStrings.getLocalString(TextFields.START_DATE)+":");
-	protected JLabel endDate = new JLabel(LocalizedStrings.getLocalString(TextFields.END_DATE)+":");
+	protected JLabel startDate = new JLabel(LocalizedStrings.getLocalString(TextFields.START_DATE));
+	protected JLabel endDate = new JLabel(LocalizedStrings.getLocalString(TextFields.END_DATE));
 	protected JTextField startDateText = new JTextField(10);
 	protected JTextField endDateText = new JTextField(10);
 	protected JButton apply = new JButton(LocalizedStrings.getLocalString(TextFields.TABLE_APPLY));
 	protected JButton cancel = new JButton(LocalizedStrings.getLocalString(TextFields.TABLE_CANCEL));
+	JButton toggleLegend = new JButton(LocalizedStrings.getLocalString(TextFields.CHART_LEGEND));
+	JButton resetPanel = new JButton(LocalizedStrings.getLocalString(TextFields.CHART_RESET));
 	protected ButtonGroup buttonGroup = new ButtonGroup();
 	protected JRadioButton open = new JRadioButton(LocalizedStrings.getLocalString(TextFields.TABLE_OPEN));
 	protected JRadioButton close = new JRadioButton(LocalizedStrings.getLocalString(TextFields.TABLE_CLOSE));
@@ -43,77 +73,174 @@ class SettingsFrame implements Subject,Localized
 	protected JRadioButton low = new JRadioButton(LocalizedStrings.getLocalString(TextFields.TABLE_LOW));
 	protected JLabel dateRange = new JLabel(LocalizedStrings.getLocalString(TextFields.CHART_DATERANGE)+" (in mm/dd/yyyy):");
 	protected JLabel dataType = new JLabel(LocalizedStrings.getLocalString(TextFields.CHART_DATATYPE));
-	protected GridBagLayout layout = new GridBagLayout();
-	protected GridBagConstraints constraints = new GridBagConstraints();
 	
+	protected GridBagLayout layout = new GridBagLayout();
 	protected String prevStartDate;
 	protected String prevEndDate;
 	protected String prevRangeType;
+	protected ArrayList<Component> tempComponents = new ArrayList<>();
 	
+	/**
+	 * Default Constructor
+	 */
 	public SettingsFrame()
 	{
 		initializeComponents();
 		configureButtons();
 	}
 	
+	/**
+	 * Sets the settings window visible.
+	 */
 	public void showFrame()
 	{
 		frame.setVisible(true);
 	}
 	
-	protected void initializeComponents()
+	/**
+	 * Hides the settings window.
+	 */
+	public void hideFrame()
 	{
 		frame.setVisible(false);
+	}
+	
+	/**
+	 * Sets up the permanent components in the settings window.
+	 */
+	protected void initializeComponents()
+	{
+		hideFrame();
 		mainPanel.setLayout(layout);
 		
-		mainPanel.add(dateRange, buildConstraints(0,0,2));
-		//enterDate.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, Color.BLACK));
-		//mainPanel.add(buildLabel("<html><hr></html"));
+		mainPanel.add(dateRange, buildConstraintsHeader(ROW_1));
 		
-		mainPanel.add(startDate, buildConstraints(1,0,1));
-		mainPanel.add(startDateText, buildConstraints(1,1,1));
-		mainPanel.add(endDate, buildConstraints(1,2,1));
-		mainPanel.add(endDateText, buildConstraints(1,3,1));
+		mainPanel.add(startDate, buildConstraints(ROW_2, COL_1, CENTER));
+		mainPanel.add(startDateText, buildConstraints(ROW_2, COL_2));
+		mainPanel.add(endDate, buildConstraints(ROW_2, COL_3, CENTER));
+		mainPanel.add(endDateText, buildConstraints(ROW_2, COL_4));
 		
-		//mainPanel.add(Box.createRigidArea(new Dimension(20,20)));
-		mainPanel.add(dataType, buildConstraints(2,0,2));
-		mainPanel.add(open, buildConstraints(3,0,1));
-		mainPanel.add(close, buildConstraints(3,1,1));
-		mainPanel.add(adjClose, buildConstraints(3,2,1));
-		mainPanel.add(volume, buildConstraints(4,0,1));
-		mainPanel.add(high, buildConstraints(4,1,1));
-		mainPanel.add(low, buildConstraints(4,2,1));
+		addLegendAndResetButton();
+		
+		mainPanel.add(dataType, buildConstraintsHeader(ROW_4));
+		mainPanel.add(open, buildConstraints(ROW_5, COL_1));
+		mainPanel.add(close, buildConstraints(ROW_5, COL_2));
+		mainPanel.add(adjClose, buildConstraints(ROW_5, COL_3));
+		mainPanel.add(volume, buildConstraints(ROW_6, COL_1));
+		mainPanel.add(high, buildConstraints(ROW_6, COL_2));
+		mainPanel.add(low, buildConstraints(ROW_6, COL_3));
+		
+		/* Make the columns equal sized */
+		open.setPreferredSize(new Dimension(110,25));
+		close.setPreferredSize(new Dimension(110,25));
+		adjClose.setPreferredSize(new Dimension(110,25));
+		endDateText.setPreferredSize(new Dimension(110,25));
 		
 		frame.setContentPane(mainPanel);
 		frame.pack();
 	}
 	
+	/**
+	 * Returns a GridBagConstraints to be used by GridBagLayout manager. Places the component
+	 * in the given position inside the window, and align to the left.
+	 * 
+	 * @param row The row number to place the component
+	 * @param col The column number to place the component
+	 * @return GridBagConstraints object
+	 */
+	protected GridBagConstraints buildConstraints(int row, int col)
+	{
+		return buildConstraints(row, col, LEFT);
+	}
+	
+	/**
+	 * Returns a GridBagConstraints to be used by GridBagLayout manager. Places the component
+	 * in the given position inside the window, and align to the given value.
+	 * 
+	 * @param row The row number to place the component
+	 * @param col The column number to place the component
+	 * @param orientation The alignment position
+	 * @return GridBagConstraints object
+	 */
+	protected GridBagConstraints buildConstraints(int row, int col, int orientation)
+	{
+		GridBagConstraints constraints = new GridBagConstraints();
+		
+		constraints.gridy = row;
+		constraints.gridx = col;
+		constraints.insets = new Insets(5, 5, 5, 5);
+		constraints.anchor = orientation == LEFT   ? GridBagConstraints.LINE_START
+		                   : orientation == CENTER ? GridBagConstraints.CENTER
+		                   : orientation == RIGHT  ? GridBagConstraints.LINE_END
+		                   : GridBagConstraints.LINE_START;
+		
+		return constraints;
+	}
+	
+	/**
+	 * A specialized GridBagConstraints for the headers inside the Settings window.
+	 * The component is placed according the given row. The component takes the full width
+	 * of the row, and has a little padding in the top.
+	 * 
+	 * @param row The row number to place the component
+	 * @return GridBagConstraints object
+	 */
+	protected GridBagConstraints buildConstraintsHeader(int row)
+	{
+		GridBagConstraints constraints = buildConstraints(row, 0);
+		constraints.gridwidth = 4;
+		constraints.insets = new Insets(10, 5, 5, 5);
+		
+		return constraints;
+	}
+	
+	/**
+	 * Returns a JButton to open the settings window.
+	 * 
+	 * @return A Button
+	 */
+	public JButton createSettingsButton()
+	{
+		JButton settings = new JButton(new ImageIcon("Resources/Images/settingsIcon.gif"));
+		settings.setPreferredSize(new Dimension(25, 25));
+		
+		settings.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				update();
+				showFrame();
+				
+			}
+		});
+		
+		return settings;
+	}
+	
+	/**
+	 * Number of rows in the settings window as laid out by the layout manager.
+	 * 
+	 * @return Number of rows
+	 */
 	protected int countLayoutRows()
 	{
 		return layout.getLayoutDimensions()[1].length;
 	}
 	
+	/**
+	 * Number of columns in the settings window as laid out by the layout manager.
+	 * 
+	 * @return Number of columns
+	 */
 	protected int countLayoutCols()
 	{
 		return layout.getLayoutDimensions()[0].length;
 	}
 	
-	protected JLabel buildLabel(String labelName)
-	{
-		return new JLabel(labelName);
-	}
-	
-	protected GridBagConstraints buildConstraints(int row, int col, int rowsToSpan)
-	{
-		constraints.gridwidth = rowsToSpan;
-		constraints.gridy = row;
-		constraints.gridx = col;
-		constraints.insets = new Insets(5, 5, 5, 5);
-		constraints.fill = GridBagConstraints.EAST;
-		
-		return constraints;
-	}
-	
+	/**
+	 * Adds all the radio buttons to a ButtonGroup, so that only one of them can be selected at a time.
+	 */
 	protected void configureButtons()
 	{
 		buttonGroup.add(open);
@@ -124,7 +251,13 @@ class SettingsFrame implements Subject,Localized
 		buttonGroup.add(low);
 	}
 	
-	protected String getSelectedButtonText() {
+	/**
+	 * Returns a string representation of the radio button selected.
+	 * 
+	 * @return Text of the selected radio button
+	 */
+	protected String getSelectedButtonText()
+	{
         for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
             AbstractButton button = buttons.nextElement();
 
@@ -136,13 +269,95 @@ class SettingsFrame implements Subject,Localized
         return null;
     }
 	
-	
-	@Override
-	public void attach(StockChartPanel stockChartPanel)
+	/**
+	 * Adds a button to show/hide legend from the StockChart panel, and another button
+	 * to reset the panel with one click.
+	 */
+	protected void addLegendAndResetButton()
 	{
-		this.observer = stockChartPanel;
+		mainPanel.add(toggleLegend, buildConstraints(ROW_3, COL_2));
+		toggleLegend.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if (observer.isShowLegend()) {
+					observer.hideLegend();
+					toggleLegend.setText("Show Legend");
+				}
+				else if (!observer.isShowLegend()) {
+					observer.showLegend();
+					toggleLegend.setText("Hide Legend");
+				}
+			}
+		});
+		
+		mainPanel.add(resetPanel, buildConstraints(ROW_3, COL_3));
+		resetPanel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				observer.resetPanel();
+				addCurrentChartLabels();
+			}
+		});
+		
+		frame.pack();
 	}
 	
+	/**
+	 * Adds an apply button that sends notification to the StockChart object, and another button
+	 * that exits from the settings window.
+	 */
+	protected void addApplyAndCancelButton()
+	{
+		mainPanel.add(apply, buildConstraints(countLayoutRows(), COL_2, CENTER));
+		tempComponents.add(apply);
+		apply.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				String newStartDate = startDateText.getText();
+				String newEndDate = endDateText.getText();
+				String newRangeType = getSelectedButtonText();
+				
+				if (!prevStartDate.equals(newStartDate) || !prevEndDate.equals(newEndDate)
+						|| !prevRangeType.equals(newRangeType)) {
+					observer.settingsChanged(newStartDate, newEndDate, newRangeType);
+				}
+				
+				frame.setVisible(false);
+			}
+		});
+		
+		mainPanel.add(cancel, buildConstraints(countLayoutRows(), COL_3, CENTER));
+		tempComponents.add(cancel);
+		cancel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				hideFrame();
+			}
+		});
+		
+		frame.pack();
+	}
+	
+	/**
+	 * Attaches the StockChart object with this class.
+	 */
+	@Override
+	public void attach(StockChart observer)
+	{
+		this.observer = observer;
+	}
+	
+	/**
+	 * Updates the settings options based on the latest view of the StockChart panel.
+	 */
 	@Override
 	public void update()
 	{
@@ -177,88 +392,68 @@ class SettingsFrame implements Subject,Localized
 		addCurrentChartLabels();
 	}
 	
+	/**
+	 * Adds the list of current charts displayed in the StockChart panel and a button
+	 * to remove them from the settings window.
+	 */
 	protected void addCurrentChartLabels()
 	{
-		if(newComponents.size() > 0){
-			for(int i =0; i < newComponents.size(); i++)
-				mainPanel.remove(newComponents.get(i));
-		}
+		removeTemporaryComponents();
+		
 		if (observer.getNumberOfSeries() > 0) {
-			newComponents = new ArrayList<>();
 			int layoutRows = countLayoutRows();
 			
 			JLabel header = new JLabel("Current Stocks displayed:");
-			newComponents.add(header);
-			mainPanel.add(header, buildConstraints(layoutRows++,0,2));
+			tempComponents.add(header);
+			mainPanel.add(header, buildConstraintsHeader(layoutRows++));
 			
 			for (String series : observer.currentStocksDisplayed()) {
 				JButton remove = new JButton("Remove");
 				remove.addActionListener(new ActionListener() {
 					
 					@Override
-					public void actionPerformed(ActionEvent e) {
+					public void actionPerformed(ActionEvent e)
+					{
 						observer.removeSeries(series);
-						for (Component comp : newComponents) {
-							mainPanel.remove(comp);
-							mainPanel.revalidate();
-						}
 						addCurrentChartLabels();
 					}
 				});
 				
 				JLabel name = new JLabel(series);
-				newComponents.add(name);
-				newComponents.add(remove);
-				mainPanel.add(name, buildConstraints(layoutRows, 1, 1));
-				mainPanel.add(remove, buildConstraints(layoutRows++, 2, 1));
+				tempComponents.add(name);
+				tempComponents.add(remove);
+				mainPanel.add(name, buildConstraints(layoutRows, 1, CENTER));
+				mainPanel.add(remove, buildConstraints(layoutRows++, 2, CENTER));
 			}
 			
 			frame.pack();
 		}
-		addApplyCancelButtons();  	
+		
+		addApplyAndCancelButton();     //add at last
 	}
-
-	protected void addApplyCancelButtons()
+	
+	/**
+	 * Removes temporary components to avoid duplicate components.
+	 */
+	protected void removeTemporaryComponents()
 	{
-		mainPanel.add(apply, buildConstraints(countLayoutRows(), 1, 1));
-		
-		apply.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String newStartDate = startDateText.getText();
-				String newEndDate = endDateText.getText();
-				String newRangeType = getSelectedButtonText();
-				
-				if (!prevStartDate.equals(newStartDate) || !prevEndDate.equals(newEndDate)
-						|| !prevRangeType.equals(newRangeType)) {
-					observer.settingsChanged(newStartDate, newEndDate, newRangeType);
-				}
-				
-				frame.setVisible(false);
-			}
-		});
-		
-		mainPanel.add(cancel, buildConstraints(countLayoutRows(), 2, 1));
-		
-		cancel.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				frame.setVisible(false);
-			}
-		});
-		
-		frame.pack();
-		
+		for (Component comp : tempComponents) {
+			mainPanel.remove(comp);
+			mainPanel.revalidate();
+		}
 	}
-
+	
+	/**
+	 * Updates all labels with the current language setup.
+	 */
 	@Override
 	public boolean updateLabels() {
 		startDate.setText(LocalizedStrings.getLocalString(TextFields.START_DATE));
 		endDate.setText(LocalizedStrings.getLocalString(TextFields.END_DATE));
 		apply.setText(LocalizedStrings.getLocalString(TextFields.TABLE_APPLY));
 		cancel.setText(LocalizedStrings.getLocalString(TextFields.TABLE_CANCEL));
+		toggleLegend.setText((LocalizedStrings.getLocalString(TextFields.CHART_LEGEND)));
+		resetPanel.setText((LocalizedStrings.getLocalString(TextFields.CHART_RESET)));
 		open.setText(LocalizedStrings.getLocalString(TextFields.TABLE_OPEN));
 		close.setText(LocalizedStrings.getLocalString(TextFields.TABLE_CLOSE));
 		adjClose.setText(LocalizedStrings.getLocalString(TextFields.TABLE_ADJCLOSE));
@@ -268,6 +463,6 @@ class SettingsFrame implements Subject,Localized
 		dataType.setText(LocalizedStrings.getLocalString(TextFields.CHART_DATATYPE));
 		dateRange.setText(LocalizedStrings.getLocalString(TextFields.CHART_DATERANGE)+" (in mm/dd/yyyy):");
 		frame.setTitle(LocalizedStrings.getLocalString(TextFields.SETTINGS));
-		return false;
+		return true;
 	}
 }

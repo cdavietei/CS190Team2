@@ -38,6 +38,8 @@
     <label id="SEARCH_FAILURE">Entrada no válida, no una acción o empresa.</label>
 	<label id="CHART_DATATYPE">Tipo de Datos:</label>
 	<label id="CHART_DATERANGE">Rango de Fechas</label>
+	<label id="CHART_LEGEND">Esconder Leyenda</label>
+	<label id="CHART_RESET">Reiniciar Panel</label>
 	<label id="SETTINGS">Ajustes</label>
 	<label id="GRAPHVIEW">Ver Gráfico</label>
 	<label id="HISTTABLE">Tabla Histórica</label>

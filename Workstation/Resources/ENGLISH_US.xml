@@ -32,12 +32,14 @@
 	<label id="TABLE_DATE">Date</label>
 	<label id="START_DATE">Start Date:</label>
 	<label id="END_DATE">End Date:</label>
-    <label id="CHART_XAXIS">Hour</label>
-	<label id="CHART_YAXIS">Market Price</label>
+    <label id="CHART_XAXIS">Time</label>
+	<label id="CHART_YAXIS">Stock Price</label>
     <label id="SEARCH_SUCCESS">Search Successful</label>
     <label id="SEARCH_FAILURE">Invalid input, not a stock or company.</label>
 	<label id="CHART_DATATYPE">Data Type:</label>
 	<label id="CHART_DATERANGE">Date Range</label>
+	<label id="CHART_LEGEND">Hide Legend</label>
+	<label id="CHART_RESET">Reset Panel</label>
 	<label id="SETTINGS">Settings</label>
 	<label id="GRAPHVIEW">Graph View</label>
 	<label id="HISTTABLE">Historical Table</label>

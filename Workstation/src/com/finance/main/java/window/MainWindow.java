@@ -52,6 +52,7 @@ import javax.swing.JComponent;
 import java.awt.SystemColor;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
 import javax.swing.JRadioButtonMenuItem;
 
 public class MainWindow extends JFrame implements ActionListener,Localized {
@@ -77,6 +78,7 @@ public class MainWindow extends JFrame implements ActionListener,Localized {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
 					MainWindow frame = new MainWindow();
 					frame.setVisible(true);
 				} catch (Exception e) {
